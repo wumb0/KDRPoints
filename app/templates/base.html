@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+    <head>
+        <title>
+            {% if title %}
+                {{title}} - KDRPoints
+            {% else %}
+                KDRPoints
+            {% endif %}
+        </title>
+
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="{{url_for('static', filename='bs/css/bootstrap.min.css')}}" rel="stylesheet">
+    </head>
+
+    <body>
+        <!-- Fixed navbar -->
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{{url_for('.index')}}">KDR Points</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="{{url_for('.index')}}">Home</a></li>
+                <li><a href="#">Profile</a></li>
+                <li><a href="#">Founders Cup</a></li>
+                <li><a href="#">Attend</a></li>
+            </ul>
+            </div>
+        </div>
+        </nav>
+        {% block content %}
+
+        {% endblock %}
+
+
+    </body>
+    <footer>
+        <script type='text/javascript' src="{{url_for('static', filename='bs/js/bootstrap.min.css')}}></script>
+    </footer>
+</html>
