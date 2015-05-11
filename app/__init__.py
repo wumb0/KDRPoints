@@ -1,8 +1,10 @@
+#!flask/bin/python
 from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.login import LoginManager
 from flask_oauthlib.client import OAuth
 from config import GOOGLE_CONSUMER_KEY, GOOGLE_CONSUMER_SECRET
+from flask.ext.admin import Admin
 
 app = Flask(__name__)
 app.config.from_object('config')
@@ -27,6 +29,9 @@ lm.init_app(app)
 lm.login_view = 'login'
 
 from app import models
-from app.views import main
+db.create_all()
+db.session.commit()
+from app.views import main, adminviews
 
+admin = Admin(app, 'KDR Points Admin', template_mode='bootstrap3')
 app.register_blueprint(main.main)
