@@ -13,6 +13,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="{{url_for('static', filename='bs/css/bootstrap.min.css')}}" rel="stylesheet">
+        <link href="{{url_for('static', filename='bs/css/bootstrap-theme.min.css')}}" rel="stylesheet">
         <link href="{{url_for('static', filename='css/custom.css')}}" rel="stylesheet">
     </head>
 
@@ -43,6 +44,27 @@
         </div>
         </nav>
         <div class="container">
+            {% with messages = get_flashed_messages(with_categories=True) %}
+            {% if messages %}
+            {% for category, message in messages %}
+                {% if category == 'error' %}
+                    <div class="alert alert-danger alert-dismissible fade in">
+                {% elif category == 'good' %}
+                    <div class="alert alert-success alert-dismissible fade in">
+                {% else %}
+                    <div class="alert alert-info alert-dismissible fade in">
+                {% endif %}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        {{message}}
+                    </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+        </div>
+
+        <div class="container">
             {% block content %}
 
             {% endblock %}
@@ -50,6 +72,7 @@
 
     </body>
     <footer>
-        <script type='text/javascript' src="{{url_for('static', filename='bs/js/bootstrap.min.css')}}></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+        <script type='text/javascript' src="{{url_for('static', filename='bs/js/bootstrap.min.js')}}"></script>
     </footer>
 </html>

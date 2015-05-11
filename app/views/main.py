@@ -26,3 +26,9 @@ def get_google_oauth_token():
 def login():
     session.pop('google_token', None)
     return google.authorize(callback=url_for('.authorized', _external=True))
+
+@main.route('/login/authorized')
+def authorized(response):
+    if response is None:
+        flash("Login failed", category='error')
+        return redirect(url_for(".index"))
