@@ -13,3 +13,16 @@ main = Blueprint('main', __name__)
 @main.route('/index')
 def index():
     return render_template('index.html', title='Home')
+
+@lm.user_loader
+def load_user(id):
+    return Brother.query.get(int(id))
+
+@google.tokengetter
+def get_google_oauth_token():
+    return session.get('google_token')
+
+@main.route('/login')
+def login():
+    session.pop('google_token', None)
+    return google.authorize(callback=url_for('.authorized', _external=True))

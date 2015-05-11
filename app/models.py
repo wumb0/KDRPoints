@@ -1,7 +1,7 @@
 from app import db
 from config import USER_ROLES
 
-class User(db.Model):
+class Brother(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     name = db.Column(db.String(50), index = True)
     nickname = db.Column(db.String(50), index = True)
@@ -11,8 +11,10 @@ class User(db.Model):
     pin = db.Column(db.Integer, index = True, unique = True)
     last_seen = db.Column(db.DateTime)
     active = db.Column(db.Boolean)
-    points = db.relationship('Points', backref = 'user', lazy = 'dynamic')
-    awards = db.relationship('Award', backref = 'user', lazy = 'dynamic')
+    points = db.relationship('Points', backref = 'brother', lazy = 'dynamic')
+    awards = db.relationship('Award', backref = 'brother', lazy = 'dynamic')
+    family = db.relationship('Family', backref="brothers")
+    family_id = db.Column(db.Integer, db.ForeignKey('family.id'))
 
     def is_admin(self):
         if self.role is USER_ROLES['admin']:
@@ -49,6 +51,10 @@ class User(db.Model):
                     total += p.amount
         return total
 
+class Family(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    name = db.Column(db.String(15))
+
 class Semester(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     year = db.Column(db.Integer, index = True)
@@ -77,13 +83,13 @@ class Semester(db.Model):
 
 class Points(db.Model):
     id = db.Column(db.Integer, primary_key = True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    brother_id = db.Column(db.Integer, db.ForeignKey('brother.id'))
     amount = db.Column(db.Integer)
     event_id = db.Column(db.Integer, db.ForeignKey('event.id'))
     semester_id = db.Column(db.Integer, db.ForeignKey('semester.id'))
 
     def __repr__(self):
-        return '<Points: {} | {} | {}>'.format(self.user_id, self.event_id, self.amount)
+        return '<Points: {} | {} | {}>'.format(self.brother_id, self.event_id, self.amount)
 
 class Event(db.Model):
     id = db.Column(db.Integer, primary_key = True)
@@ -113,7 +119,7 @@ class Award(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     name = db.Column(db.String(20), index = True)
     icon = db.Column(db.String(50))
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    brother_id = db.Column(db.Integer, db.ForeignKey('brother.id'))
 
     def __repr__(self):
         return 'Award: {}'.format(self.name)
