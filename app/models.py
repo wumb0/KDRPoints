@@ -7,10 +7,10 @@ class Brother(db.Model):
     nickname = db.Column(db.String(50), index = True)
     email = db.Column(db.String(100), index = True, unique = True)
     role = db.Column(db.SmallInteger, default = USER_ROLES['user'])
-    postition = db.Column(db.String(50), index = True)
+    position = db.Column(db.String(50), index = True)
     pin = db.Column(db.Integer, index = True, unique = True)
     last_seen = db.Column(db.DateTime)
-    active = db.Column(db.Boolean)
+    active = db.Column(db.Boolean, default = True)
     points = db.relationship('Points', backref = 'brother', lazy = 'dynamic')
     awards = db.relationship('Award', backref = 'brother', lazy = 'dynamic')
     family = db.relationship('Family', backref="brothers")
@@ -34,6 +34,9 @@ class Brother(db.Model):
 
     def is_anonymous(self):
         return False
+
+    def get_id(self):
+        return unicode(self.id)
 
     def __repr__(self):
         return '<User {}'.format(self.name)

@@ -37,8 +37,14 @@
                 <li><a href="#">Founders Cup</a></li>
                 <li><a href="#">Awards</a></li>
                 <li><a href="#">Attend</a></li>
-                <li><a href="#">Login</a></li>
+                {% if g.user.is_authenticated() %}
+                <li><a href="/logout">Logout</a></li>
+                {% if g.user.role > 0 %}
                 <li><a href="/admin">Admin</a></li>
+                {% endif %}
+                {% else %}
+                <li><a href="/login">Login</a></li>
+                {% endif %}
             </ul>
             </div>
         </div>
@@ -51,6 +57,8 @@
                     <div class="alert alert-danger alert-dismissible fade in">
                 {% elif category == 'good' %}
                     <div class="alert alert-success alert-dismissible fade in">
+                {% elif category == 'warning' %}
+                    <div class="alert alert-warning alert-dismissible fade in">
                 {% else %}
                     <div class="alert alert-info alert-dismissible fade in">
                 {% endif %}

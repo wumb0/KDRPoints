@@ -33,5 +33,5 @@ db.create_all()
 db.session.commit()
 from app.views import main, adminviews
 
-admin = Admin(app, 'KDR Points Admin', template_mode='bootstrap3')
+admin = Admin(app, 'KDR Points Admin', template_mode='bootstrap3', index_view=adminviews.IndexView())
 app.register_blueprint(main.main)
