@@ -3,6 +3,7 @@ from flask import Flask, session
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.login import LoginManager
 from flask_oauthlib.client import OAuth
+from flask_admin.contrib.sqla import ModelView
 from config import GOOGLE_CONSUMER_KEY, GOOGLE_CONSUMER_SECRET
 from flask.ext.admin import Admin
 
@@ -34,4 +35,10 @@ db.session.commit()
 from app.views import main, adminviews
 
 admin = Admin(app, 'KDR Points Admin', template_mode='bootstrap3', index_view=adminviews.IndexView())
+admin.add_view(adminviews.BrotherModelView(db.session))
+admin.add_view(adminviews.FamilyModelView(db.session))
+admin.add_view(adminviews.EventModelView(db.session))
+admin.add_view(adminviews.PointsModelView(db.session))
+admin.add_view(adminviews.SemesterModelView(db.session))
+admin.add_view(adminviews.AwardModelView(db.session))
 app.register_blueprint(main.main)

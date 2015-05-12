@@ -23,3 +23,20 @@ class FirstLoginForm(Form):
                 raise ValidationError("The PIN number entered has already been taken")
                 return False
         return True
+
+class AttendForm(Form):
+    current_semester = Semester.query.filter_by(current=True).first()
+    events = []
+    events_query = Event.query.filter_by(event_picker=True, semester_id=current_semester.id).all()
+    if events is not None:
+        events = [ (x.id, x.name) for x in events_query ]
+    event = SelectField('event', choices=events, coerce=int)
+    pin = IntegerField('pin', validators=[DataRequired()])
+    submit = SubmitField('submit')
+
+    def validate(self):
+        if not Form.validate(self):
+            return False
+        if not self.pin.data in [ x.pin for x in  Brothers.query.all() ]:
+            return False
+        return True

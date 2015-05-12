@@ -98,8 +98,18 @@ def first_login():
         flash_wtferrors(flogin_form)
     flogin_form.name.default = bro.name
     flogin_form.process()
-    return render_template('first_login.html', form=flogin_form)
+    return render_template('first_login.html', title="First Login", form=flogin_form)
 
 @main.errorhandler(404)
 def not_found_error(error):
     return render_template('404.html')
+
+@main.route('/attend', methods = ["GET", "POST"])
+def attend():
+    form = AttendForm()
+    if form.validate_on_submit():
+        bro = Brother.query.filter_by(pin=form.pin.data).first()
+        if bro is not None:
+            event = Event.query.filter_by(id=form.event.data).first()
+    return render_template('attend.html', title="Attend")
+

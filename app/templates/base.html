@@ -36,14 +36,14 @@
                 <li><a href="#">Profile</a></li>
                 <li><a href="#">Founders Cup</a></li>
                 <li><a href="#">Awards</a></li>
-                <li><a href="#">Attend</a></li>
+                <li><a href="{{url_for(".attend")}}">Attend</a></li>
                 {% if g.user.is_authenticated() %}
-                <li><a href="/logout">Logout</a></li>
+                <li><a href="{{url_for(".logout")}}">Logout</a></li>
                 {% if g.user.role > 0 %}
                 <li><a href="/admin">Admin</a></li>
                 {% endif %}
                 {% else %}
-                <li><a href="/login">Login</a></li>
+                <li><a href="{{url_for(".login")}}">Login</a></li>
                 {% endif %}
             </ul>
             </div>

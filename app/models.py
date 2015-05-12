@@ -1,6 +1,16 @@
 from app import db
 from config import USER_ROLES
 
+events = db.Table('events',
+    db.Column('event_id', db.Integer, db.ForeignKey('event.id')),
+    db.Column('brother_id', db.Integer, db.ForeignKey('brother.id'))
+)
+
+awards = db.Table('awards',
+    db.Column('award_id', db.Integer, db.ForeignKey('award.id')),
+    db.Column('brother_id', db.Integer, db.ForeignKey('brother.id'))
+)
+
 class Brother(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     name = db.Column(db.String(50), index = True)
@@ -11,10 +21,11 @@ class Brother(db.Model):
     pin = db.Column(db.Integer, index = True)
     last_seen = db.Column(db.DateTime)
     active = db.Column(db.Boolean, default = True)
-    points = db.relationship('Points', backref = 'brother', lazy = 'dynamic')
-    awards = db.relationship('Award', backref = 'brother', lazy = 'dynamic')
-    family = db.relationship('Family', backref="brothers")
+    points = db.relationship('OtherPoints', backref = 'brother', lazy = 'dynamic')
+    awards = db.relationship('Award', secondary=awards, backref = 'brothers', lazy = 'dynamic')
+    events = db.relationship('Event', secondary=events, backref=db.backref('brothers', lazy='dynamic'))
     family_id = db.Column(db.Integer, db.ForeignKey('family.id'))
+    family = db.relationship('Family', backref="brothers")
 
     def is_admin(self):
         if self.role is USER_ROLES['admin']:
@@ -39,7 +50,7 @@ class Brother(db.Model):
         return unicode(self.id)
 
     def __repr__(self):
-        return '<User {}'.format(self.name)
+        return self.name
 
     def last_seen(self):
         return self.last_seen.strftime('%A, %B %d %Y %I:%M%p')
@@ -58,6 +69,9 @@ class Family(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     name = db.Column(db.String(15))
 
+    def __repr__(self):
+        return self.name
+
 class Semester(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     year = db.Column(db.Integer, index = True)
@@ -71,7 +85,7 @@ class Semester(db.Model):
         return "{}{}".format(self.season, self.year)
 
     def __repr__(self):
-        return '<Semester: {} {}>'.format(self.season, self.year)
+        return '{} {}'.format(self.season, self.year)
 
     def __cmp__(self, other):
         try:
@@ -84,28 +98,27 @@ class Semester(db.Model):
         except:
             return -1
 
-class Points(db.Model):
+class OtherPoints(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     brother_id = db.Column(db.Integer, db.ForeignKey('brother.id'))
     amount = db.Column(db.Integer)
-    event_id = db.Column(db.Integer, db.ForeignKey('event.id'))
     semester_id = db.Column(db.Integer, db.ForeignKey('semester.id'))
 
     def __repr__(self):
-        return '<Points: {} | {} | {}>'.format(self.brother_id, self.event_id, self.amount)
+        return '{} Points'.format(self.amount)
 
 class Event(db.Model):
     id = db.Column(db.Integer, primary_key = True)
-    event_picker = db.Column(db.Boolean)
+    event_picker = db.Column(db.Boolean, default = True)
     name = db.Column(db.String(50), index = True)
     description = db.Column(db.String(1000))
     semester = db.relationship("Semester")
     semester_id = db.Column(db.Integer, db.ForeignKey('semester.id'))
     date = db.Column(db.DateTime)
-    points = db.relationship('Points', backref = 'event', lazy = 'dynamic')
+    points = db.Column(db.Integer, default = 0)
 
     def __repr__(self):
-        return '<Event: {}>'.format(self.name)
+        return self.name
 
     def __cmp__(self, other):
         try:
@@ -122,7 +135,9 @@ class Award(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     name = db.Column(db.String(20), index = True)
     icon = db.Column(db.String(50))
-    brother_id = db.Column(db.Integer, db.ForeignKey('brother.id'))
+    semester = db.relationship("Semester")
+    semester_id = db.Column(db.Integer, db.ForeignKey('semester.id'))
+    points = db.Column(db.Integer, default = 0)
 
     def __repr__(self):
-        return 'Award: {}'.format(self.name)
+        return self.name
