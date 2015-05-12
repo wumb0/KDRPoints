@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+{% set points = g.user.get_all_points(g.current_semester) %}
+{% if points < avg %}
+{% set label = "danger" %}
+{% else %}
+{% set label = "success" %}
+{% endif %}
+<div class="jumbotron">
+    <h1>{{g.user.name}} - #{{g.user.pin}}</h1>
+    <p>Your Points: 
+    <span class="label label-{{label}}">{{points}}</span></p>
+    <p>Average Points: <span class="label label-primary">{{avg}}</span></p>
+
+</div>
+{% endblock %}

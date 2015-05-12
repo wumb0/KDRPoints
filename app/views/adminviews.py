@@ -56,6 +56,8 @@ class EventModelView(ProtectedModelView):
     can_create = True
     can_delete = True
     can_edit = True
+    semester = models.Semester.query.filter_by(current=True).first()
+    form_args = dict(semester=dict(default=semester))
     def __init__(self, session):
         super(EventModelView, self).__init__(models.Event, session)
 
@@ -63,6 +65,8 @@ class PointsModelView(ProtectedModelView):
     can_create = True
     can_delete = True
     can_edit = True
+    semester = models.Semester.query.filter_by(current=True).first()
+    form_args = dict(semester=dict(default=semester))
     def __init__(self, session):
         super(PointsModelView, self).__init__(models.OtherPoints, session)
 
@@ -74,5 +78,7 @@ class AwardModelView(ProtectedModelView):
     can_create = True
     can_delete = True
     can_edit = True
+    semester = models.Semester.query.filter_by(current=True).first()
+    form_args = dict(semester=dict(default=semester))
     def __init__(self, session):
         super(AwardModelView, self).__init__(models.Award, session)

@@ -16,13 +16,13 @@ class FirstLoginForm(Form):
     def validate(self):
         if not Form.validate(self):
             return False
+        return True
+
+    def validate_pin(self, field):
         if not isinstance(self.pin.data, int) or self.pin.data <= 0:
                 raise ValidationError("The PIN number entered was invalid")
-                return False
         if Brother.query.filter_by(pin=self.pin.data).first() is not None:
                 raise ValidationError("The PIN number entered has already been taken")
-                return False
-        return True
 
 class AttendForm(Form):
     event = SelectField('event', choices=[], coerce=int)
@@ -32,6 +32,10 @@ class AttendForm(Form):
     def validate(self):
         if not Form.validate(self):
             return False
-        if not self.pin.data in [ x.pin for x in Brother.query.all() ]:
-            return False
         return True
+
+    def validate_pin(self, field):
+        if self.pin.data <= 0:
+            raise ValidationError("Invalid PIN entered")
+        if not self.pin.data in [ x.pin for x in Brother.query.all() ]:
+            raise ValidationError("The PIN number does not exist in the database")

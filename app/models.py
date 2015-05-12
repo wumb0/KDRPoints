@@ -58,13 +58,15 @@ class Brother(db.Model):
 
     def get_all_points(self, semester):
         total = 0
-        events_awards = self.events + self.awards
         for p in self.points:
             if p.semester is semester:
-                    total += p.amount
-        for e in events_awards:
+                    total += p.points
+        for e in self.events:
             if e.semester is semester:
                 total += e.points
+        for a in self.awards:
+            if a.semester is semester:
+                total += a.points
         return total
 
 class Family(db.Model):

@@ -12,8 +12,7 @@ main = Blueprint('main', __name__)
 @main.before_request
 def before_request():
     g.user = current_user
-    if g.user.is_authenticated():
-            redirect(url_for(".first_login"))
+    g.current_semester = Semester.query.filter_by(current=True).first()
 
 @main.route('/')
 @main.route('/index')
@@ -41,6 +40,7 @@ def login():
     return google.authorize(callback=url_for('.authorized', _external=True))
 
 @main.route('/logout')
+@login_required
 def logout():
     logout_user()
     session.clear()
@@ -121,5 +121,13 @@ def attend():
             event.brothers.append(bro)
             db.session.commit()
             flash("Signed in to the event", category="good")
+    else:
+        flash_wtferrors(form)
     return render_template('attend.html', title="Attend", form=form)
 
+@main.route('/profile')
+@login_required
+def profile():
+    all_brothers = Brother.query.filter_by(active=True)
+    avg = sum([ x.get_all_points(g.current_semester) for x in all_brothers ]) / all_brothers.count()
+    return render_template("profile.html", title="Profile", avg=avg)
