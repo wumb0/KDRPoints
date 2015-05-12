@@ -18,7 +18,11 @@ def before_request():
 @main.route('/')
 @main.route('/index')
 def index():
-    return render_template('index.html', title='Home')
+    if g.user.is_authenticated():
+        name=g.user.name.split(" ")[0]
+    else:
+        name = "stranger"
+    return render_template('index.html', title='Home', name=name)
 
 @lm.user_loader
 def load_user(id):
