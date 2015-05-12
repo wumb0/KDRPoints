@@ -55,14 +55,15 @@ class Brother(db.Model):
     def last_seen(self):
         return self.last_seen.strftime('%A, %B %d %Y %I:%M%p')
 
-    def get_points(self, semester, event='all'):
+    def get_all_points(self, semester):
         total = 0
+        events_awards = self.events + self.awards
         for p in self.points:
             if p.semester is semester:
-                if event is 'all':
                     total += p.amount
-                elif p.event is event:
-                    total += p.amount
+        for e in events_awards:
+            if e.semester is semester:
+                total += e.points
         return total
 
 class Family(db.Model):
@@ -102,6 +103,7 @@ class OtherPoints(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     brother_id = db.Column(db.Integer, db.ForeignKey('brother.id'))
     amount = db.Column(db.Integer)
+    semester = db.relationship("Semester")
     semester_id = db.Column(db.Integer, db.ForeignKey('semester.id'))
 
     def __repr__(self):
