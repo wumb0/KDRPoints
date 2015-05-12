@@ -107,9 +107,19 @@ def not_found_error(error):
 @main.route('/attend', methods = ["GET", "POST"])
 def attend():
     form = AttendForm()
+    #remove this
+    current_semester = Semester.query.filter_by(current=True).first()
+    events_query = Event.query.filter_by(event_picker=True, semester_id=current_semester.id).all()
+    events = []
+    if events is not None:
+        events = [ (x.id, x.name) for x in events_query ]
+    form.event.choices = events
     if form.validate_on_submit():
         bro = Brother.query.filter_by(pin=form.pin.data).first()
         if bro is not None:
             event = Event.query.filter_by(id=form.event.data).first()
-    return render_template('attend.html', title="Attend")
+            event.brothers.append(bro)
+            db.session.commit()
+            flash("Signed in to the event", category="good")
+    return render_template('attend.html', title="Attend", form=form)
 

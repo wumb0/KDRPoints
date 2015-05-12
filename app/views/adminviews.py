@@ -31,7 +31,13 @@ class ProtectedModelView(ModelView):
                 flash("You don't have permission to go there", category="warning")
                 return redirect(url_for('main.index'))
 
-class BrotherModelView(ProtectedModelView):
+class AdminModelView(ProtectedModelView):
+    def is_visible(self):
+        if current_user.is_authenticated() and current_user.role != 2:
+            return False
+        return True
+
+class BrotherModelView(AdminModelView):
     column_exclude_list = ['points']
     can_create = False
     column_display_pk = True
@@ -40,24 +46,33 @@ class BrotherModelView(ProtectedModelView):
     def __init__(self, session):
         super(BrotherModelView, self).__init__(models.Brother, session)
 
-class FamilyModelView(ProtectedModelView):
+class FamilyModelView(AdminModelView):
     can_create = False
     can_edit = False
     def __init__(self, session):
         super(FamilyModelView, self).__init__(models.Family, session)
 
 class EventModelView(ProtectedModelView):
+    can_create = True
+    can_delete = True
+    can_edit = True
     def __init__(self, session):
         super(EventModelView, self).__init__(models.Event, session)
 
 class PointsModelView(ProtectedModelView):
+    can_create = True
+    can_delete = True
+    can_edit = True
     def __init__(self, session):
         super(PointsModelView, self).__init__(models.OtherPoints, session)
 
-class SemesterModelView(ProtectedModelView):
+class SemesterModelView(AdminModelView):
     def __init__(self, session):
         super(SemesterModelView, self).__init__(models.Semester, session)
 
 class AwardModelView(ProtectedModelView):
+    can_create = True
+    can_delete = True
+    can_edit = True
     def __init__(self, session):
         super(AwardModelView, self).__init__(models.Award, session)
