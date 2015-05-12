@@ -8,7 +8,7 @@ class Brother(db.Model):
     email = db.Column(db.String(100), index = True, unique = True)
     role = db.Column(db.SmallInteger, default = USER_ROLES['user'])
     position = db.Column(db.String(50), index = True)
-    pin = db.Column(db.Integer, index = True, unique = True)
+    pin = db.Column(db.Integer, index = True)
     last_seen = db.Column(db.DateTime)
     active = db.Column(db.Boolean, default = True)
     points = db.relationship('Points', backref = 'brother', lazy = 'dynamic')
