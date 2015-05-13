@@ -127,7 +127,7 @@ class Event(db.Model):
     description = db.Column(db.String(1000))
     semester = db.relationship("Semester")
     semester_id = db.Column(db.Integer, db.ForeignKey('semester.id'))
-    date = db.Column(db.Date, default=datetime.today)
+    timestamp = db.Column(db.Date, default=datetime.today)
     points = db.Column(db.Integer, default = 0)
 
     def __repr__(self):
@@ -152,6 +152,7 @@ class Award(db.Model):
     semester_id = db.Column(db.Integer, db.ForeignKey('semester.id'))
     points = db.Column(db.Integer, default = 0)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+    color = db.Column(db.String(15), default="#000000")
 
     def __repr__(self):
         return self.name

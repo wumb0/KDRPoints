@@ -4,3 +4,9 @@
 [submodule "app/static/fa"]
 	path = app/static/fa
 	url = https://github.com/FortAwesome/Font-Awesome
+[submodule "app/static/cp"]
+	path = app/static/cp
+	url = https://github.com/josedvq/colpick-jQuery-Color-Picker/
+[submodule "app/static/icp"]
+	path = app/static/icp
+	url = https://github.com/mjolnic/fontawesome-iconpicker

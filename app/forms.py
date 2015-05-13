@@ -1,6 +1,6 @@
 from flask.ext.wtf import Form
-from wtforms import TextField, SubmitField, SelectField, IntegerField
-#from wtforms.fields import TextAreaField
+from wtforms import TextField, SubmitField, SelectField, IntegerField, widgets
+from wtforms.fields import TextAreaField
 from wtforms.validators import DataRequired, ValidationError
 from app.models import *
 #from config import USER_ROLES

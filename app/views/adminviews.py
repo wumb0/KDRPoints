@@ -39,6 +39,7 @@ class AdminModelView(ProtectedModelView):
 
 class BrotherModelView(AdminModelView):
     column_exclude_list = ['points']
+    column_default_sort = ('active', True)
     can_create = False
     column_display_pk = True
     column_hide_backrefs = False
@@ -71,6 +72,7 @@ class PointsModelView(ProtectedModelView):
         super(PointsModelView, self).__init__(models.OtherPoints, session)
 
 class SemesterModelView(AdminModelView):
+    column_default_sort = ('current', True)
     def __init__(self, session):
         super(SemesterModelView, self).__init__(models.Semester, session)
 
@@ -78,6 +80,20 @@ class AwardModelView(ProtectedModelView):
     can_create = True
     can_delete = True
     can_edit = True
+    form_args = dict(icon=dict(cols=5))
+    form_widget_args = {
+        'color': {
+            'style': "width: 10em;"
+        },
+        'icon': {
+            'style': "width: 15em;"
+        },
+        'points': {
+            'style': "width: 5em;"
+        }
+    }
+    edit_template = 'admin/editaward.html'
+    create_template = 'admin/createaward.html'
     semester = models.Semester.query.filter_by(current=True).first()
     form_args = dict(semester=dict(default=semester))
     def __init__(self, session):
