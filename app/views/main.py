@@ -129,7 +129,6 @@ def attend():
 @login_required
 def profile():
     all_brothers = Brother.query.filter_by(active=True)
-    import pdb; pdb.set_trace()  # XXX BREAKPOINT
     avg = sum([ x.get_all_points(g.current_semester) for x in all_brothers ]) / all_brothers.count()
     return render_template("profile.html", title="Profile", avg=avg)
 

@@ -55,7 +55,16 @@
             <div class="panel panel-success">
                 <div class="panel-heading"><h3 class="panel-title">Awards</h3></div>
                 <div class="panel-body">
-                    Awards will go here
+                    {% for award in g.user.awards.all() %}
+                    <div class="col-sm-1 text-center">
+                        <div class="row">
+                            <i style="color: #{{award.color}}" class="fa {{award.icon}} fa-4x" title="{{award.points}} Points"></i>
+                        </div>
+                        <div class="row">
+                            {{award.name}}
+                        </div>
+                    </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>
