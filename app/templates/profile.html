@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 {% set points = g.user.get_all_points(g.current_semester) %}
-{% if points < avg %}
+{% if points < (avg-(0.25*avg)) %}
 {% set label = "danger" %}
 {% else %}
 {% set label = "success" %}

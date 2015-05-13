@@ -1,31 +1,29 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="container">
-    <p>
-        <h1>First Login Information</h1>
-        <p>Please fill out the following information to complete the signup process</p>
+<p>
+    <h1>First Login Information</h1>
+    <p>Please fill out the following information to complete the signup process</p>
+</p>
+<p>
+<form action="" method="POST" name="first_login">
+    {{form.hidden_tag()}}
+    <h5>First and Last Name</h5>
+    {{ form.name }}
     </p>
     <p>
-    <form action="" method="POST" name="first_login">
-        {{form.hidden_tag()}}
-        <h5>First and Last Name</h5>
-        {{ form.name }}
-        </p>
-        <p>
-        <h5>Nickname (if any)</h5>
-        {{ form.nickname }}
-        </p>
-        <p>
-        <h5>Pin</h5>
-        {{ form.pin }}
-        </p>
-        <p>
-        <h5>Family Line</h5>
-        {{ form.family }}
-        </p>
-        <p>
-        {{ form.submit(class="button", value="Submit") }}
-        </p>
-    </form>
-</div>
+    <h5>Nickname (if any)</h5>
+    {{ form.nickname }}
+    </p>
+    <p>
+    <h5>Pin</h5>
+    {{ form.pin }}
+    </p>
+    <p>
+    <h5>Family Line</h5>
+    {{ form.family }}
+    </p>
+    <p>
+    {{ form.submit(class="btn btn-primary", value="Submit") }}
+    </p>
+</form>
 {% endblock %}

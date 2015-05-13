@@ -131,3 +131,9 @@ def profile():
     all_brothers = Brother.query.filter_by(active=True)
     avg = sum([ x.get_all_points(g.current_semester) for x in all_brothers ]) / all_brothers.count()
     return render_template("profile.html", title="Profile", avg=avg)
+
+@main.route('/founderscup')
+@login_required
+def founderscup():
+    families = sorted(Family.query.all(), key=lambda x: x.get_points(g.current_semester), reverse=True)
+    return render_template("founders_cup.html", title="Founders Cup", families=families)

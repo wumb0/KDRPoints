@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="jumbotron">
+    {% set maxpoints = families[0].get_points(g.current_semester) * 1.1 %}
+    {% set i = 1 %}
+    {% for family in families %}
+    {% set points = family.get_points(g.current_semester) %}
+    <p>{{i}}. {{family.name}}: {{points}}</p>
+    <div class="progress">
+        <div class="progress-bar progress-bar-striped" aria-valuenow="{{points}}" aria-valuemin="0" aria-valuemax="{{maxpoints}}" style="width: {{points*100/maxpoints}}%;"></div>
+    </div>
+    {% set i = i + 1 %}
+    {% endfor %}
+</div>
+{% endblock %}

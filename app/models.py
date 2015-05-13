@@ -73,12 +73,18 @@ class Family(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     name = db.Column(db.String(15))
 
+    def get_points(self, semester):
+        total = 0
+        for b in self.brothers:
+            total += b.get_all_points(semester)
+        return total
+
     def __repr__(self):
         return self.name
 
 class Semester(db.Model):
     id = db.Column(db.Integer, primary_key = True)
-    year = db.Column(db.Integer, index = True)
+    year = db.Column(db.Integer, index = True, )
     season = db.Column(db.String(20), index = True)
     current = db.Column(db.Boolean, default = False)
 
@@ -120,7 +126,7 @@ class Event(db.Model):
     description = db.Column(db.String(1000))
     semester = db.relationship("Semester")
     semester_id = db.Column(db.Integer, db.ForeignKey('semester.id'))
-    date = db.Column(db.Date)
+    date = db.Column(db.Date, default=datetime.today)
     points = db.Column(db.Integer, default = 0)
 
     def __repr__(self):

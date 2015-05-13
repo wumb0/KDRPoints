@@ -32,13 +32,14 @@
             </div>
             <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="{{url_for('.index')}}">Home</a></li>
+                <li id="index"><a href="{{url_for('.index')}}">Home</a></li>
                 {% if g.user.is_authenticated() %}
-                <li><a href="{{url_for(".profile")}}">Profile</a></li>
-                <li><a href="#">Founders Cup</a></li>
-                <li><a href="#">Awards</a></li>
+                <li id="profile"><a href="{{url_for(".profile")}}">Profile</a></li>
+                <li id="founderscup"><a href="{{url_for(".founderscup")}}">Founders Cup</a></li>
+                <li id="awards"><a href="#">Awards</a></li>
+                <li id="events"><a href="#">Events</a></li>
                 {% endif %}
-                <li><a href="{{url_for(".attend")}}">Attend</a></li>
+                <li id="attend"><a href="{{url_for(".attend")}}">Attend</a></li>
                 {% if g.user.is_authenticated() %}
                 <li><a href="{{url_for(".logout")}}">Logout</a></li>
                 {% if g.user.role > 0 %}
@@ -73,7 +74,6 @@
             {% endif %}
             {% endwith %}
         </div>
-
         <div class="container">
             {% block content %}
 
@@ -84,5 +84,9 @@
     <footer>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
         <script type='text/javascript' src="{{url_for('static', filename='bs/js/bootstrap.min.js')}}"></script>
+        <script>
+            $(document).ready(function () {
+                    $("#" + "{{request.endpoint}}".split(".")[1]).addClass("active"); })
+        </script>
     </footer>
 </html>

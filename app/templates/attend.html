@@ -1,15 +1,13 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class=container>
-    <form action="" method="POST" name="attend">
-        {{form.hidden_tag()}}
-        <p>
-        <h5>Event: </h5>{{form.event}}
-        </p>
-        <p>
-        <h5>Pin: </h5>{{form.pin}}
-        </p>
-        {{form.submit(class="button", value="Submit")}}
-    </form>
-</div>
+<form action="" method="POST" name="attend">
+    {{form.hidden_tag()}}
+    <p>
+    <h5>Event: </h5>{{form.event}}
+    </p>
+    <p>
+    <h5>Pin: </h5>{{form.pin}}
+    </p>
+    {{form.submit(class="btn btn-primary", value="Submit")}}
+</form>
 {% endblock %}
