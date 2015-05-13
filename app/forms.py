@@ -1,5 +1,5 @@
 from flask.ext.wtf import Form
-from wtforms import TextField, SubmitField, SelectField, IntegerField, widgets
+from wtforms import TextField, SubmitField, SelectField, IntegerField, widgets, HiddenField
 from wtforms.fields import TextAreaField
 from wtforms.validators import DataRequired, ValidationError
 from app.models import *
@@ -27,6 +27,7 @@ class FirstLoginForm(Form):
 class AttendForm(Form):
     event = SelectField('event', choices=[], coerce=int)
     pin = IntegerField('pin', validators=[DataRequired()])
+    code = HiddenField('code', validators=[DataRequired()], default="0000")
     submit = SubmitField('submit')
 
     def validate(self):

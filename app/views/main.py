@@ -118,9 +118,12 @@ def attend():
         bro = Brother.query.filter_by(pin=form.pin.data).first()
         if bro is not None:
             event = Event.query.filter_by(id=form.event.data).first()
-            event.brothers.append(bro)
-            db.session.commit()
-            flash("Signed in to the event", category="good")
+            if form.code.data == event.code:
+                event.brothers.append(bro)
+                db.session.commit()
+                flash("Signed in to the event", category="good")
+            else:
+                flash("The event code was not correct", category="error")
     else:
         flash_wtferrors(form)
     return render_template('attend.html', title="Attend", form=form)
@@ -130,7 +133,9 @@ def attend():
 def profile():
     all_brothers = Brother.query.filter_by(active=True)
     avg = sum([ x.get_all_points(g.current_semester) for x in all_brothers ]) / all_brothers.count()
-    return render_template("profile.html", title="Profile", avg=avg)
+    all_items = g.user.events.all() + g.user.awards.all() + g.user.points.all()
+    all_items.sort(key=lambda x: x.timestamp.date())
+    return render_template("profile.html", title="Profile", avg=avg, all_items=all_items[:10], Event=Event, Award=Award, OtherPoints=OtherPoints, isinstance=isinstance)
 
 @main.route('/founderscup')
 @login_required

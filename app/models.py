@@ -123,11 +123,12 @@ class OtherPoints(db.Model):
 class Event(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     event_picker = db.Column(db.Boolean, default = True)
+    code = db.Column(db.String(10), default="0000")
     name = db.Column(db.String(50), index = True)
     description = db.Column(db.String(1000))
     semester = db.relationship("Semester")
     semester_id = db.Column(db.Integer, db.ForeignKey('semester.id'))
-    timestamp = db.Column(db.Date, default=datetime.today)
+    timestamp = db.Column(db.DateTime, default=datetime.today)
     points = db.Column(db.Integer, default = 0)
 
     def __repr__(self):
