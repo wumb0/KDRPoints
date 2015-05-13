@@ -24,7 +24,7 @@ class Brother(db.Model):
     active = db.Column(db.Boolean, default = True)
     points = db.relationship('OtherPoints', backref = 'brother', lazy = 'dynamic')
     awards = db.relationship('Award', secondary=awards, backref = 'brothers', lazy = 'dynamic')
-    events = db.relationship('Event', secondary=events, backref=db.backref('brothers', lazy='dynamic'))
+    events = db.relationship('Event', secondary=events, backref='brothers', lazy='dynamic')
     family_id = db.Column(db.Integer, db.ForeignKey('family.id'))
     family = db.relationship('Family', backref="brothers")
 

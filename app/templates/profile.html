@@ -7,10 +7,58 @@
 {% set label = "success" %}
 {% endif %}
 <div class="jumbotron">
-    <h1>{{g.user.name}} - #{{g.user.pin}}</h1>
-    <p>Your Points: 
-    <span class="label label-{{label}}">{{points}}</span></p>
-    <p>Average Points: <span class="label label-primary">{{avg}}</span></p>
-
+    <div class="row">
+        <div class="col-sm-12 text-center">
+            <h1>{{g.user.name}} - #{{g.user.pin}}</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12 text-center">
+            {% if not g.user.position == "None" %}
+            {{g.user.position}}
+            {% endif %}
+        </div>
+    </div>
+    <div class="row">
+    </div>
+    <div class="row">
+        <div class="col-sm-1"></div>
+        <div class="col-sm-5">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Points</h3>
+                </div>
+                <div class="panel-body">
+                    <p>Your Points:
+                    <span class="label label-{{label}}">{{points}}</span></p>
+                    <p>Average Points: <span class="label label-primary">{{avg}}</span></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-5">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Stats</h3>
+                </div>
+                <div class="panel-body">
+                    <p>Events Attended:
+                    <span class="label label-primary">{{g.user.events.all()|length}}</span></p>
+                    <p>Awards received:
+                    <span class="label label-primary">{{g.user.awards.all()|length}}</span></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-1"></div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-success">
+                <div class="panel-heading"><h3 class="panel-title">Awards</h3></div>
+                <div class="panel-body">
+                    Awards will go here
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
