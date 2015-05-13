@@ -14,6 +14,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="{{url_for('static', filename='bs/css/bootstrap.min.css')}}" rel="stylesheet">
         <link href="{{url_for('static', filename='bs/css/bootstrap-theme.min.css')}}" rel="stylesheet">
+        <link href="{{url_for('static', filename='fa/css/font-awesome.css')}}" rel="stylesheet">
         <link href="{{url_for('static', filename='css/custom.css')}}" rel="stylesheet">
     </head>
 
@@ -32,21 +33,21 @@
             </div>
             <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li id="index"><a href="{{url_for('.index')}}">Home</a></li>
+                <li id="index"><a href="{{url_for('.index')}}"><i class="fa fa-home"></i> Home</a></li>
                 {% if g.user.is_authenticated() %}
-                <li id="profile"><a href="{{url_for(".profile")}}">Profile</a></li>
-                <li id="founderscup"><a href="{{url_for(".founderscup")}}">Founders Cup</a></li>
-                <li id="awards"><a href="#">Awards</a></li>
-                <li id="events"><a href="#">Events</a></li>
+                <li id="profile"><a href="{{url_for(".profile")}}"><i class="fa fa-user"></i> Profile</a></li>
+                <li id="founderscup"><a href="{{url_for(".founderscup")}}"><i class="fa fa-trophy"></i> Founders Cup</a></li>
+                <li id="awards"><a href="#"><i class="fa fa-star"></i> Awards</a></li>
+                <li id="events"><a href="#"><i class="fa fa-calendar"></i> Events</a></li>
                 {% endif %}
-                <li id="attend"><a href="{{url_for(".attend")}}">Attend</a></li>
+                <li id="attend"><a href="{{url_for(".attend")}}"><i class="fa fa-at"></i> Attend</a></li>
                 {% if g.user.is_authenticated() %}
-                <li><a href="{{url_for(".logout")}}">Logout</a></li>
+                <li><a href="{{url_for(".logout")}}"><i class="fa fa-sign-out"></i> Logout</a></li>
                 {% if g.user.role > 0 %}
-                <li><a href="/admin">Admin</a></li>
+                <li><a href="/admin"><i class="fa fa-cog"></i> Admin</a></li>
                 {% endif %}
                 {% else %}
-                <li><a href="{{url_for(".login")}}">Login</a></li>
+                <li><a href="{{url_for(".login")}}"><i class="fa fa-key"></i> Login</a></li>
                 {% endif %}
             </ul>
             </div>
@@ -80,6 +81,16 @@
             {% endblock %}
         </div>
 
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <p class="text-muted text-center">Brought to you with love by Jaime Geiger #318</p>
+            </div>
+            <div class="row text-center github">
+                <a href="https://github.com/jgeigerm/KDRPoints"><i class="fa fa-github fa-2x"></i></a>
+            </div>
+        </div>
+    </footer>
     </body>
     <footer>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>

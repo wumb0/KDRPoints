@@ -114,6 +114,7 @@ class OtherPoints(db.Model):
     points = db.Column(db.Integer)
     semester = db.relationship("Semester")
     semester_id = db.Column(db.Integer, db.ForeignKey('semester.id'))
+    reason = db.Column(db.String(100))
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
 
     def __repr__(self):
