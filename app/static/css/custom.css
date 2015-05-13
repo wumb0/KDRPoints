@@ -1,10 +1,14 @@
 body {
-    padding-top: 75px;
+    padding-top: 65px;
 }
 
 html {
   position: relative;
   min-height: 100%;
+}
+
+.jumbotron {
+    padding-top: 15px;
 }
 
 body {

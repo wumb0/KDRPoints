@@ -27,7 +27,7 @@ google = oauth.remote_app(
 
 lm = LoginManager()
 lm.init_app(app)
-lm.login_view = 'login'
+lm.login_view = 'main.login'
 
 from app import models
 db.create_all()

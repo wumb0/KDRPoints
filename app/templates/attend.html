@@ -1,13 +1,15 @@
 {% extends 'base.html' %}
 {% block content %}
-<form action="" method="POST" name="attend">
-    {{form.hidden_tag()}}
-    <p>
-    <h5>Event: </h5>{{form.event}}
-    </p>
-    <p>
-    <h5>Pin: </h5>{{form.pin}}
-    </p>
-    {{form.submit(class="btn btn-primary", value="Submit")}}
-</form>
+<div class="jumbotron">
+    <form action="" method="POST" name="attend">
+        {{form.hidden_tag()}}
+        <p>
+        <h5>Event: </h5>{{form.event}}
+        </p>
+        <p>
+        <h5>Pin: </h5>{{form.pin(size=5)}}
+        </p>
+        {{form.submit(class="btn btn-primary", value="Submit")}}
+    </form>
+</div>
 {% endblock %}
