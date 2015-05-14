@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 <h1><i class="fa fa-users"></i> Brothers</h1>
+{% set i = 0 %}
 {% for brother in brothers %}
 {% set points = brother.get_all_points(g.current_semester) %}
 {% if points < (avg-(0.25*avg)) %}
@@ -32,15 +33,39 @@
     </div>
     <div class="col-md-2">
         <div class="row">
-            <h3>Events: <span class="label label-primary lblspace" style="float: right;">{{brother.events.filter_by(semester=g.current_semester).all()|length}}</span></h3>
+            <div class="col-md-8">
+                <h3>Events: </h3>
+            </div>
+            <div class="col-md-4">
+                <h3 class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><button type="button"  role="button" class="btn btn-primary" style="float: right;">{{brother.events.filter_by(semester=g.current_semester).all()|length}}</button></h3>
+                <ul class="dropdown-menu" role="menu">
+                            {% if g.user.role > 0 %}
+                            {% for event in brother.events.all() %}
+                            <li><a href="#">{{event.name}}</a></li>
+                            {% endfor %}
+                            {% endif %}
+                </ul>
+            </div>
         </div>
         <div class="row">
-            <h3>Awards: <span class="label label-primary lblspace" style="float: right;">{{brother.awards.filter_by(semester=g.current_semester).all()|length}}</span></h3>
+            <div class="col-md-8">
+                <h3>Awards: </h3>
+            </div>
+            <div class="col-md-4">
+                <h3 class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><button type="button"  role="button" class="btn btn-primary" style="float: right;">{{brother.awards.filter_by(semester=g.current_semester).all()|length}}</button></h3>
+                <ul class="dropdown-menu" role="menu">
+                            {% if g.user.role > 0 %}
+                            {% for award in brother.awards.all() %}
+                            <li><a href="#">{{award.name}}</a></li>
+                            {% endfor %}
+                            {% endif %}
+                </ul>
+            </div>
         </div>
     </div>
     <div class="col-md-1">
     {% if g.user.role == 2 %}
-    <h3 class="text-center"><span class="label label-{{label}}">{{points}}</span></p></h3>
+    <h3 class="text-center space-above"><span class="label label-{{label}}">{{points}}</span></p></h3>
     {% endif %}
     </div>
     <div class="col-md-5 space-above text-center">
@@ -57,5 +82,6 @@
     </div>
 </div>
 {% endif %}
+{% set i = i + 1 %}
 {% endfor %}
 {% endblock %}
