@@ -80,20 +80,34 @@
                 <div class="col-md-2">
                     <h3><span class="label label-default">{{item.timestamp.date()}}</span></h3>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <h3><span class="label label-default">{{item.semester.get_name()}}</span></h3>
                 </div>
             {% if isinstance(item, Event) %}
-                <div class="col-md-5 desc">
-                    <h4>{{item.description}}</h4>
+                <div class="col-md-1">
+                    <h3>Event</h3>
+                </div>
+                <div class="col-md-5">
+                    <div class="row">
+                        <h4>{{item.name}}</h4>
+                    </div>
+                    <div class="row">
+                        <p>{{item.description}}</p>
+                    </div>
                 </div>
             {% endif %}
             {% if isinstance(item, OtherPoints) %}
+                <div class="col-md-1">
+                    <h3>Misc.</h3>
+                </div>
                 <div class="col-md-5 desc">
-                    <h4>{{item.reason}}</h4>
+                    <p>{{item.reason}}</p>
                 </div>
             {% endif %}
             {% if isinstance(item, Award) %}
+                <div class="col-md-1">
+                    <h3>Award</h3>
+                </div>
                 <div class="col-md-5 text-center">
                     <div class="row">
                         <i style="color: #{{item.color}};" class="fa {{item.icon}} fa-4x"></i>
