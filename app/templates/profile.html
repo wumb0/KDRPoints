@@ -56,11 +56,11 @@
                 <div class="panel-heading"><h3 class="panel-title">Awards</h3></div>
                 <div class="panel-body">
                     {% for award in g.user.awards.all() %}
-                    <div class="col-xs-1 text-center award">
+                    <div class="col-sm-1 col-md-1 text-center award">
                         <div class="row">
                             <i style="color: #{{award.color}}" class="fa {{award.icon}} fa-4x" title="{{award.points}} Points"></i>
                         </div>
-                        <div class="row">
+                        <div class="row text-center">
                             {{award.name}}
                         </div>
                     </div>
