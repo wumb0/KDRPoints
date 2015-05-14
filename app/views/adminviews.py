@@ -57,7 +57,6 @@ class EventModelView(ProtectedModelView):
     can_create = True
     can_delete = True
     can_edit = True
-    form_excluded_columns = ('code')
     semester = models.Semester.query.filter_by(current=True).first()
     form_args = dict(semester=dict(default=semester))
     def __init__(self, session):

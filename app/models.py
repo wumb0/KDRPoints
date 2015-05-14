@@ -25,7 +25,7 @@ class Brother(db.Model):
     points = db.relationship('OtherPoints', backref = 'brother', lazy = 'dynamic')
     awards = db.relationship('Award', secondary=awards, backref = 'brothers', lazy = 'dynamic')
     events = db.relationship('Event', secondary=events, backref='brothers', lazy='dynamic')
-    family_id = db.Column(db.Integer, db.ForeignKey('family.id'), nullable=False)
+    family_id = db.Column(db.Integer, db.ForeignKey('family.id'))
     family = db.relationship('Family', backref="brothers")
 
     def is_admin(self):
@@ -123,6 +123,7 @@ class OtherPoints(db.Model):
 class Event(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     event_picker = db.Column(db.Boolean, default = True, nullable=False)
+    code_enable = db.Column(db.Boolean, default = False, nullable=False)
     code = db.Column(db.String(10), default="0000", nullable=False)
     name = db.Column(db.String(50), index = True, nullable=False)
     description = db.Column(db.String(1000), nullable=False)

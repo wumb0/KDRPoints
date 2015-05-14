@@ -68,3 +68,7 @@ body {
 .lblspace {
     padding-bottom: 10px;
 }
+
+.required {
+    color: red;
+}

@@ -6,10 +6,34 @@
         <p>
         <h5>Event: </h5>{{form.event}}
         </p>
+        <p id="codeform">
+        <h5>Code: </h5>
+        {{form.code}} <span class="required"></span>
+        </p>
         <p>
         <h5>Pin: </h5>{{form.pin(size=5)}}
         </p>
         {{form.submit(class="btn btn-primary", value="Submit")}}
     </form>
 </div>
+{% endblock %}
+{% block footer %}
+<script>
+function codereq(){
+    {% for event in events %}
+    if($('#event').val() == {{event.id}}){
+        document.getElementById('code').disabled = {% if event.code_enable %}false{% else %}true{% endif %};
+        {% if not event.code_enable %}
+            $(".required").html("Code not required for this event")
+        {% else %}
+            $(".required").html("")
+        {% endif %}
+    }
+    {% endfor %}
+}
+$(document).ready(function() {
+    codereq();
+    $('#event').change(codereq);
+});
+</script>
 {% endblock %}

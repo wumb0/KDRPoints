@@ -27,7 +27,7 @@ class FirstLoginForm(Form):
 class AttendForm(Form):
     event = SelectField('event', choices=[], coerce=int)
     pin = IntegerField('pin', validators=[DataRequired()])
-    code = HiddenField('code', validators=[DataRequired()], default="0000")
+    code = TextField('code', default="0000")
     submit = SubmitField('submit')
 
     def validate(self):

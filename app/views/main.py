@@ -118,15 +118,18 @@ def attend():
         bro = Brother.query.filter_by(pin=form.pin.data).first()
         if bro is not None:
             event = Event.query.filter_by(id=form.event.data).first()
-            if form.code.data == event.code:
-                event.brothers.append(bro)
-                db.session.commit()
-                flash("Signed in to the event", category="good")
+            if not event.code_enable or form.code.data == event.code:
+                if bro not in event.brothers:
+                    event.brothers.append(bro)
+                    db.session.commit()
+                    flash("Signed in to the event", category="good")
+                else:
+                    flash("You have already signed in", category="warning")
             else:
                 flash("The event code was not correct", category="error")
     else:
         flash_wtferrors(form)
-    return render_template('attend.html', title="Attend", form=form)
+    return render_template('attend.html', title="Attend", form=form, events=events_query)
 
 @main.route('/profile')
 @login_required
