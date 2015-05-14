@@ -1,0 +1,81 @@
+{% set i = 0 %}
+{% for item in all_items %}
+<div class="well row profile text-center">
+        <div class="col-md-2">
+            <h3><span class="label label-default lblspace">{{item.timestamp.date()}}</span></h3>
+        </div>
+        <div class="col-md-2">
+            <h3><span class="label label-default lblspace">{{item.semester.get_name()}}</span></h3>
+        </div>
+    {% if isinstance(item, Event) %}
+        <div class="col-md-1">
+        {% if request.endpoint == "main.events" %}
+            <div class="row text-center dropdown theme-dropdown">
+<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                    <h3><span class="btn btn-primary">{{item.brothers|length}}</span></h3></a>
+                <ul class="dropdown-menu" role="menu">
+                    {% if g.user.role > 0 %}
+                    {% for brother in item.brothers %}
+                    <li><a href="#">{{brother.name}}</a></li>
+                    {% endfor %}
+                    {% endif %}
+                </ul>
+            </div>
+        {% else %}
+            <h3>Event</h3>
+        {% endif %}
+        </div>
+        <div class="col-md-5">
+                <h4>{{item.name}}</h4>
+                <p>{{item.description}}</p>
+        </div>
+    {% endif %}
+    {% if isinstance(item, OtherPoints) %}
+        <div class="col-md-1">
+            <h3>Misc.</h3>
+        </div>
+        <div class="col-md-5 desc">
+            <p>{{item.reason}}</p>
+        </div>
+    {% endif %}
+    {% if isinstance(item, Award) %}
+        <div class="col-md-1">
+        {% if request.endpoint == "main.awards" %}
+            <div class="row text-center dropdown theme-dropdown">
+<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                    <h3><span class="btn btn-primary">{{item.brothers|length}}</span></h3></a>
+                <ul class="dropdown-menu" role="menu">
+                    {% if g.user.role > 0 %}
+                    {% for brother in item.brothers %}
+                    <li><a href="#">{{brother.name}}</a></li>
+                    {% endfor %}
+                    {% endif %}
+                </ul>
+            </div>
+        {% else %}
+            <h3>Award</h3>
+        {% endif %}
+        </div>
+        <div class="col-md-5 text-center">
+            <div class="row">
+                <i style="color: #{{item.color}};" class="fa {{item.icon}} fa-4x"></i>
+            </div>
+            <div class="row">
+                {{item.name}}
+            </div>
+        </div>
+    {% endif %}
+    <div class="col-md-2">
+        {% if item.points > 0 %}
+        <h2><span class="label label-success">+{{item.points}}</span></h2>
+        {% endif %}
+        {% if item.points == 0 %}
+        <h2><span class="label label-primary">{{item.points}}</span></h2>
+        {% endif %}
+        {% if item.points < 0 %}
+        <h2><span class="label label-danger">{{item.points}}</span></h2>
+        {% endif %}
+    </div>
+</div>
+{% set i = i + 1 %}
+{% endfor %}

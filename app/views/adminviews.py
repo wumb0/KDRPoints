@@ -72,7 +72,18 @@ class PointsModelView(ProtectedModelView):
         super(PointsModelView, self).__init__(models.OtherPoints, session)
 
 class SemesterModelView(AdminModelView):
+    can_delete = False
     column_default_sort = ('current', True)
+
+    def on_model_change(self, form, model):
+        sems = model.query.filter_by(current=True)
+        for sem in sems:
+            if sem is not model:
+                sem.current = False
+                db.session.add(sem)
+                db.session.commit()
+
+
     def __init__(self, session):
         super(SemesterModelView, self).__init__(models.Semester, session)
 

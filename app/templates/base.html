@@ -41,8 +41,8 @@
                 {% if g.user.is_authenticated() %}
                 <li id="profile"><a href="{{url_for(".profile")}}"><i class="fa fa-user"></i> Profile</a></li>
                 <li id="founderscup"><a href="{{url_for(".founderscup")}}"><i class="fa fa-trophy"></i> Founders Cup</a></li>
-                <li id="awards"><a href="#"><i class="fa fa-star"></i> Awards</a></li>
-                <li id="events"><a href="#"><i class="fa fa-calendar"></i> Events</a></li>
+                <li id="awards"><a href="{{url_for('.awards')}}"><i class="fa fa-star"></i> Awards</a></li>
+                <li id="events"><a href="{{url_for('.events')}}"><i class="fa fa-calendar"></i> Events</a></li>
                 {% endif %}
                 <li id="attend"><a href="{{url_for(".attend")}}"><i class="fa fa-at"></i> Attend</a></li>
                 {% if g.user.is_authenticated() %}

@@ -6,6 +6,7 @@ from flask.ext.login import logout_user, login_user, current_user, current_user,
 from app.models import *
 from config import USER_ROLES
 from app.forms import *
+from sqlalchemy import desc
 
 main = Blueprint('main', __name__)
 
@@ -136,7 +137,7 @@ def attend():
 def profile():
     all_brothers = Brother.query.filter_by(active=True)
     avg = sum([ x.get_all_points(g.current_semester) for x in all_brothers ]) / all_brothers.count()
-    all_items = g.user.events.all() + g.user.awards.all() + g.user.points.all()
+    all_items = g.user.events.filter_by(semester=g.current_semester).all() + g.user.awards.filter_by(semester=g.current_semester).all()+ g.user.points.filter_by(semester=g.current_semester).all()
     all_items.sort(key=lambda x: x.timestamp, reverse=True)
     return render_template("profile.html", title="Profile", avg=avg, all_items=all_items[:10], Event=Event, Award=Award, OtherPoints=OtherPoints, isinstance=isinstance)
 
@@ -157,3 +158,14 @@ def edit_nickname():
         return redirect(url_for('.profile'))
     return render_template("edit_nickname.html", title="Edit Nickname", form=form)
 
+@main.route('/awards')
+@login_required
+def awards():
+    all_items = Award.query.filter_by(semester=g.current_semester).order_by(desc(Award.timestamp))
+    return render_template('awards.html', title="Awards", all_items=all_items, isinstance=isinstance, Event=Event, Award=Award, OtherPoints=OtherPoints)
+
+@main.route('/events')
+@login_required
+def events():
+    all_items = Event.query.filter_by(semester=g.current_semester).order_by(desc(Event.timestamp))
+    return render_template('events.html', title="Events", all_items=all_items, isinstance=isinstance, Event=Event, Award=Award, OtherPoints=OtherPoints)
