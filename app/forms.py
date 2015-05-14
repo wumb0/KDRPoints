@@ -40,3 +40,12 @@ class AttendForm(Form):
             raise ValidationError("Invalid PIN entered")
         if not self.pin.data in [ x.pin for x in Brother.query.all() ]:
             raise ValidationError("The PIN number does not exist in the database")
+
+class EditNickForm(Form):
+    nickname = TextField("nickname")
+    submit = SubmitField('submit')
+
+    def validate(self):
+        if not Form.validate(self):
+            return False
+        return True

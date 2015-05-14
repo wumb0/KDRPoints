@@ -145,3 +145,15 @@ def profile():
 def founderscup():
     families = sorted(Family.query.all(), key=lambda x: x.get_points(g.current_semester), reverse=True)
     return render_template("founders_cup.html", title="Founders Cup", families=families)
+
+@main.route('/edit_nickname')
+@login_required
+def edit_nickname():
+    form = EditNickForm()
+    if form.validate_on_submit():
+        g.user.nickname = form.nickname.data
+        db.session.add(g.user)
+        db.session.commit()
+        return redirect(url_for('profile'))
+    return render_template("edit_nickname.html", title="Edit Nickname", form=form)
+
