@@ -14,7 +14,6 @@
     </div>
     <div class="row">
         <div class="col-sm-12 text-center">
-            <a href="{{url_for("edit_nickname")}}"><button class="btn btn-primary">Edit Nickname</button></a>
             {% if g.user.nickname %}
             <h2><em>"{{g.user.nickname}}"</em></h3>
             {% endif %}
@@ -26,6 +25,9 @@
             {{g.user.position}}
             {% endif %}
         </div>
+    </div>
+    <div class="row text-center">
+        <h5><a href="{{url_for(".edit_nickname")}}"><button class="btn btn-xs btn-primary">Edit Nickname</button></a><h5>
     </div>
     <div class="row space-above">
         <div class="col-sm-5 col-sm-offset-1">
