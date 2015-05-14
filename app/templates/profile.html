@@ -8,8 +8,15 @@
 {% endif %}
 <div class="jumbotron">
     <div class="row">
-        <div class="col-sm-12 text-center">
+        <div class="col-sm-12 text-center profile-user">
             <h1>{{g.user.name}} - #{{g.user.pin}}</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12 text-center">
+            {% if g.user.nickname %}
+            <h2><em>"{{g.user.nickname}}"</em></h3>
+            {% endif %}
         </div>
     </div>
     <div class="row">
@@ -19,11 +26,8 @@
             {% endif %}
         </div>
     </div>
-    <div class="row">
-    </div>
-    <div class="row">
-        <div class="col-sm-1"></div>
-        <div class="col-sm-5">
+    <div class="row space-above">
+        <div class="col-sm-5 col-sm-offset-1">
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     <h3 class="panel-title">Points</h3>
