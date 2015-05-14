@@ -134,7 +134,7 @@ def profile():
     all_brothers = Brother.query.filter_by(active=True)
     avg = sum([ x.get_all_points(g.current_semester) for x in all_brothers ]) / all_brothers.count()
     all_items = g.user.events.all() + g.user.awards.all() + g.user.points.all()
-    all_items.sort(key=lambda x: x.timestamp.date())
+    all_items.sort(key=lambda x: x.timestamp, reverse=True)
     return render_template("profile.html", title="Profile", avg=avg, all_items=all_items[:10], Event=Event, Award=Award, OtherPoints=OtherPoints, isinstance=isinstance)
 
 @main.route('/founderscup')

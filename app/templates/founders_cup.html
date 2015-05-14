@@ -1,21 +1,23 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="jumbotron">
-    <div class="row"><h2><i class="fa fa-trophy"></i> Founders Cup Standings</h2></div>
-    {% set maxpoints = families[0].get_points(g.current_semester) * 1.1 %}
-    {% if maxpoints == 0 %}
-    {% set maxpoints = 1 %}
-    {% endif %}
-    {% set i = 1 %}
-    {% for family in families %}
-    {% set points = family.get_points(g.current_semester) %}
-    <div class="row">
-        <p>{{i}}. {{family.name}}: {{points}}</p>
-        <div class="progress">
-            <div class="progress-bar progress-bar-striped" aria-valuenow="{{points}}" aria-valuemin="0" aria-valuemax="{{maxpoints}}" style="width: {{points*100/maxpoints}}%;"></div>
+    <div class="container jmargins">
+        <div class="row"><h2><i class="fa fa-trophy"></i> Founders Cup Standings</h2></div>
+        {% set maxpoints = families[0].get_points(g.current_semester) * 1.1 %}
+        {% if maxpoints == 0 %}
+        {% set maxpoints = 1 %}
+        {% endif %}
+        {% set i = 1 %}
+        {% for family in families %}
+        {% set points = family.get_points(g.current_semester) %}
+        <div class="row">
+            <p>{{i}}. {{family.name}}: {{points}}</p>
+            <div class="progress">
+                <div class="progress-bar progress-bar-striped" aria-valuenow="{{points}}" aria-valuemin="0" aria-valuemax="{{maxpoints}}" style="width: {{points*100/maxpoints}}%;"></div>
+            </div>
         </div>
+        {% set i = i + 1 %}
+        {% endfor %}
     </div>
-    {% set i = i + 1 %}
-    {% endfor %}
 </div>
 {% endblock %}

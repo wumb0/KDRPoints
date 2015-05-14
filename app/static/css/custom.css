@@ -37,3 +37,30 @@ body {
 .github a:hover {
     color: #696969;
 }
+
+.profile {
+    margin-left: 2em;
+    margin-right: 2em;
+}
+
+.jmargins {
+    margin-left: 1em;
+    margin-right: 1em;
+}
+
+.row-eq-height {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+}
+
+.award {
+    padding-bottom: 1em;
+    margin-left: 1em;
+    margin-right: 1em;
+}
+
+.desc {
+    padding-top: 1.2em;
+}
