@@ -177,5 +177,5 @@ def events():
 @main.route('/brothers')
 @login_required
 def brothers():
-    brothers = Brother.query.filter_by(active=True)
+    brothers = Brother.query.filter_by(active=True).order_by(Brother.pin)
     return render_template("brothers.html", title="Brothers", brothers=brothers)
