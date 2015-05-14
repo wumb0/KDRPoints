@@ -37,10 +37,11 @@
                 <h3>Events: </h3>
             </div>
             <div class="col-xs-4">
-                <h3 class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><button type="button"  role="button" class="btn btn-primary" style="float: right;">{{brother.events.filter_by(semester=g.current_semester).all()|length}}</button></h3>
+                {% set events = brother.events.filter_by(semester=g.current_semester).all() %}
+                <h3 class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><button type="button"  role="button" class="btn btn-primary" style="float: right;">{{events|length}}</button></h3>
                 <ul class="dropdown-menu" role="menu">
                             {% if g.user.role > 0 %}
-                            {% for event in brother.events.all() %}
+                            {% for event in events %}
                             <li><a href="#">{{event.name}}</a></li>
                             {% endfor %}
                             {% endif %}
@@ -52,11 +53,12 @@
                 <h3>Awards: </h3>
             </div>
             <div class="col-xs-4">
-                <h3 class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><button type="button"  role="button" class="btn btn-primary" style="float: right;">{{brother.awards.filter_by(semester=g.current_semester).all()|length}}</button></h3>
+                {% set awards = brother.awards.filter_by(semester=g.current_semester).all() %}
+                <h3 class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><button type="button"  role="button" class="btn btn-primary" style="float: right;">{{awards|length}}</button></h3>
                 <ul class="dropdown-menu" role="menu">
                             {% if g.user.role > 0 %}
-                            {% for award in brother.awards.all() %}
-                            <li><a href="#">{{award.name}}</a></li>
+                            {% for award in awards %}
+                            <li><a href="#"><i class="fa {{award.icon}}" style="color: #{{award.color}};"></i> {{award.name}} - {{award.points}} Points</a></li>
                             {% endfor %}
                             {% endif %}
                 </ul>

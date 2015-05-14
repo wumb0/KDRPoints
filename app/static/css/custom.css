@@ -80,3 +80,10 @@ body {
 .profile-user {
     margin-bottom: -2em;
 }
+
+.dropdown-menu {
+    left: 50%;
+    right: auto;
+    text-align: center;
+    transform: translate(-50%, 0);
+}

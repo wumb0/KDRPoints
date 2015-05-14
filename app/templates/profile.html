@@ -36,9 +36,22 @@
                     <h3 class="panel-title">Points</h3>
                 </div>
                 <div class="panel-body">
-                    <p>Your Points:
-                    <span class="label label-{{label}}">{{points}}</span></p>
-                    <p>Average Points: <span class="label label-primary">{{avg}}</span></p>
+                    <div class="row">
+                        <div class="col-xs-9">
+                            <h3>Your Points: </h3>
+                        </div>
+                        <div class="col-xs-3">
+                            <h3><span class="label label-{{label}}" style="float: right;">{{points}}</span></h3>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-9">
+                            <h3>Average Points: </h3>
+                        </div>
+                        <div class="col-xs-3">
+                            <h3><span class="label label-primary" style="float: right;">{{avg}}</span></h3>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -48,10 +61,35 @@
                     <h3 class="panel-title">Stats</h3>
                 </div>
                 <div class="panel-body">
-                    <p>Events Attended:
-                    <span class="label label-primary">{{g.user.events.filter_by(semester=g.current_semester).all()|length}}</span></p>
-                    <p>Awards received:
-                    <span class="label label-primary">{{g.user.awards.all()|length}}</span></p>
+                    <div class="row">
+                        <div class="col-xs-8">
+                            <h3>Events: </h3>
+                        </div>
+                        <div class="col-xs-4">
+                            {% set events = g.user.events.filter_by(semester=g.current_semester).all() %}
+                            <h3 class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><button type="button"  role="button" class="btn btn-primary" style="float: right;">{{events|length}}</button></h3>
+                            <ul class="dropdown-menu" role="menu">
+                                        {% for event in events %}
+                                        <li><a href="#">{{event.name}}</a></li>
+                                        {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-8">
+                            <h3>Awards: </h3>
+                        </div>
+                        <div class="col-xs-4">
+                        {% set awards = g.user.awards.filter_by(semester=g.current_semester).all() %}
+                            <h3 class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><button type="button"  role="button" class="btn btn-primary" style="float: right;">{{awards|length}}</button></h3>
+                            <ul class="dropdown-menu" role="menu">
+                                        {% for award in awards %}
+                                        <li><a href="#"><i class="fa {{award.icon}}" style="color: #{{award.color}};"></i> {{award.name}} - {{award.points}} Points</a></li>
+                                        {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
