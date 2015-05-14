@@ -178,4 +178,6 @@ def events():
 @login_required
 def brothers():
     brothers = Brother.query.filter_by(active=True).order_by(Brother.pin)
-    return render_template("brothers.html", title="Brothers", brothers=brothers)
+    all_brothers = Brother.query.filter_by(active=True)
+    avg = sum([ x.get_all_points(g.current_semester) for x in all_brothers ]) / all_brothers.count()
+    return render_template("brothers.html", title="Brothers", brothers=brothers, avg=avg)

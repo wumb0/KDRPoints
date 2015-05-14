@@ -2,6 +2,12 @@
 {% block content %}
 <h1><i class="fa fa-users"></i> Brothers</h1>
 {% for brother in brothers %}
+{% set points = brother.get_all_points(g.current_semester) %}
+{% if points < (avg-(0.25*avg)) %}
+{% set label = "danger" %}
+{% else %}
+{% set label = "success" %}
+{% endif %}
 {% if brother.pin and brother.name %}
 <div class="well row profile">
     <div class="col-md-1 text-center">
@@ -32,7 +38,12 @@
             <h3>Awards: <span class="label label-primary lblspace" style="float: right;">{{brother.awards.filter_by(semester=g.current_semester).all()|length}}</span></h3>
         </div>
     </div>
-    <div class="col-md-5 space-above col-md-offset-1 text-center">
+    <div class="col-md-1">
+    {% if g.user.role == 2 %}
+    <h3 class="text-center"><span class="label label-{{label}}">{{points}}</span></p></h3>
+    {% endif %}
+    </div>
+    <div class="col-md-5 space-above text-center">
         {% for award in brother.awards[::-1][:4] %}
         <div class="col-sm-2 col-md-2 award">
             <div class="row text-center">
