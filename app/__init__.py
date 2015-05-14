@@ -6,6 +6,7 @@ from flask_oauthlib.client import OAuth
 from flask_admin.contrib.sqla import ModelView
 from config import GOOGLE_CONSUMER_KEY, GOOGLE_CONSUMER_SECRET
 from flask.ext.admin import Admin
+from flask_admin.base import MenuLink
 
 app = Flask(__name__)
 app.config.from_object('config')
@@ -35,6 +36,7 @@ db.session.commit()
 from app.views import main, adminviews
 
 admin = Admin(app, 'KDR Points Admin', template_mode='bootstrap3', index_view=adminviews.IndexView())
+admin.add_link(MenuLink(name='Back to Site', url='/'))
 admin.add_view(adminviews.EventModelView(db.session))
 admin.add_view(adminviews.AwardModelView(db.session))
 admin.add_view(adminviews.PointsModelView(db.session))
