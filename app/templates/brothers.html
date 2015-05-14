@@ -18,8 +18,8 @@
             {% endif %}
         </div>
         <div class="row">
-            {% if brother.postion != "None" %}
-            <em>"{{brother.position}}"</em>
+            {% if not brother.postion == "None" %}
+            {{brother.position}}
             {% endif %}
         </div>
     </div>
