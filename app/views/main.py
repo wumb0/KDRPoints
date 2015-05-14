@@ -14,6 +14,10 @@ main = Blueprint('main', __name__)
 def before_request():
     g.user = current_user
     g.current_semester = Semester.query.filter_by(current=True).first()
+    if g.user.is_authenticated():
+        g.user.active = True
+        db.session.add(g.user)
+        db.session.commit()
 
 @main.route('/')
 @main.route('/index')
