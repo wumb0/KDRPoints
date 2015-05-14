@@ -76,12 +76,12 @@
     </div>
     <div class="panel-body">
         {% for item in all_items %}
-        <div class="well row profile row-eq-height text-center">
+        <div class="well row profile text-center">
                 <div class="col-md-2">
-                    <h3><span class="label label-default">{{item.timestamp.date()}}</span></h3>
+                    <h3><span class="label label-default lblspace">{{item.timestamp.date()}}</span></h3>
                 </div>
                 <div class="col-md-2">
-                    <h3><span class="label label-default">{{item.semester.get_name()}}</span></h3>
+                    <h3><span class="label label-default lblspace">{{item.semester.get_name()}}</span></h3>
                 </div>
             {% if isinstance(item, Event) %}
                 <div class="col-md-1">

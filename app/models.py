@@ -16,16 +16,16 @@ class Brother(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     name = db.Column(db.String(50), index = True)
     nickname = db.Column(db.String(50), index = True)
-    email = db.Column(db.String(100), index = True, unique = True)
-    role = db.Column(db.SmallInteger, default = USER_ROLES['user'])
+    email = db.Column(db.String(100), index = True, unique = True, nullable=False)
+    role = db.Column(db.SmallInteger, default = USER_ROLES['user'], nullable=False)
     position = db.Column(db.String(50), index = True)
     pin = db.Column(db.Integer, index = True)
     last_seen = db.Column(db.DateTime)
-    active = db.Column(db.Boolean, default = True)
+    active = db.Column(db.Boolean, default = True, nullable=False)
     points = db.relationship('OtherPoints', backref = 'brother', lazy = 'dynamic')
     awards = db.relationship('Award', secondary=awards, backref = 'brothers', lazy = 'dynamic')
     events = db.relationship('Event', secondary=events, backref='brothers', lazy='dynamic')
-    family_id = db.Column(db.Integer, db.ForeignKey('family.id'))
+    family_id = db.Column(db.Integer, db.ForeignKey('family.id'), nullable=False)
     family = db.relationship('Family', backref="brothers")
 
     def is_admin(self):
@@ -71,7 +71,7 @@ class Brother(db.Model):
 
 class Family(db.Model):
     id = db.Column(db.Integer, primary_key = True)
-    name = db.Column(db.String(15))
+    name = db.Column(db.String(15), nullable=False)
 
     def get_points(self, semester):
         total = 0
@@ -84,9 +84,9 @@ class Family(db.Model):
 
 class Semester(db.Model):
     id = db.Column(db.Integer, primary_key = True)
-    year = db.Column(db.Integer, index = True, )
-    season = db.Column(db.String(20), index = True)
-    current = db.Column(db.Boolean, default = False)
+    year = db.Column(db.Integer, index = True, nullable=False)
+    season = db.Column(db.String(20), index = True, nullable=False )
+    current = db.Column(db.Boolean, default = False, nullable=False )
 
     def get_name(self):
         return "{} {}".format(self.season, self.year)
@@ -111,25 +111,25 @@ class Semester(db.Model):
 class OtherPoints(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     brother_id = db.Column(db.Integer, db.ForeignKey('brother.id'))
-    points = db.Column(db.Integer)
+    points = db.Column(db.Integer, nullable=False)
     semester = db.relationship("Semester")
-    semester_id = db.Column(db.Integer, db.ForeignKey('semester.id'))
-    reason = db.Column(db.String(100))
-    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+    semester_id = db.Column(db.Integer, db.ForeignKey('semester.id'), nullable=False)
+    reason = db.Column(db.String(100), nullable=False)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
 
     def __repr__(self):
         return '{} Points'.format(self.amount)
 
 class Event(db.Model):
     id = db.Column(db.Integer, primary_key = True)
-    event_picker = db.Column(db.Boolean, default = True)
-    code = db.Column(db.String(10), default="0000")
-    name = db.Column(db.String(50), index = True)
-    description = db.Column(db.String(1000))
+    event_picker = db.Column(db.Boolean, default = True, nullable=False)
+    code = db.Column(db.String(10), default="0000", nullable=False)
+    name = db.Column(db.String(50), index = True, nullable=False)
+    description = db.Column(db.String(1000), nullable=False)
     semester = db.relationship("Semester")
-    semester_id = db.Column(db.Integer, db.ForeignKey('semester.id'))
-    timestamp = db.Column(db.DateTime, default=datetime.today)
-    points = db.Column(db.Integer, default = 0)
+    semester_id = db.Column(db.Integer, db.ForeignKey('semester.id'), nullable=False)
+    timestamp = db.Column(db.DateTime, default=datetime.today, nullable=False)
+    points = db.Column(db.Integer, default = 0, nullable=False)
 
     def __repr__(self):
         return self.name
@@ -147,13 +147,13 @@ class Event(db.Model):
 
 class Award(db.Model):
     id = db.Column(db.Integer, primary_key = True)
-    name = db.Column(db.String(20), index = True)
-    icon = db.Column(db.String(50))
+    name = db.Column(db.String(20), index = True, nullable=False)
+    icon = db.Column(db.String(50), nullable=False)
     semester = db.relationship("Semester")
-    semester_id = db.Column(db.Integer, db.ForeignKey('semester.id'))
-    points = db.Column(db.Integer, default = 0)
-    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
-    color = db.Column(db.String(15), default="#000000")
+    semester_id = db.Column(db.Integer, db.ForeignKey('semester.id'), nullable=False)
+    points = db.Column(db.Integer, default = 0, nullable=False )
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    color = db.Column(db.String(15), default="#000000", nullable=False)
 
     def __repr__(self):
         return self.name
