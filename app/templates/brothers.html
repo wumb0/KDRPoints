@@ -2,6 +2,7 @@
 {% block content %}
 <h1><i class="fa fa-users"></i> Brothers</h1>
 {% for brother in brothers %}
+{% if brother.pin and brother.name %}
 <div class="well row profile">
     <div class="col-md-1 text-center">
         {% if brother.pin %}
@@ -18,7 +19,7 @@
             {% endif %}
         </div>
         <div class="row">
-            {% if not brother.postion == "None" %}
+            {% if not brother.position == "None" %}
             {{brother.position}}
             {% endif %}
         </div>
@@ -52,5 +53,6 @@
         {% endfor %}
     </div>
 </div>
+{% endif %}
 {% endfor %}
 {% endblock %}
