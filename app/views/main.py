@@ -173,3 +173,9 @@ def awards():
 def events():
     all_items = Event.query.filter_by(semester=g.current_semester).order_by(desc(Event.timestamp))
     return render_template('events.html', title="Events", all_items=all_items, isinstance=isinstance, Event=Event, Award=Award, OtherPoints=OtherPoints)
+
+@main.route('/brothers')
+@login_required
+def brothers():
+    brothers = Brother.query.filter_by(active=True)
+    return render_template("brothers.html", title="Brothers", brothers=brothers)

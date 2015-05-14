@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1><i class="fa fa-users"></i> Brothers</h1>
+{% for brother in brothers %}
+<div class="well row profile">
+    <div class="col-md-3 text-center">
+        <div class="row">
+            <h3><span class="label label-default lblspace">{{brother.name}}</span></h3>
+        </div>
+        <div class="row">
+            <em>"{{brother.nickname}}"</em>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="row">
+            <h3>Awards:</h3>
+        </div>
+        <div class="row">
+            <h3>Events:</h3>
+        </div>
+    </div>
+    <div class="col-md-1">
+        <div class="row">
+            <h3><span class="label label-primary lblspace">{{brother.awards.filter_by(semester=g.current_semester).all()|length}}</span></h3>
+        </div>
+        <div class="row">
+            <h3><span class="label label-primary lblspace">{{brother.events.filter_by(semester=g.current_semester).all()|length}}</span></h3>
+        </div>
+    </div>
+    <div class="col-md-6">
+        {% for award in brother.awards.all()[:5] %}
+        <div class="col-sm-1 col-md-1 text-center award">
+            <div class="row">
+                <i style="color: #{{award.color}}" class="fa {{award.icon}} fa-4x" title="{{award.semester}} - {{award.points}} Points"></i>
+            </div>
+            <div class="row text-center">
+                {{award.name}}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endfor %}
+{% endblock %}
