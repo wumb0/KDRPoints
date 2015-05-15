@@ -19,6 +19,8 @@ Make a new file in the root of the project (where requirements.txt is) called ap
 
 Next, start up a virtualenv with the command: virtualenv flask
 
+Enter the virtualenv with the command: source flask/bin/activate
+
 Then install requirements with pip: pip install -r requirements.txt
 
 Google Auth
