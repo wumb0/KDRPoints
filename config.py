@@ -11,7 +11,5 @@ SQLALCHEMY_MIGRATE_REPO = os.path.join(basedir, 'db_repo')
 SECRET_KEY = f.readline().strip()
 GOOGLE_CONSUMER_KEY = f.readline().strip()
 GOOGLE_CONSUMER_SECRET = f.readline().strip()
-BASE_ADMINS = [ x.rstrip() for x in f.readline().split(',') ]
 USER_ROLES = {'admin':2,'chair':1,'user':0}
-
 f.close()
