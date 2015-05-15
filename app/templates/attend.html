@@ -8,10 +8,14 @@
         </p>
         <p id="codeform">
         <h5>Code: </h5>
-        {{form.code}} <span class="required"></span>
+        {{form.code(size=12)}} <span class="required"></span>
         </p>
         <p>
+        {% if g.user.is_authenticated() %}
+        <h5>Pin: </h5>{{form.pin(size=5, disabled=True)}} Logged in
+        {% else %}
         <h5>Pin: </h5>{{form.pin(size=5)}}
+        {% endif %}
         </p>
         {{form.submit(class="btn btn-primary", value="Submit")}}
     </form>

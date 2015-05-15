@@ -114,6 +114,8 @@ def attend():
     events = []
     if events is not None:
         events = [ (x.id, x.name) for x in events_query ]
+    if g.user.is_authenticated():
+        form.pin.data = g.user.pin
     form.event.choices = events
     if form.validate_on_submit():
         bro = Brother.query.filter_by(pin=form.pin.data).first()
@@ -156,6 +158,8 @@ def edit_nickname():
         db.session.add(g.user)
         db.session.commit()
         return redirect(url_for('.profile'))
+    else:
+        flash_wtferrors(form)
     return render_template("edit_nickname.html", title="Edit Nickname", form=form)
 
 @main.route('/awards')
