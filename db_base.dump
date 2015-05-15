@@ -1,0 +1,6 @@
+insert into semester values(1, '2015', 'Spring', 1);
+insert into Family VALUES(1,"Bless");
+insert into Family VALUES(2,"Bona");
+insert into Family VALUES(3,"Gates");
+insert into Family VALUES(4,"Stumm");
+insert into Family VALUES(5,"Vadney");
