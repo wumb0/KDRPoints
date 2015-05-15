@@ -108,9 +108,7 @@ def not_found_error(error):
 @main.route('/attend', methods = ["GET", "POST"])
 def attend():
     form = AttendForm()
-    #remove this
-    current_semester = Semester.query.filter_by(current=True).first()
-    events_query = Event.query.filter_by(event_picker=True, semester_id=current_semester.id).all()
+    events_query = Event.query.filter_by(event_picker=True, semester=g.current_semester).all()
     events = []
     if events is not None:
         events = [ (x.id, x.name) for x in events_query ]
