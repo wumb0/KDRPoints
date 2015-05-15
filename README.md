@@ -33,4 +33,18 @@ Running the Server
 ------------------
 Use the following command to start the server: python run.py
 
-It should work now.
+It should work now but you have to run a few queries to insert things before you can complete registration:
+
+sqlite3 app.db -init db_base.dump
+
+Then restart the server
+
+Log in with your kdrib Google account
+
+Run the following to upgrade yourself to admin:
+
+sqlite3 app.db -cmd 'update brother set role=2;'
+
+Then .exit to exit sqlite3
+
+Now you can access the admin panel as a superadmin
