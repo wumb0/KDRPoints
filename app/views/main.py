@@ -85,21 +85,22 @@ def first_login():
     if bro.pin != 0 or bro.family != None:
         flash("This page is meant for initial registrants only, change profile information on the edit profile page", category="error")
         abort(404)
-    flogin_form = FirstLoginForm()
-    if flogin_form.validate_on_submit():
-        bro.pin = flogin_form.pin.data
-        bro.name = flogin_form.name.data
-        bro.nickname = flogin_form.nickname.data
-        bro.family_id = flogin_form.family.data
+    form = FirstLoginForm()
+    if form.validate_on_submit():
+        bro.pin = form.pin.data
+        bro.name = form.name.data
+        bro.nickname = form.nickname.data
+        bro.family_id = form.family.data
+        bro.active = form.active.data
         db.session.add(bro)
         db.session.commit()
         flash("Registered sucessfully!", category="good")
         return redirect(url_for('main.index'))
     else:
-        flash_wtferrors(flogin_form)
-    flogin_form.name.default = bro.name
-    flogin_form.process()
-    return render_template('first_login.html', title="First Login", form=flogin_form)
+        flash_wtferrors(form)
+    form.name.default = bro.name
+    form.process()
+    return render_template('first_login.html', title="First Login", form=form)
 
 @main.errorhandler(404)
 def not_found_error(error):

@@ -1,5 +1,5 @@
 from flask.ext.wtf import Form
-from wtforms import TextField, SubmitField, SelectField, IntegerField, widgets, HiddenField
+from wtforms import TextField, SubmitField, SelectField, IntegerField, widgets, HiddenField, BooleanField
 from wtforms.fields import TextAreaField
 from wtforms.validators import DataRequired, ValidationError, Length, NumberRange
 from app.models import *
@@ -9,6 +9,7 @@ class FirstLoginForm(Form):
     name = TextField('name', validators = [DataRequired(), Length(max=50)])
     nickname = TextField('nickname', validators=[Length(max=50)])
     pin = IntegerField('pin', validators = [DataRequired(), NumberRange(min=1, max=2000)])
+    active = BooleanField('active', default=True)
     families = [(x.id, x.name) for x in Family.query.all()]
     family = SelectField('family', choices = families, coerce=int)
     submit = SubmitField('submit')
