@@ -141,10 +141,11 @@ def attend():
 @login_required
 def profile():
     all_brothers = Brother.query.filter_by(active=True)
-    avg = sum([ x.get_all_points(g.current_semester) for x in all_brothers ]) / all_brothers.count()
+    avgpoints = sum([ x.get_all_points(g.current_semester) for x in all_brothers ]) / all_brothers.count()
+    avgsvc = sum([ x.total_service_hours(g.current_semester) for x in all_brothers ]) / all_brothers.count()
     all_items = g.user.events.filter_by(semester=g.current_semester).all() + g.user.awards.filter_by(semester=g.current_semester).all()+ g.user.points.filter_by(semester=g.current_semester).all()
     all_items.sort(key=lambda x: x.timestamp, reverse=True)
-    return render_template("profile.html", title="Profile", avg=avg, all_items=all_items[:10], Event=Event, Award=Award, OtherPoints=OtherPoints, isinstance=isinstance)
+    return render_template("profile.html", title="Profile", avgpoints=avgpoints, avgsvc=avgsvc, all_items=all_items[:10], Event=Event, Award=Award, OtherPoints=OtherPoints, isinstance=isinstance)
 
 @main.route('/founderscup')
 @login_required

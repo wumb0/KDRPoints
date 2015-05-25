@@ -1,10 +1,16 @@
 {% extends 'base.html' %}
 {% block content %}
 {% set points = g.user.get_all_points(g.current_semester) %}
-{% if points < (avg-(0.25*avg)) %}
-{% set label = "danger" %}
+{% set servicehrs = g.user.total_service_hours(g.current_semester) %}
+{% if points < (avgpoints-(0.25*avgpoints)) %}
+{% set pointlabel = "danger" %}
 {% else %}
-{% set label = "success" %}
+{% set pointlabel = "success" %}
+{% endif %}
+{% if servicehrs < (avgsvc-(0.25*avgsvc)) %}
+{% set svclabel = "danger" %}
+{% else %}
+{% set svclabel = "success" %}
 {% endif %}
 <div class="row"><h1><i class="fa fa-user"></i> Profile</h1></div>
 <div class="jumbotron">
@@ -31,7 +37,7 @@
         <h5><a href="{{url_for(".edit_nickname")}}"><button class="btn btn-xs btn-primary">Edit Nickname</button></a><h5>
     </div>
     <div class="row space-above">
-        <div class="col-sm-5 col-sm-offset-1">
+        <div class="col-sm-4">
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     <h3 class="panel-title">Points</h3>
@@ -42,7 +48,7 @@
                             <h3>Your Points: </h3>
                         </div>
                         <div class="col-xs-3">
-                            <h3><span class="label label-{{label}}" style="float: right;">{{points}}</span></h3>
+                            <h3><span class="label label-{{pointlabel}}" style="float: right;">{{points}}</span></h3>
                         </div>
                     </div>
                     <div class="row">
@@ -50,16 +56,47 @@
                             <h3>Average Points: </h3>
                         </div>
                         <div class="col-xs-3">
-                            <h3><span class="label label-primary" style="float: right;">{{avg}}</span></h3>
+                            <h3><span class="label label-primary" style="float: right;">{{avgpoints}}</span></h3>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-sm-5">
+        <div class="col-sm-4">
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <h3 class="panel-title">Stats</h3>
+                    <h3 class="panel-title">Service Hours</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-xs-10">
+                            <h3>Your Service Hrs: </h3>
+                        </div>
+                        <div class="col-xs-2">
+                            {% set service = g.user.service %}
+                            <h3 class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><button type="button"  role="button" class="btn btn-{{svclabel}}" style="float: right;">{{servicehrs}}</button></h3>
+                            <ul class="dropdown-menu" role="menu">
+                                        {% for event in service %}
+                                        <li><a href="#">{{event.name}} - {{(event.end - event.start).seconds/3600}}h</a></li>
+                                        {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-10">
+                            <h3>Avg. Service Hrs: </h3>
+                        </div>
+                        <div class="col-xs-2">
+                            <h3><span class="label label-primary" style="float: right;">{{avgsvc}}</span></h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Events and Awards</h3>
                 </div>
                 <div class="panel-body">
                     <div class="row">

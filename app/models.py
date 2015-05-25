@@ -45,6 +45,13 @@ class Brother(db.Model):
             return True
         return False
 
+    def total_service_hours(self, semester):
+        total = 0
+        for serv in self.service:
+            if serv.semester == semester and serv.approved == True:
+                total += (serv.end - serv.start).seconds/3600.0
+        return total
+
     def is_authenticated(self):
         return True
 
