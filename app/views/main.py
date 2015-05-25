@@ -14,6 +14,10 @@ main = Blueprint('main', __name__)
 def before_request():
     g.user = current_user
     g.current_semester = Semester.query.filter_by(current=True).first()
+    if g.user.is_authenticated():
+        g.user.last_seen = datetime.utcnow()
+        db.session.add(g.user)
+        db.session.commit()
 
 @main.route('/')
 @main.route('/index')
@@ -180,3 +184,32 @@ def brothers():
     all_brothers = Brother.query.filter_by(active=True)
     avg = sum([ x.get_all_points(g.current_semester) for x in all_brothers ]) / all_brothers.count()
     return render_template("brothers.html", title="Brothers", brothers=brothers, avg=avg)
+
+@main.route('/event/<id>')
+@login_required
+def event(id):
+    event = Event.query.filter_by(id=id).first()
+    if event is None:
+        abort(404)
+    return render_template('event.html', title=event.name, event=event)
+
+@main.route('/award/<id>')
+@login_required
+def award(id):
+    award = Award.query.filter_by(id=id).first()
+    if event is None:
+        abort(404)
+    return render_template('award.html', title=award.name, award=award)
+
+@main.route('/service', methods = ['GET', 'POST'])
+@login_required
+def service():
+    form = ServiceForm()
+    if form.validate_on_submit():
+        serv = Service(brother_id=g.user.id, start=form.start.data, end=form.end.data, info=form.info.data, name=form.name.data, semester_id=g.current_semester.id)
+        db.session.add(serv)
+        db.session.commit()
+        flash("Service submitted successfully", category="good")
+    else:
+        flash_wtferrors(form)
+    return render_template('service.html', title="Service", form=form)

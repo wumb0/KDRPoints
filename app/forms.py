@@ -1,7 +1,8 @@
 from flask.ext.wtf import Form
-from wtforms import TextField, SubmitField, SelectField, IntegerField, widgets, HiddenField, BooleanField
+from wtforms import TextField, SubmitField, SelectField, IntegerField, widgets, HiddenField, BooleanField, DateTimeField
 from wtforms.fields import TextAreaField
 from wtforms.validators import DataRequired, ValidationError, Length, NumberRange
+from datetime import datetime, timedelta
 from app.models import *
 #from config import USER_ROLES
 
@@ -50,3 +51,27 @@ class EditNickForm(Form):
         if not Form.validate(self):
             return False
         return True
+
+def roundTime():
+    tm = datetime.now()
+    tm = tm - timedelta(minutes=tm.minute % 15,
+                                seconds=tm.second,
+                                microseconds=tm.microsecond)
+    return tm
+
+class ServiceForm(Form):
+    name = TextField('name', validators=[DataRequired(), Length(max=50)])
+    start = DateTimeField('start', validators=[DataRequired()], format='%m/%d/%Y %I:%M %p', default=roundTime())
+    end = DateTimeField('end', validators=[DataRequired()], format='%m/%d/%Y %I:%M %p', default=roundTime())
+    info = TextAreaField('info')
+    submit = SubmitField('submit')
+
+    def validate(self):
+        if not Form.validate(self):
+            return False
+        return True
+
+    def validate_end(self, field):
+        if self.end.data <= self.start.data:
+            raise ValidationError("The end must be after the beginning")
+

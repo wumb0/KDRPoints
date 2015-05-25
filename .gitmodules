@@ -10,3 +10,6 @@
 [submodule "app/static/icp"]
 	path = app/static/icp
 	url = https://github.com/mjolnic/fontawesome-iconpicker
+[submodule "app/static/drp"]
+	path = app/static/drp
+	url = https://github.com/dangrossman/bootstrap-daterangepicker

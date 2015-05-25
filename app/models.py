@@ -12,19 +12,26 @@ awards = db.Table('awards',
     db.Column('brother_id', db.Integer, db.ForeignKey('brother.id'))
 )
 
+points = db.Table('points',
+    db.Column('otherpoints_id', db.Integer, db.ForeignKey('otherpoints.id')),
+    db.Column('brother_id', db.Integer, db.ForeignKey('brother.id'))
+)
+
 class Brother(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     name = db.Column(db.String(50), index = True)
     nickname = db.Column(db.String(50), index = True)
     email = db.Column(db.String(100), index = True, unique = True, nullable=False)
     role = db.Column(db.SmallInteger, default = USER_ROLES['user'], nullable=False)
-    position = db.Column(db.String(50), index = True)
+    position = db.Column(db.String(50), index = True, nullable=False, default="None")
     pin = db.Column(db.Integer, index = True)
-    last_seen = db.Column(db.DateTime)
+    last_seen = db.Column(db.DateTime, default=datetime.utcnow())
     active = db.Column(db.Boolean, default = True, nullable=False)
-    points = db.relationship('OtherPoints', backref = 'brother', lazy = 'dynamic')
+    points = db.relationship('OtherPoints', secondary=points, backref = 'brothers', lazy = 'dynamic')
     awards = db.relationship('Award', secondary=awards, backref = 'brothers', lazy = 'dynamic')
     events = db.relationship('Event', secondary=events, backref='brothers', lazy='dynamic')
+    service = db.relationship('Service')
+    studyhours = db.relationship('StudyHours')
     family_id = db.Column(db.Integer, db.ForeignKey('family.id'))
     family = db.relationship('Family', backref="brothers")
 
@@ -53,7 +60,7 @@ class Brother(db.Model):
     def __repr__(self):
         return self.name
 
-    def last_seen(self):
+    def last_seen_print(self):
         return self.last_seen.strftime('%A, %B %d %Y %I:%M%p')
 
     def get_all_points(self, semester):
@@ -109,13 +116,13 @@ class Semester(db.Model):
             return -1
 
 class OtherPoints(db.Model):
+    __tablename__ = 'otherpoints'
     id = db.Column(db.Integer, primary_key = True)
-    brother_id = db.Column(db.Integer, db.ForeignKey('brother.id'))
     points = db.Column(db.Integer, nullable=False)
     semester = db.relationship("Semester")
     semester_id = db.Column(db.Integer, db.ForeignKey('semester.id'), nullable=False)
     reason = db.Column(db.String(100), nullable=False)
-    timestamp = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow(), nullable=False)
 
     def __repr__(self):
         return '{} Points'.format(self.amount)
@@ -153,8 +160,38 @@ class Award(db.Model):
     semester = db.relationship("Semester")
     semester_id = db.Column(db.Integer, db.ForeignKey('semester.id'), nullable=False)
     points = db.Column(db.Integer, default = 0, nullable=False )
-    timestamp = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow(), nullable=False)
     color = db.Column(db.String(15), default="#000000", nullable=False)
+
+    def __repr__(self):
+        return self.name
+
+class Service(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    name = db.Column(db.String(50), index = True, nullable=False)
+    info = db.Column(db.String(200))
+    semester = db.relationship("Semester")
+    semester_id = db.Column(db.Integer, db.ForeignKey('semester.id'), nullable=False)
+    start = db.Column(db.DateTime, nullable=False)
+    end = db.Column(db.DateTime, nullable=False)
+    brother_id = db.Column(db.Integer, db.ForeignKey('brother.id'), nullable=False)
+    brother = db.relationship("Brother")
+    approved = db.Column(db.Boolean, default=False)
+
+    def __repr__(self):
+        return self.name
+
+class StudyHours(db.Model):
+    __tablename__ = 'studyhours'
+    id = db.Column(db.Integer, primary_key = True)
+    info = db.Column(db.String(200), nullable = False)
+    semester = db.relationship("Semester")
+    semester_id = db.Column(db.Integer, db.ForeignKey('semester.id'), nullable=False)
+    start = db.Column(db.DateTime, nullable=False)
+    end = db.Column(db.DateTime, nullable=False)
+    brother_id = db.Column(db.Integer, db.ForeignKey('brother.id'), nullable=False)
+    brother = db.relationship("Brother")
+    approved = db.Column(db.Boolean, default=False)
 
     def __repr__(self):
         return self.name

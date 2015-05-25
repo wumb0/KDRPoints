@@ -37,13 +37,18 @@ class AdminModelView(ProtectedModelView):
             return False
         return True
 
+    def is_accessible(self):
+        if current_user.is_authenticated() and current_user.role == 2:
+            return True
+        return False
+
 class BrotherModelView(AdminModelView):
     column_exclude_list = ['points']
     column_default_sort = ('active', True)
     can_create = False
     column_display_pk = True
     column_hide_backrefs = False
-    form_excluded_columns = ('points', 'awards', 'events')
+    form_excluded_columns = ('points', 'awards', 'events', 'studyhours', 'service', 'last_seen')
     def __init__(self, session):
         super(BrotherModelView, self).__init__(models.Brother, session)
 
@@ -109,3 +114,19 @@ class AwardModelView(ProtectedModelView):
     form_args = dict(semester=dict(default=semester))
     def __init__(self, session):
         super(AwardModelView, self).__init__(models.Award, session)
+
+class ServiceModelView(ProtectedModelView):
+    column_default_sort = ('approved')
+
+    def __init__(self, session):
+        super(ServiceModelView, self).__init__(models.Service, session)
+
+    def is_accessible(self):
+        if current_user.is_authenticated() and ((current_user.role == 1 and "service" in current_user.position.lower()) or current_user.role == 2):
+            self.can_create = True
+            self.can_edit = True
+            self.can_delete = True
+            return True
+        return False
+
+

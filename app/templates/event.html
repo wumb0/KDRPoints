@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="jumbotron">
+    <div class="row">
+        <h3>{{event.name}}</h3>
+    </div>
+    <div class="row">
+        <div class="label label-primary">{{event.brothers|length}}</div>
+    </div>
+</div>
+{% endblock %}

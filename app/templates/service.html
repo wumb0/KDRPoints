@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block head %}
+<link href="{{url_for('static', filename='drp/daterangepicker-bs3.css')}}" rel="stylesheet">
+{% endblock %}
+{% block content %}
+<div class="row"><h1><i class="fa fa-recycle"></i> Report Service Hours</h1></div>
+<div class="jumbotron">
+    <form action="" method="POST" name="service">
+        {{form.hidden_tag()}}
+        <p>
+            <h5>Event: </h5>{{form.name}}
+        </p>
+        <p>
+            <h5>Start Time: </h5>{{form.start}}
+        </p>
+        <p>
+            <h5>End Time: </h5>{{form.end}}
+        </p>
+        <p>
+            <h5>Additional Info: </h5>{{form.info}}
+        </p>
+        {{form.submit(class="btn btn-primary", value="Submit")}}
+    </form>
+</div>
+{% endblock %}
+{% block footer %}
+<script type="text/javascript" src="{{url_for('static', filename='drp/moment.min.js')}}"></script>
+<script type="text/javascript" src="{{url_for('static', filename='drp/daterangepicker.js')}}"></script>
+<script type="text/javascript">
+$(function() {
+    $('input[name="end"]').daterangepicker({
+        singleDatePicker: true,
+        format: 'MM/DD/YYYY h:mm A',
+        timePicker: true,
+        opens: 'center',
+        timePickerIncrement: 15
+    });
+    $('input[name="start"]').daterangepicker({
+        singleDatePicker: true,
+        format: 'MM/DD/YYYY h:mm A',
+        timePicker: true,
+        opens: 'center',
+        timePickerIncrement: 15
+    });
+});
+</script>
+{% endblock %}
