@@ -137,15 +137,23 @@ def attend():
         flash_wtferrors(form)
     return render_template('attend.html', title="Attend", form=form, events=events_query)
 
-@main.route('/profile')
+@main.route('/profile', methods = [ 'GET', 'POST' ])
 @login_required
 def profile():
+    form = EditNickForm()
+    if form.validate_on_submit():
+        g.user.nickname = form.nickname.data
+        db.session.add(g.user)
+        db.session.commit()
+        return redirect(url_for('.profile'))
+    else:
+        flash_wtferrors(form)
     all_brothers = Brother.query.filter_by(active=True)
     avgpoints = sum([ x.get_all_points(g.current_semester) for x in all_brothers ]) / all_brothers.count()
     avgsvc = sum([ x.total_service_hours(g.current_semester) for x in all_brothers ]) / all_brothers.count()
     all_items = g.user.events.filter_by(semester=g.current_semester).all() + g.user.awards.filter_by(semester=g.current_semester).all()+ g.user.points.filter_by(semester=g.current_semester).all()
     all_items.sort(key=lambda x: x.timestamp, reverse=True)
-    return render_template("profile.html", title="Profile", avgpoints=avgpoints, avgsvc=avgsvc, all_items=all_items[:10], Event=Event, Award=Award, OtherPoints=OtherPoints, isinstance=isinstance)
+    return render_template("profile.html", title="Profile", avgpoints=avgpoints, avgsvc=avgsvc, all_items=all_items[:10], Event=Event, Award=Award, OtherPoints=OtherPoints, isinstance=isinstance, form=form)
 
 @main.route('/founderscup')
 @login_required

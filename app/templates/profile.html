@@ -34,7 +34,26 @@
         </div>
     </div>
     <div class="row text-center space-above">
-        <h5><a href="{{url_for(".edit_nickname")}}"><button class="btn btn-xs btn-primary">Edit Nickname</button></a><h5>
+<div class="modal fade" id="editnickname" tabindex="-1" role="dialog" aria-labelledby="mt" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="mt">Edit Nickname</h4>
+            </div>
+            <div class="modal-body">
+                <div class="jumbotron">
+                    <form action="" method="POST" name="edit_nickname">
+                        {{form.hidden_tag()}}
+                        <h5>Nickname:</h5>{{form.nickname}}
+                        {{form.submit(class="btn btn-primary", value="Submit")}}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+        <h5><a href="#" data-toggle='modal' data-target="#editnickname"><button class="btn btn-xs btn-primary">Edit Nickname</button></a><h5>
     </div>
     <div class="row space-above">
         <div class="col-sm-4">
