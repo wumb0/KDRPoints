@@ -41,13 +41,18 @@
             </div>
             <div class="col-xs-4">
                 {% set events = brother.events.filter_by(semester=g.current_semester).all() %}
+                {% if g.user.role > 0 %}
+                {% for event in events %}
+                    {% include 'event.html' %}
+                {% endfor %}
+                {% endif %}
                 <h3 class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><button type="button"  role="button" class="btn btn-primary" style="float: right;">{{events|length}}</button></h3>
                 <ul class="dropdown-menu" role="menu">
-                            {% if g.user.role > 0 %}
-                            {% for event in events %}
-                            <li><a href="#">{{event.name}}</a></li>
-                            {% endfor %}
-                            {% endif %}
+                    {% if g.user.role > 0 %}
+                    {% for event in events %}
+                    <li><a href="#" data-toggle="modal" data-target="#evmo{{event.id}}">{{event.name}}</a></li>
+                    {% endfor %}
+                    {% endif %}
                 </ul>
             </div>
         </div>
@@ -57,13 +62,18 @@
             </div>
             <div class="col-xs-4">
                 {% set awards = brother.awards.filter_by(semester=g.current_semester).all() %}
+                {% if g.user.role > 0 %}
+                {% for award in awards %}
+                    {% include 'award.html' %}
+                {% endfor %}
+                {% endif %}
                 <h3 class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><button type="button"  role="button" class="btn btn-primary" style="float: right;">{{awards|length}}</button></h3>
                 <ul class="dropdown-menu" role="menu">
-                            {% if g.user.role > 0 %}
-                            {% for award in awards %}
-                            <li><a href="#"><i class="fa {{award.icon}}" style="color: #{{award.color}};"></i> {{award.name}} - {{award.points}} Points</a></li>
-                            {% endfor %}
-                            {% endif %}
+                    {% if g.user.role > 0 %}
+                    {% for award in awards %}
+                    <li><a href="#" data-toggle="modal" data-target="#awmo{{award.id}}"><i class="fa {{award.icon}}" style="color: #{{award.color}};"></i> {{award.name}}</a></li>
+                    {% endfor %}
+                    {% endif %}
                 </ul>
             </div>
         </div>
@@ -75,12 +85,13 @@
     </div>
     <div class="col-md-5 space-above text-center">
         {% for award in brother.awards[::-1][:4] %}
+        {% include 'award.html' %}
         <div class="col-sm-2 col-md-2 award">
             <div class="row text-center">
                 <i style="color: #{{award.color}}" class="fa {{award.icon}} fa-4x" title="{{award.semester}} - {{award.points}} Points"></i>
             </div>
             <div class="row text-center">
-                {{award.name}}
+                <a data-toggle="modal" data-target="#awmo{{award.id}}">{{award.name}}</a>
             </div>
         </div>
         {% endfor %}

@@ -134,6 +134,9 @@ class OtherPoints(db.Model):
     def __repr__(self):
         return '{} Points'.format(self.amount)
 
+    def print_timestamp(self):
+        return self.timestamp.strftime('%A, %B %d %Y %I:%M%p')
+
 class Event(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     event_picker = db.Column(db.Boolean, default = True, nullable=False)
@@ -160,6 +163,9 @@ class Event(db.Model):
         except:
             return -1
 
+    def print_timestamp(self):
+        return self.timestamp.strftime('%A, %B %d %Y %I:%M%p')
+
 class Award(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     name = db.Column(db.String(20), index = True, nullable=False)
@@ -168,10 +174,13 @@ class Award(db.Model):
     semester_id = db.Column(db.Integer, db.ForeignKey('semester.id'), nullable=False)
     points = db.Column(db.Integer, default = 0, nullable=False )
     timestamp = db.Column(db.DateTime, default=datetime.utcnow(), nullable=False)
-    color = db.Column(db.String(15), default="#000000", nullable=False)
+    color = db.Column(db.String(15), default="000000", nullable=False)
 
     def __repr__(self):
         return self.name
+
+    def print_timestamp(self):
+        return self.timestamp.strftime('%A, %B %d %Y %I:%M%p')
 
 class Service(db.Model):
     id = db.Column(db.Integer, primary_key = True)

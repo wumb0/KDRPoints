@@ -198,7 +198,7 @@ def event(id):
 @login_required
 def award(id):
     award = Award.query.filter_by(id=id).first()
-    if event is None:
+    if award is None:
         abort(404)
     return render_template('award.html', title=award.name, award=award)
 

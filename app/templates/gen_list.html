@@ -7,6 +7,8 @@
             <h3><span class="label label-default lblspace">{{item.semester.get_name()}}</span></h3>
         </div>
     {% if isinstance(item, Event) %}
+    {% set event = item %}
+    {% include 'event.html' %}
         <div class="col-md-1">
         {% if request.endpoint == "main.events" %}
             <div class="row text-center dropdown theme-dropdown">
@@ -25,7 +27,7 @@
         {% endif %}
         </div>
         <div class="col-md-5">
-                <h4>{{item.name}}</h4>
+            <h4><a href="#" data-toggle="modal" data-target="#evmo{{event.id}}">{{event.name}}</a></h4>
                 <p>{{item.description}}</p>
         </div>
     {% endif %}
@@ -38,6 +40,8 @@
         </div>
     {% endif %}
     {% if isinstance(item, Award) %}
+    {% set award = item %}
+    {% include 'award.html' %}
         <div class="col-md-1">
         {% if request.endpoint == "main.awards" %}
             <div class="row text-center dropdown theme-dropdown">
@@ -60,7 +64,7 @@
                 <i style="color: #{{item.color}};" class="fa {{item.icon}} fa-4x"></i>
             </div>
             <div class="row">
-                {{item.name}}
+                <a data-toggle="modal" data-target="#awmo{{award.id}}">{{award.name}}</a>
             </div>
         </div>
     {% endif %}
