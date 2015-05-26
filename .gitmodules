@@ -10,3 +10,6 @@
 [submodule "app/static/drp"]
 	path = app/static/drp
 	url = https://github.com/dangrossman/bootstrap-daterangepicker
+[submodule "app/static/kon"]
+	path = app/static/kon
+	url = https://github.com/snaptortoise/konami-js
