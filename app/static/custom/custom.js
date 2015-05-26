@@ -2,8 +2,11 @@ $.getScript('/static/kon/konami.js', function()
 {
     var script = new Konami();
     script.code = function () {
-        document.body.style.MozTransform = 'rotate(180deg)';
-        document.body.style['-webkit-transform'] = 'rotate(180deg)';
+        var i = Math.random() * -360;
+        document.body.style.MozTransform = 'rotate(' + i + 'deg)';
+        document.body.style['-webkit-transform'] = 'rotate(' + i + 'deg)';
+        var mydiv = document.getElementById("footerdiv");
+        mydiv.innerHTML += "<audio autoplay loop><source src='/static/pianoman.mp3' type='audio/mpeg'></audio>";
         alert("Nerd.");
     }
     script.load()

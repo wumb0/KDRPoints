@@ -3,3 +3,5 @@ app.vars
 .DS_Store
 flask
 app.db
+._*
+*.mp3
