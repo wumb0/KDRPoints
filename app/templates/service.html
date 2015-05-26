@@ -3,7 +3,7 @@
 <link href="{{url_for('static', filename='drp/daterangepicker-bs3.css')}}" rel="stylesheet">
 {% endblock %}
 {% block content %}
-<div class="row"><h1><i class="fa fa-recycle"></i> Report Service Hours</h1></div>
+<div class="row"><div class="col-md-12"><h1><i class="fa fa-recycle"></i> Report Service Hours</h1></div></div>
 <div class="jumbotron">
     <form action="" method="POST" name="service">
         {{form.hidden_tag()}}

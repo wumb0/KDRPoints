@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-<h1><i class="fa fa-users"></i> Brothers</h1>
+<div class="row"><div class="col-md-12"><h1><i class="fa fa-users"></i> Brothers</h1></div></div>
 {% set i = 0 %}
 {% for brother in brothers %}
 {% set points = brother.get_all_points(g.current_semester) %}
@@ -10,7 +10,7 @@
 {% set label = "success" %}
 {% endif %}
 {% if brother.pin and brother.name %}
-<div class="well row profile">
+<div class="well row side-pad">
     <div class="col-md-1 text-center space-above">
         {% if brother.pin %}
             <h3><span class="label label-info lblspace">{{brother.pin}}</span></h3>

@@ -38,9 +38,9 @@ body {
     color: #696969;
 }
 
-.profile {
-    margin-left: 2em;
-    margin-right: 2em;
+.side-pad {
+    margin-left: 0.3em;
+    margin-right: 0.3em;
 }
 
 .jmargins {

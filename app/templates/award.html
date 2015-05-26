@@ -6,22 +6,30 @@
                 <h4 class="modal-title" id="mt">Award</h4>
             </div>
             <div class="modal-body">
-                <div class="jumbotron text-left">
-                    <div class="col-sm-12">
-                        <div class="row text-center">
+                <div class="jumbotron text-left side-pad">
+                    <div class="row text-center">
+                        <div class="col-sm-12">
                             <i class="fa {{award.icon}} fa-5x" style="color: #{{award.color}};"></i>
                         </div>
-                        <div class="row">
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
                             <h3> {{award.name}} - {{award.points}} Points</h3>
                         </div>
-                        <div class="row">
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
                             <div class="label label-default label-lg">{{award.print_timestamp()}}</div>
                         </div>
-                        <div class="row space-above">
+                    </div>
+                    <div class="row space-above">
+                        <div class="col-sm-12">
                             <div class="label label-primary">{{award.brothers|length}} Brother{% if award.brothers|length != 1 %}s{% endif %}</div>
                         </div>
-                        {% if g.user.role == 2 %}
-                        <div class="row space-above">
+                    </div>
+                    {% if g.user.role == 2 %}
+                    <div class="row space-above">
+                        <div class="col-sm-12">
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
                                     <h3 class="panel-title">Brothers</h3>
@@ -37,8 +45,8 @@
                                 </div>
                             </div>
                         </div>
-                        {% endif %}
                     </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
