@@ -4,23 +4,33 @@
 {% endblock %}
 {% block content %}
 <div class="row"><div class="col-md-12"><h1><i class="fa fa-recycle"></i> Report Service Hours</h1></div></div>
-<div class="jumbotron">
-    <form action="" method="POST" name="service">
-        {{form.hidden_tag()}}
-        <p>
-            <h5>Event: </h5>{{form.name}}
-        </p>
-        <p>
-            <h5>Start Time: </h5>{{form.start}}
-        </p>
-        <p>
-            <h5>End Time: </h5>{{form.end}}
-        </p>
-        <p>
-            <h5>Additional Info: </h5>{{form.info}}
-        </p>
-        {{form.submit(class="btn btn-primary", value="Submit")}}
-    </form>
+<div class="row jumbotron">
+    <div class="col-md-12">
+        <form action="" method="POST" name="service">
+            {{form.hidden_tag()}}
+            <div class="row">
+                <div class="col-md-12">
+                    <h5>Event: </h5>{{form.name}}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <h5>Start Time: </h5>{{form.start}}<button type="button" id="startpicker" class="btn fa fa-calendar"></button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <h5>End Time: </h5>{{form.end}}<button type="button" id="endpicker" class="btn fa fa-calendar"></button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <h5>Additional Info: </h5>{{form.info}}
+                </div>
+            </div>
+            {{form.submit(class="btn btn-primary", value="Submit")}}
+        </form>
+    </div>
 </div>
 {% endblock %}
 {% block footer %}
@@ -28,19 +38,25 @@
 <script type="text/javascript" src="{{url_for('static', filename='drp/daterangepicker.js')}}"></script>
 <script type="text/javascript">
 $(function() {
-    $('input[name="end"]').daterangepicker({
+    $('#endpicker').daterangepicker({
         singleDatePicker: true,
         format: 'MM/DD/YYYY h:mm A',
         timePicker: true,
         opens: 'center',
         timePickerIncrement: 15
     });
-    $('input[name="start"]').daterangepicker({
+    $('#startpicker').daterangepicker({
         singleDatePicker: true,
         format: 'MM/DD/YYYY h:mm A',
         timePicker: true,
         opens: 'center',
         timePickerIncrement: 15
+    });
+    $('#startpicker').on('apply.daterangepicker', function(ev, picker) {
+    $('#start').val(picker.startDate.format('MM/DD/YYYY h:mm A'));
+    });
+    $('#endpicker').on('apply.daterangepicker', function(ev, picker) {
+    $('#end').val(picker.startDate.format('MM/DD/YYYY h:mm A'));
     });
 });
 </script>
