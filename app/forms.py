@@ -7,12 +7,12 @@ from app.models import *
 #from config import USER_ROLES
 
 class FirstLoginForm(Form):
-    name = TextField('name', validators = [DataRequired(), Length(max=50)])
-    nickname = TextField('nickname', validators=[Length(max=50)])
-    pin = IntegerField('pin', validators = [DataRequired(), NumberRange(min=1, max=2000)])
-    active = BooleanField('active', default=True)
+    name = TextField('Name', validators = [DataRequired(), Length(max=50)])
+    nickname = TextField('Nickname', validators=[Length(max=50)])
+    pin = IntegerField('Pin', validators = [DataRequired(), NumberRange(min=1, max=2000)])
+    active = BooleanField('Active', default=True)
     families = [(x.id, x.name) for x in Family.query.all()]
-    family = SelectField('family', choices = families, coerce=int)
+    family = SelectField('Family Line', choices = families, coerce=int)
     submit = SubmitField('submit')
 
     def validate(self):
@@ -27,9 +27,9 @@ class FirstLoginForm(Form):
                 raise ValidationError("The PIN number entered has already been taken")
 
 class AttendForm(Form):
-    event = SelectField('event', choices=[], coerce=int)
-    pin = IntegerField('pin', validators=[DataRequired()], default="")
-    code = TextField('code', default="0000", validators=[Length(max=10)])
+    event = SelectField('Event', choices=[], coerce=int)
+    pin = IntegerField('Pin', validators=[DataRequired()], default="")
+    code = TextField('Code', default="0000", validators=[Length(max=10)])
     submit = SubmitField('submit')
 
     def validate(self):
@@ -44,7 +44,7 @@ class AttendForm(Form):
             raise ValidationError("The PIN number does not exist in the database")
 
 class EditNickForm(Form):
-    nickname = TextField("nickname", validators=[Length(max=50)])
+    nickname = TextField("New Nickname", validators=[Length(max=50)])
     submit = SubmitField('submit')
 
     def validate(self):
@@ -60,10 +60,10 @@ def roundTime():
     return tm
 
 class ServiceForm(Form):
-    name = TextField('name', validators=[DataRequired(), Length(max=50)])
-    start = DateTimeField('start', validators=[DataRequired()], format='%m/%d/%Y %I:%M %p', default=roundTime())
-    end = DateTimeField('end', validators=[DataRequired()], format='%m/%d/%Y %I:%M %p', default=roundTime())
-    info = TextAreaField('info')
+    name = TextField('Event Name', validators=[DataRequired(), Length(max=50)])
+    start = DateTimeField('Start Time', validators=[DataRequired()], format='%m/%d/%Y %I:%M %p', default=roundTime())
+    end = DateTimeField('End Time', validators=[DataRequired()], format='%m/%d/%Y %I:%M %p', default=roundTime())
+    info = TextAreaField('Additional info')
     submit = SubmitField('submit')
 
     def validate(self):

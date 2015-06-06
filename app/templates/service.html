@@ -10,22 +10,22 @@
             {{form.hidden_tag()}}
             <div class="row">
                 <div class="col-md-12">
-                    <h5>Event: </h5>{{form.name}}
+                    <h5>{{form.name.label}} </h5>{{form.name}}
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <h5>Start Time: </h5>{{form.start}}<button type="button" id="startpicker" class="btn fa fa-calendar"></button>
+                    <h5>{{form.start.label}} </h5>{{form.start}}<button type="button" id="startpicker" class="btn fa fa-calendar"></button>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <h5>End Time: </h5>{{form.end}}<button type="button" id="endpicker" class="btn fa fa-calendar"></button>
+                    <h5>{{form.end.label}} </h5>{{form.end}}<button type="button" id="endpicker" class="btn fa fa-calendar"></button>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <h5>Additional Info: </h5>{{form.info}}
+                    <h5>{{form.info.label}} </h5>{{form.info}}
                 </div>
             </div>
             {{form.submit(class="btn btn-primary", value="Submit")}}

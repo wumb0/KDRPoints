@@ -5,17 +5,18 @@
     <form action="" method="POST" name="attend">
         {{form.hidden_tag()}}
         <p>
-        <h5>Event: </h5>{{form.event}}
+        <h5>{{form.event.label}} </h5>{{form.event}}
         </p>
         <p id="codeform">
-        <h5>Code: </h5>
+        <h5>{{form.code.label}} </h5>
         {{form.code(size=12)}} <span class="required"></span>
         </p>
         <p>
+        <h5>{{form.pin.label}} </h5>
         {% if g.user.is_authenticated() %}
-        <h5>Pin: </h5>{{form.pin(size=5, disabled=True)}} Logged in
+        {{form.pin(size=5, disabled=True)}} Logged in
         {% else %}
-        <h5>Pin: </h5>{{form.pin(size=5)}}
+        {{form.pin(size=5)}}
         {% endif %}
         </p>
         {{form.submit(class="btn btn-primary", value="Submit")}}

@@ -41,11 +41,11 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title" id="mt">Edit Nickname</h4>
             </div>
-            <div class="modal-body">
+            <div class="modal-body text-left">
                 <div class="jumbotron">
                     <form action="" method="POST" name="edit_nickname">
                         {{form.hidden_tag()}}
-                        <h5>Nickname:</h5>{{form.nickname}}
+                        <h5>{{form.nickname.label}}</h5>{{form.nickname}}
                         {{form.submit(class="btn btn-primary", value="Submit")}}
                     </form>
                 </div>
