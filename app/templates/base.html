@@ -25,21 +25,21 @@
     <body role="document">
         <!-- Fixed navbar -->
         <nav class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
+        <div class="container fluid">
             <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="{{url_for('.index')}}">KDR Points</a>
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand " href="{{url_for('.index')}}"><i class="fa fa-home"></i> KDR Points</a>
             </div>
             <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li id="index"><a href="{{url_for('.index')}}"><i class="fa fa-home"></i> Home</a></li>
                 {% if g.user.is_authenticated() %}
                 <li id="profile"><a href="{{url_for(".profile")}}"><i class="fa fa-user"></i> Profile</a></li>
+                <li id="allpoints"><a href="{{url_for(".allpoints")}}"><i class="fa fa-sort"></i> My Points</a></li>
                 <li id="founderscup"><a href="{{url_for(".founderscup")}}"><i class="fa fa-trophy"></i> Founders Cup</a></li>
                 <li id="awards"><a href="{{url_for('.awards')}}"><i class="fa fa-star"></i> Awards</a></li>
                 <li id="events"><a href="{{url_for('.events')}}"><i class="fa fa-calendar"></i> Events</a></li>

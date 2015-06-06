@@ -11,3 +11,7 @@ $.getScript('/static/kon/konami.js', function()
     }
     script.load()
 });
+
+$(window).on('resize load', function() {
+    $('body').css({"padding-top": $(".navbar").height() + "px"});
+});

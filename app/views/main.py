@@ -155,6 +155,13 @@ def profile():
     all_items.sort(key=lambda x: x.timestamp, reverse=True)
     return render_template("profile.html", title="Profile", avgpoints=avgpoints, avgsvc=avgsvc, all_items=all_items[:10], Event=Event, Award=Award, OtherPoints=OtherPoints, isinstance=isinstance, form=form)
 
+@main.route('/allpoints')
+@login_required
+def allpoints():
+    all_items = g.user.events.filter_by(semester=g.current_semester).all() + g.user.awards.filter_by(semester=g.current_semester).all()+ g.user.points.filter_by(semester=g.current_semester).all()
+    all_items.sort(key=lambda x: x.timestamp, reverse=True)
+    return render_template("allpoints.html", title="All Points", all_items=all_items[:10], Event=Event, Award=Award, OtherPoints=OtherPoints, isinstance=isinstance)
+
 @main.route('/founderscup')
 @login_required
 def founderscup():
