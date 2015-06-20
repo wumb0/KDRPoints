@@ -5,3 +5,4 @@ flask
 app.db
 ._*
 *.mp3
+migrations

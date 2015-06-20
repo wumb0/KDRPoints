@@ -130,6 +130,7 @@ class OtherPoints(db.Model):
     semester_id = db.Column(db.Integer, db.ForeignKey('semester.id'), nullable=False)
     reason = db.Column(db.String(100), nullable=False)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow(), nullable=False)
+    __table_args__ = (db.CheckConstraint(points >= 0, name='check_points_positive'),{})
 
     def __repr__(self):
         return '{} Points'.format(self.amount)
@@ -148,6 +149,7 @@ class Event(db.Model):
     semester_id = db.Column(db.Integer, db.ForeignKey('semester.id'), nullable=False)
     timestamp = db.Column(db.DateTime, default=datetime.today, nullable=False)
     points = db.Column(db.Integer, default = 0, nullable=False)
+    __table_args__ = (db.CheckConstraint(points >= 0, name='check_points_positive'),{})
 
     def __repr__(self):
         return self.name
@@ -175,6 +177,7 @@ class Award(db.Model):
     points = db.Column(db.Integer, default = 0, nullable=False )
     timestamp = db.Column(db.DateTime, default=datetime.utcnow(), nullable=False)
     color = db.Column(db.String(15), default="000000", nullable=False)
+    __table_args__ = (db.CheckConstraint(points >= 0, name='check_points_positive'),{})
 
     def __repr__(self):
         return self.name
