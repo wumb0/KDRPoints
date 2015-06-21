@@ -9,19 +9,29 @@ git clone --recursive https://github.com/jgeigerm/KDRPoints/
 
 Then you need a few things.
 
-Make a new file in the root of the project (where requirements.txt is) called app.vars
+Install python-dev, libmysqlclient-dev, and mysql-server
+```
+sudo apt-get install libmysqlclient-dev python-dev mysql-server
+```
+Change the root password of your mysql installation :)
 
-- The first line should be a random key: Can be whatever (md5 sum something and paste it in there)
+Run mysql_setup.sh (you can just keep the defaults, except for the password, which you should define)
 
-- The second line should be the Google Consumer ID
+Make a new file in the root of the project (where requirements.txt is) called app.vars with the following lines
 
-- The third line should be the Google Consumer Secret
+1. The database name
+2. The database host
+3. The database username
+4. The database password
+5. A random key: Can be whatever (md5 sum something and paste it in there)
+6. The Google Consumer ID
+7. The Google Consumer Secret
 
 Next, start up a virtualenv with the command: virtualenv flask
 
 Enter the virtualenv with the command: source flask/bin/activate
 
-Then install requirements with pip: pip install -r requirements.txt
+Then install requirements with pip: pip install -r requirements.txt (Flask-MySQL will fail if you don't install python-dev and libmysqlclient-dev above)
 
 Google Auth
 -----------
@@ -37,7 +47,7 @@ Use the following command to start the server: python run.py
 
 It should work now but you have to run a few queries to insert things before you can complete registration:
 
-sqlite3 app.db -init db_base.dump
+mysql -u root -p < db_base.dump
 
 Then restart the server
 
@@ -45,8 +55,6 @@ Log in with your kdrib Google account
 
 Run the following to upgrade yourself to admin:
 
-sqlite3 app.db -cmd 'update brother set role=2;'
-
-Then .exit to exit sqlite3
+echo "use kdrpoints;update brother set role=2;" | mysql -u kdrpoints -p
 
 Now you can access the admin panel as a superadmin
