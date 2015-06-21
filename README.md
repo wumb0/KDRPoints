@@ -19,7 +19,7 @@ Change the root password of your mysql installation :)
 
 Run mysql_setup.sh (you can just keep the defaults, except for the password, which you should define)
 
-Make a new file in the root of the project (where requirements.txt is) called app.vars with the following lines
+Make a new file in the root of the project (where requirements.txt is) called app.vars with the following lines (1-4 are not needed with sqlite)
 
 1. The database name
 2. The database host
@@ -33,7 +33,11 @@ Next, start up a virtualenv with the command: virtualenv flask
 
 Enter the virtualenv with the command: source flask/bin/activate
 
-Then install requirements with pip: pip install -r requirements.txt (Flask-MySQL will fail if you don't install python-dev and libmysqlclient-dev above)
+Then install requirements with pip:
+```
+pip install -r requirements.txt
+```
+Flask-MySQL will fail if you don't install python-dev and libmysqlclient-dev above, if you aren't using MySQL then just ignore it
 
 Google Auth
 -----------
@@ -49,7 +53,7 @@ Use the following command to start the server: python run.py
 
 It should work now but you have to run a few queries to insert things before you can complete registration:
 
-mysql -u root -p < db_base.dump
+mysql -u root -p < db_base.dump OR sqlite3 app.db -init db_base.dump (it should still work)
 
 Then restart the server
 
@@ -57,6 +61,6 @@ Log in with your kdrib Google account
 
 Run the following to upgrade yourself to admin:
 
-echo "use kdrpoints;update brother set role=2;" | mysql -u kdrpoints -p
+echo "use kdrpoints;update brother set role=2;" | mysql -u kdrpoints -p OR sqlite3 app.db -cmd 'update brother set role=2;'
 
 Now you can access the admin panel as a superadmin
