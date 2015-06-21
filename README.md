@@ -9,6 +9,8 @@ git clone --recursive https://github.com/jgeigerm/KDRPoints/
 
 Then you need a few things.
 
+If you don't want to use mysql then you can use sqlite... just comment out the mysql lines in config.py and uncomment the sqlite line
+
 Install python-dev, libmysqlclient-dev, and mysql-server
 ```
 sudo apt-get install libmysqlclient-dev python-dev mysql-server
