@@ -58,8 +58,10 @@ mysql -u root -p < db_base.dump
 ```
 OR
 ```
-sqlite3 app.db -init db_base.dump (it should still work)
+sqlite3 app.db -init db_base.dump
 ```
+It will error because of the use statement but it should work otherwise. 
+
 Then restart the server
 
 Log in with your kdrib Google account
