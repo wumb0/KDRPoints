@@ -4,6 +4,7 @@ from flask_admin.contrib.sqla import ModelView
 from flask.ext.login import current_user
 from flask import redirect, url_for, flash
 from config import USER_ROLES
+from wtforms.validators import NumberRange
 
 class IndexView(AdminIndexView):
     def is_accessible(self):
@@ -63,7 +64,8 @@ class EventModelView(ProtectedModelView):
     can_delete = True
     can_edit = True
     semester = models.Semester.query.filter_by(current=True).first()
-    form_args = dict(semester=dict(default=semester))
+    form_args = dict(points=dict(validators=[NumberRange(min=0)]),
+                     semester=dict(default=semester))
     def __init__(self, session):
         super(EventModelView, self).__init__(models.Event, session)
 
@@ -72,7 +74,9 @@ class PointsModelView(ProtectedModelView):
     can_delete = True
     can_edit = True
     semester = models.Semester.query.filter_by(current=True).first()
-    form_args = dict(semester=dict(default=semester))
+    form_args = dict(points=dict(validators=[NumberRange(min=0)]),
+                     semester=dict(default=semester))
+
     def __init__(self, session):
         super(PointsModelView, self).__init__(models.OtherPoints, session)
 
@@ -111,7 +115,8 @@ class AwardModelView(ProtectedModelView):
     edit_template = 'admin/editaward.html'
     create_template = 'admin/createaward.html'
     semester = models.Semester.query.filter_by(current=True).first()
-    form_args = dict(semester=dict(default=semester))
+    form_args = dict(points=dict(validators=[NumberRange(min=0)]),
+                     semester=dict(default=semester))
     def __init__(self, session):
         super(AwardModelView, self).__init__(models.Award, session)
 
