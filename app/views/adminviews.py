@@ -114,11 +114,12 @@ class AwardModelView(ProtectedModelView):
     }
     edit_template = 'admin/editaward.html'
     create_template = 'admin/createaward.html'
-    brothers = [ (x.id, x) for x in models.Brother.query.filter_by(active=True) ]
     semester = models.Semester.query.filter_by(current=True).first()
     form_args = dict(points=dict(validators=[NumberRange(min=0)]),
-                     semester=dict(default=semester))
-    form_choices = { 'brothers': brothers }
+                     semester=dict(default=semester),
+                     brothers=dict(query_factory=
+                        lambda: models.Brother.query.filter_by(active=True))
+                    )
     def __init__(self, session):
         super(AwardModelView, self).__init__(models.Award, session)
 
