@@ -65,7 +65,9 @@ class EventModelView(ProtectedModelView):
     can_edit = True
     semester = models.Semester.query.filter_by(current=True).first()
     form_args = dict(points=dict(validators=[NumberRange(min=0)]),
-                     semester=dict(default=semester))
+                     semester=dict(default=semester),
+                     brothers=dict(query_factory=
+                                   lambda: models.Brother.query.filter_by(active=True)))
     def __init__(self, session):
         super(EventModelView, self).__init__(models.Event, session)
 
@@ -75,7 +77,9 @@ class PointsModelView(ProtectedModelView):
     can_edit = True
     semester = models.Semester.query.filter_by(current=True).first()
     form_args = dict(points=dict(validators=[NumberRange(min=0)]),
-                     semester=dict(default=semester))
+                     semester=dict(default=semester),
+                     brothers=dict(query_factory=
+                                   lambda: models.Brother.query.filter_by(active=True)))
 
     def __init__(self, session):
         super(PointsModelView, self).__init__(models.OtherPoints, session)
@@ -125,6 +129,9 @@ class AwardModelView(ProtectedModelView):
 
 class ServiceModelView(ProtectedModelView):
     column_default_sort = ('approved')
+    form_args = dict(brother=dict(query_factory=
+                        lambda: models.Brother.query.filter_by(active=True))
+                     )
 
     def __init__(self, session):
         super(ServiceModelView, self).__init__(models.Service, session)
