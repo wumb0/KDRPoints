@@ -73,7 +73,7 @@ echo "use kdrpoints;update brother set role=2;" | mysql -u kdrpoints -p
 ```
 OR
 ```
-sqlite3 app.db -cmd 'update brother set role=2;'
+sqlite3 app.db 'update brother set role=2;'
 ```
 
 Now you can access the admin panel as a superadmin
