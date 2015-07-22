@@ -37,7 +37,7 @@ Then install requirements with pip:
 ```
 pip install -r requirements.txt
 ```
-Flask-MySQL will fail if you don't install python-dev and libmysqlclient-dev above, if you aren't using MySQL then just ignore it
+Flask-MySQL will fail if you don't install python-dev and libmysqlclient-dev above, if you aren't using MySQL then take that line out of the requirements.txt file, otherwise the installation will fail
 
 Google Auth
 -----------
