@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="row"><div class="col-md-12"><h1><i class="fa fa-users"></i> Brothers</h1></div></div>
-{% if brothers|count %}
+{% if brothers|count == 0 %}
 None
 {% else %}
 {% set i = 0 %}
