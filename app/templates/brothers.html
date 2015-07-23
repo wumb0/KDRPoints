@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="row"><div class="col-md-12"><h1><i class="fa fa-users"></i> Brothers</h1></div></div>
+{% if brothers|count %}
+None
+{% else %}
 {% set i = 0 %}
 {% for brother in brothers %}
 {% set points = brother.get_all_points(g.current_semester) %}
@@ -100,4 +103,5 @@
 {% endif %}
 {% set i = i + 1 %}
 {% endfor %}
+{% endif %}
 {% endblock %}
