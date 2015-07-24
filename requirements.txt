@@ -5,4 +5,5 @@ Flask-Login
 Flask-Oauthlib
 Flask-SQLAlchemy
 Flask-Migrate
+Flask-Mail
 Flask-MySQL

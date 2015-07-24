@@ -6,6 +6,7 @@ f = open(os.path.join(basedir, 'app.vars') , 'r')
 #SERVER_NAME = 'points.kdrib.org'
 CSRF_ENABLED = True
 
+# comment out these next 4 lines if using sqlite
 MYSQL_DB = f.readline().strip()
 MYSQL_HOST = f.readline().strip()
 MYSQL_USERNAME = f.readline().strip()
@@ -16,5 +17,10 @@ SQLALCHEMY_MIGRATE_REPO = os.path.join(basedir, 'db_repo')
 SECRET_KEY = f.readline().strip()
 GOOGLE_CONSUMER_KEY = f.readline().strip()
 GOOGLE_CONSUMER_SECRET = f.readline().strip()
+MAIL_SERVER = f.readline().strip()
+MAIL_PORT = f.readline().strip()
+MAIL_USE_SSL = f.readline().strip()
+MAIL_USERNAME = f.readline().strip()
+MAIL_PASSWORD = f.readline().strip()
 USER_ROLES = {'admin':2,'chair':1,'user':0}
 f.close()

@@ -28,6 +28,11 @@ Make a new file in the root of the project (where requirements.txt is) called ap
 5. A random key: Can be whatever (md5 sum something and paste it in there)
 6. The Google Consumer ID
 7. The Google Consumer Secret
+8. Mail server (smtp.google.com)
+9. Mail port (443)
+10. Use ssl or not (True)
+11. Email address
+12. Email password
 
 Next, start up a virtualenv with the command: virtualenv flask
 

@@ -1,4 +1,4 @@
-from app import app, db, models
+from app import app, db, models, mail
 from flask.ext.admin import AdminIndexView
 from flask_admin.contrib.sqla import ModelView
 from flask.ext.login import current_user
