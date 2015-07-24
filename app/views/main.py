@@ -148,16 +148,11 @@ def profile():
         return redirect(url_for('.profile'))
     else:
         flash_wtferrors(form)
-    all_brothers = Brother.query.filter_by(active=True)
-    if all_brothers.count() > 0:
-        avgpoints = sum([ x.get_all_points(g.current_semester) for x in all_brothers ]) / all_brothers.count()
-        avgsvc = sum([ x.total_service_hours(g.current_semester) for x in all_brothers ]) / all_brothers.count()
-    else:
-        avgpoints = 0
-        avgsvc = 0
+    avgpoints, avgsvc = __get_avg_points()
     all_items = g.user.events.filter_by(semester=g.current_semester).all() + g.user.awards.filter_by(semester=g.current_semester).all()+ g.user.points.filter_by(semester=g.current_semester).all()
     all_items.sort(key=lambda x: x.timestamp, reverse=True)
     return render_template("profile.html", title="Profile", avgpoints=avgpoints, avgsvc=avgsvc, all_items=all_items[:10], Event=Event, Award=Award, OtherPoints=OtherPoints, isinstance=isinstance, form=form)
+
 
 @main.route('/allpoints')
 @login_required
@@ -187,10 +182,15 @@ def events():
 @main.route('/brothers')
 @login_required
 def brothers():
-    brothers = Brother.query.filter_by(active=True).order_by(Brother.pin)
-    all_brothers = Brother.query.filter_by(active=True)
-    avg = sum([ x.get_all_points(g.current_semester) for x in all_brothers ]) / all_brothers.count()
-    return render_template("brothers.html", title="Brothers", brothers=brothers, avg=avg)
+    brothers = Brother.query.filter_by(active=True).order_by(Brother.pin).all()
+    avgpoints, avgsvc = __get_avg_points()
+    return render_template("brothers.html", title="Brothers", brothers=brothers, avg=avgpoints)
+
+@main.route('/allbrothers')
+@login_required
+def all_brothers():
+    brothers = sorted(Brother.query.all(), key=lambda x: x.pin)
+    return render_template("brothers.html", title="All Brothers", brothers=brothers, avg=0)
 
 @main.route('/event/<id>')
 @login_required
@@ -220,3 +220,14 @@ def service():
     else:
         flash_wtferrors(form)
     return render_template('service.html', title="Service", form=form)
+
+
+def __get_avg_points():
+    all_brothers = Brother.query.filter_by(active=True)
+    if all_brothers.count() > 0:
+        avgpoints = sum([ x.get_all_points(g.current_semester) for x in all_brothers ]) / all_brothers.count()
+        avgsvc = sum([ x.total_service_hours(g.current_semester) for x in all_brothers ]) / all_brothers.count()
+    else:
+        avgpoints = 0
+        avgsvc = 0
+    return avgpoints, avgsvc
