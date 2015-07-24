@@ -28,7 +28,7 @@
     </div>
     <div class="row space-above">
         <div class="col-sm-12 text-center space-above">
-            {% if not g.user.position == "None" %}
+            {% if g.user.position %}
             {{g.user.position}}
             {% endif %}
         </div>
