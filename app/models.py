@@ -22,8 +22,8 @@ class Brother(db.Model):
     name = db.Column(db.String(50), index = True)
     nickname = db.Column(db.String(50), index = True)
     email = db.Column(db.String(100), index = True, unique = True, nullable=False)
-    role = db.Column(db.SmallInteger, default = USER_ROLES['user'], nullable=False)
-    position = db.Column(db.String(50), index = True, nullable=False, default="None")
+    position_id = db.Column(db.Integer, db.ForeignKey('position.id'))
+    position = db.relationship('Position', backref = "brothers")
     pin = db.Column(db.Integer, index = True)
     last_seen = db.Column(db.DateTime, default=datetime.utcnow())
     active = db.Column(db.Boolean, default = True, nullable=False)
@@ -36,14 +36,26 @@ class Brother(db.Model):
     family = db.relationship('Family', backref="brothers")
 
     def is_admin(self):
-        if self.role is USER_ROLES['admin']:
+        if self.position is None:
+            return False
+        if self.position.permission == USER_ROLES['admin']:
             return True
         return False
 
     def is_chair(self):
-        if self.role is USER_ROLES['chair']:
+        if self.position is None:
+            return False
+        if self.position.permission == USER_ROLES['chair']:
             return True
         return False
+
+    def is_normal_user(self):
+        if self.position is None:
+            return True
+        if self.position.permission == USER_ROLES['user']:
+            return True
+        return False
+
 
     def total_service_hours(self, semester):
         total = 0
@@ -64,8 +76,11 @@ class Brother(db.Model):
     def get_id(self):
         return unicode(self.id)
 
-    def __repr__(self):
+    def __str__(self):
         return self.name
+
+    def __repr__(self):
+        return "<Brother: {}>".format(self.name)
 
     def last_seen_print(self):
         return self.last_seen.strftime('%A, %B %d %Y %I:%M%p')
@@ -93,8 +108,11 @@ class Family(db.Model):
             total += b.get_all_points(semester)
         return total
 
-    def __repr__(self):
+    def __str__(self):
         return self.name
+
+    def __repr__(self):
+        return "<Family: {}>".format(self.name)
 
 class Semester(db.Model):
     id = db.Column(db.Integer, primary_key = True)
@@ -108,8 +126,11 @@ class Semester(db.Model):
     def get_linkname(self):
         return "{}{}".format(self.season, self.year)
 
+    def __str__(self):
+        return '{}'.format(self.get_name())
+
     def __repr__(self):
-        return '{} {}'.format(self.season, self.year)
+        return "<Semester: {}>".format(self.get_name())
 
     def __cmp__(self, other):
         try:
@@ -132,8 +153,11 @@ class OtherPoints(db.Model):
     timestamp = db.Column(db.DateTime, default=datetime.utcnow(), nullable=False)
     __table_args__ = (db.CheckConstraint(points >= 0, name='check_points_positive'),{})
 
-    def __repr__(self):
+    def __str__(self):
         return '{} Points'.format(self.amount)
+
+    def __repr__(self):
+        return "<Points: {} - {} {}>".format(self.reason, self.semester.get_name())
 
     def print_timestamp(self):
         return self.timestamp.strftime('%A, %B %d %Y %I:%M%p')
@@ -151,8 +175,11 @@ class Event(db.Model):
     points = db.Column(db.Integer, default = 0, nullable=False)
     __table_args__ = (db.CheckConstraint(points >= 0, name='check_points_positive'),{})
 
-    def __repr__(self):
+    def __str__(self):
         return self.name
+
+    def __repr__(self):
+        return "<Event: {} - {} {}>".format(self.name, self.semester.get_name())
 
     def __cmp__(self, other):
         try:
@@ -179,8 +206,11 @@ class Award(db.Model):
     color = db.Column(db.String(15), default="000000", nullable=False)
     __table_args__ = (db.CheckConstraint(points >= 0, name='check_points_positive'),{})
 
-    def __repr__(self):
+    def __str__(self):
         return self.name
+
+    def __repr__(self):
+        return "<Award: {} - {}>".format(self.name, self.semester.get_name())
 
     def print_timestamp(self):
         return self.timestamp.strftime('%A, %B %d %Y %I:%M%p')
@@ -197,8 +227,11 @@ class Service(db.Model):
     brother = db.relationship("Brother")
     approved = db.Column(db.Boolean, default=False)
 
-    def __repr__(self):
+    def __str__(self):
         return self.name
+
+    def __repr__(self):
+        return "<Service: {} - {}>".format(self.name, self.semester.get_name())
 
 class StudyHours(db.Model):
     __tablename__ = 'studyhours'
@@ -212,5 +245,19 @@ class StudyHours(db.Model):
     brother = db.relationship("Brother")
     approved = db.Column(db.Boolean, default=False)
 
+    def __str__(self):
+        return self.info
+
     def __repr__(self):
+        return "<Study hours: {} - {}>".format(self.semester.get_name(), self.brother.name)
+
+class Position(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    name = db.Column(db.String(50))
+    permission = db.Column(db.Integer)
+
+    def __repr__(self):
+        return "<{}>".format(self.name)
+
+    def __str__(self):
         return self.name

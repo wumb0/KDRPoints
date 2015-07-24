@@ -9,7 +9,7 @@ from app.email import send_email
 
 class ProtectedIndexView(AdminIndexView):
     def is_accessible(self):
-        if current_user.is_authenticated() and current_user.role > 0:
+        if current_user.is_authenticated() and not current_user.is_normal_user():
             return True
         return False
 
@@ -20,8 +20,8 @@ class ProtectedIndexView(AdminIndexView):
 
 class ProtectedModelView(ModelView):
     def is_accessible(self):
-        if current_user.is_authenticated() and current_user.role > 0:
-            if current_user.role == 1:
+        if current_user.is_authenticated() and not current_user.is_normal_user():
+            if current_user.is_chair():
                 self.can_create = False
                 self.can_delete = False
                 self.can_edit = False
@@ -35,12 +35,12 @@ class ProtectedModelView(ModelView):
 
 class AdminModelView(ProtectedModelView):
     def is_visible(self):
-        if current_user.is_authenticated() and current_user.role != 2:
-            return False
-        return True
+        if current_user.is_authenticated() and current_user.is_admin():
+            return True
+        return False
 
     def is_accessible(self):
-        if current_user.is_authenticated() and current_user.role == 2:
+        if current_user.is_authenticated() and current_user.is_admin():
             return True
         return False
 
@@ -50,9 +50,16 @@ class BrotherModelView(AdminModelView):
     can_create = False
     column_display_pk = True
     column_hide_backrefs = False
-    form_excluded_columns = ('points', 'awards', 'events', 'studyhours', 'service', 'last_seen')
+    form_excluded_columns = ('points', 'awards',
+                             'events', 'studyhours',
+                             'service', 'last_seen',
+                             'email')
     def __init__(self, session):
         super(BrotherModelView, self).__init__(models.Brother, session)
+
+class PositionModelView(AdminModelView):
+    def __init__(self, session):
+        super(PositionModelView, self).__init__(models.Position, session)
 
 class FamilyModelView(AdminModelView):
     can_create = False
@@ -148,7 +155,7 @@ class ServiceModelView(ProtectedModelView):
     def on_model_change(self, form, model, created):
         if form.approved.data:
             semester = models.Semester.query.filter_by(current=True).one()
-            donehrs = form.brother.data.total_service_hours(semester)
+            donehrs = model.brother.data.total_service_hours(semester)
             svchrs = (form.end.data - form.start.data).seconds/3600.0
             remaining = 15 - donehrs
 

@@ -27,7 +27,7 @@
                             <div class="label label-primary">{{event.brothers|length}} Brother{% if event.brothers|length != 1 %}s{% endif %}</div>
                         </div>
                     </div>
-                    {% if g.user.role == 2 %}
+                    {% if g.user.is_admin() %}
                     <div class="row space-above">
                         <div class="col-sm-12">
                             <div class="panel panel-primary">
