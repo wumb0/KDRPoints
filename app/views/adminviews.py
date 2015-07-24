@@ -1,10 +1,11 @@
-from app import app, db, models, mail
+from app import app, db, models
 from flask.ext.admin import AdminIndexView
 from flask_admin.contrib.sqla import ModelView
 from flask.ext.login import current_user
 from flask import redirect, url_for, flash
 from config import USER_ROLES
 from wtforms.validators import NumberRange
+from app.email import send_email
 
 class ProtectedIndexView(AdminIndexView):
     def is_accessible(self):
@@ -144,4 +145,43 @@ class ServiceModelView(ProtectedModelView):
             return True
         return False
 
+    def on_model_change(self, form, model, created):
+        if form.approved.data:
+            semester = models.Semester.query.filter_by(current=True).one()
+            donehrs = form.brother.data.total_service_hours(semester)
+            svchrs = (form.end.data - form.start.data).seconds/3600.0
+            remaining = 15 - donehrs
 
+            svcmsg ="The service hours you reported for '{}' have just been approved by {}. ".format(
+                form.name.data,
+                current_user.name)
+            if remaining > 0:
+                svcmsg += "You have {} service hour(s) left to do this semester (out of 15).".format(remaining)
+            else:
+                svcmsg += "You have completed your service hours for this semester! You currently have {}.".format(donehrs)
+            send_email("Service Chair (points)",
+                       str(svchrs) + " service hour" +
+                       ("" if svchrs == 1 else "s") +
+                       " have been approved!",
+                       [form.brother.data.email],
+                       svcmsg,
+                       svcmsg)
+
+    def on_model_delete(self, model):
+        semester = models.Semester.query.filter_by(current=True).one()
+        donehrs = model.brother.total_service_hours(semester)
+        svchrs = (model.end - model.start).seconds/3600.0
+        remaining = 15 - donehrs
+        svcmsg ="The {} service hour(s) you reported for '{}' have been denied by {}. If you want to know why you should ask them about it! ".format(
+            svchrs,
+            model.name,
+            current_user.name)
+        if remaining > 0:
+            svcmsg += "You have {} service hour(s) left to do this semester (out of 15).".format(remaining)
+        else:
+            svcmsg += "You have completed your service hours for this semester! You currently have {}.".format(donehrs)
+        send_email("Service Chair (points)",
+                    "Service hours have been DENIED!",
+                    [model.brother.email],
+                    svcmsg,
+                    svcmsg)
