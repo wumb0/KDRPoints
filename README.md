@@ -74,11 +74,16 @@ Log in with your kdrib Google account
 Run the following to upgrade yourself to admin:
 
 ```
-echo "use kdrpoints;update brother set role=2;" | mysql -u kdrpoints -p
+mysql -u kdrpoints -p
+use kdrpoints
+insert into position values(1, "Admin", 2);
+update brother set position_id=1;
 ```
 OR
 ```
-sqlite3 app.db 'update brother set role=2;'
+sqlite3 app.db
+insert into position values(1, "Admin", 2);
+update brother set position_id=1;
 ```
 
 Now you can access the admin panel as a superadmin
