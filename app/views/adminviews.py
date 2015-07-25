@@ -145,7 +145,8 @@ class ServiceModelView(ProtectedModelView):
         super(ServiceModelView, self).__init__(models.Service, session)
 
     def is_accessible(self):
-        if current_user.is_authenticated() and ((current_user.role == 1 and "service" in current_user.position.lower()) or current_user.role == 2):
+        if current_user.is_authenticated() and \
+                ("service" in current_user.position.name.lower() or current_user.is_admin()):
             self.can_create = True
             self.can_edit = True
             self.can_delete = True
