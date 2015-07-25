@@ -6,6 +6,7 @@ from flask import redirect, url_for, flash
 from config import USER_ROLES
 from wtforms.validators import NumberRange
 from app.email import send_email
+from wtforms import SelectField
 
 class ProtectedIndexView(AdminIndexView):
     def is_accessible(self):
@@ -58,6 +59,9 @@ class BrotherModelView(AdminModelView):
         super(BrotherModelView, self).__init__(models.Brother, session)
 
 class PositionModelView(AdminModelView):
+    choices = [ (int(USER_ROLES[i]), i) for i in USER_ROLES.keys() ]
+    form_overrides = dict(permission=SelectField)
+    form_args = dict(permission=dict(choices=choices, coerce=int))
     def __init__(self, session):
         super(PositionModelView, self).__init__(models.Position, session)
 

@@ -56,11 +56,10 @@ class Brother(db.Model):
             return True
         return False
 
-
     def total_service_hours(self, semester):
         total = 0
         for serv in self.service:
-            if serv.semester == semester and serv.approved == True:
+            if serv.semester == semester and serv.approved is True:
                 total += (serv.end - serv.start).seconds/3600.0
         return total
 
@@ -151,7 +150,6 @@ class OtherPoints(db.Model):
     semester_id = db.Column(db.Integer, db.ForeignKey('semester.id'), nullable=False)
     reason = db.Column(db.String(100), nullable=False)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow(), nullable=False)
-    __table_args__ = (db.CheckConstraint(points >= 0, name='check_points_positive'),{})
 
     def __str__(self):
         return '{} Points'.format(self.amount)
@@ -173,7 +171,6 @@ class Event(db.Model):
     semester_id = db.Column(db.Integer, db.ForeignKey('semester.id'), nullable=False)
     timestamp = db.Column(db.DateTime, default=datetime.today, nullable=False)
     points = db.Column(db.Integer, default = 0, nullable=False)
-    __table_args__ = (db.CheckConstraint(points >= 0, name='check_points_positive'),{})
 
     def __str__(self):
         return self.name
@@ -204,7 +201,6 @@ class Award(db.Model):
     points = db.Column(db.Integer, default = 0, nullable=False )
     timestamp = db.Column(db.DateTime, default=datetime.utcnow(), nullable=False)
     color = db.Column(db.String(15), default="000000", nullable=False)
-    __table_args__ = (db.CheckConstraint(points >= 0, name='check_points_positive'),{})
 
     def __str__(self):
         return self.name
@@ -253,8 +249,8 @@ class StudyHours(db.Model):
 
 class Position(db.Model):
     id = db.Column(db.Integer, primary_key = True)
-    name = db.Column(db.String(50))
-    permission = db.Column(db.Integer)
+    name = db.Column(db.String(50), nullable = False)
+    permission = db.Column(db.Integer, nullable = False)
 
     def __repr__(self):
         return "<{}>".format(self.name)
