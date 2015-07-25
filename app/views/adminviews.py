@@ -61,7 +61,9 @@ class BrotherModelView(AdminModelView):
 class PositionModelView(AdminModelView):
     choices = [ (int(USER_ROLES[i]), i) for i in USER_ROLES.keys() ]
     form_overrides = dict(permission=SelectField)
-    form_args = dict(permission=dict(choices=choices, coerce=int))
+    form_args = dict(permission=dict(choices=choices,
+                                     validators=[NumberRange(min=0, max=2)],
+                                     coerce=int))
     def __init__(self, session):
         super(PositionModelView, self).__init__(models.Position, session)
 

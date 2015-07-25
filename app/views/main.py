@@ -223,7 +223,8 @@ def service():
                        semester_id=g.current_semester.id)
         db.session.add(serv)
         db.session.commit()
-        svcchair = Brother.query.filter(Brother.position.like('%service%')).one()
+        svcid = Position.query.filter_by(name="Service Chair").one()
+        svcchair = Brother.query.filter_by(position_id=svcid.id).one()
         path = urlparse(request.base_url)
         body = "{} has submitted service hours for approval. Go to {}://{}{}?id={} to review.".format(
                 g.user.name, path.scheme, path.netloc, url_for('service.edit_view'), serv.id)
