@@ -38,7 +38,7 @@
                                     {% for brother in event.brothers %}
                                     <div class="row">
                                         <div class="container">
-                                            {{brother.name}}
+                                            <a href="{{url_for(".allbrotherpoints", username=brother.email.split('@')[0])}}">{{brother.name}}</a>
                                         </div>
                                     </div>
                                     {% endfor %}

@@ -155,13 +155,39 @@ def profile():
     all_items.sort(key=lambda x: x.timestamp, reverse=True)
     return render_template("profile.html", title="Profile", avgpoints=avgpoints, avgsvc=avgsvc, all_items=all_items[:10], Event=Event, Award=Award, OtherPoints=OtherPoints, isinstance=isinstance, form=form)
 
+@main.route('/allbrotherpoints/<username>')
+@login_required
+def allbrotherpoints(username):
+    user = Brother.query.filter_by(email=username + "@kdrib.org").first()
+    if not user or not g.user.is_admin():
+        abort(404)
+    all_items = (user.events.all() +
+                 user.awards.all() +
+                 user.points.all())
+    all_items.sort(key=lambda x: x.timestamp, reverse=True)
+    return render_template("allpoints.html",
+                           title="All Points - {}".format(user.name),
+                           all_items=all_items,
+                           Event=Event,
+                           Award=Award,
+                           OtherPoints=OtherPoints,
+                           isinstance=isinstance,
+                           user=user)
 
 @main.route('/allpoints')
 @login_required
 def allpoints():
-    all_items = g.user.events.filter_by(semester=g.current_semester).all() + g.user.awards.filter_by(semester=g.current_semester).all()+ g.user.points.filter_by(semester=g.current_semester).all()
+    all_items = (g.user.events.all() +
+                 g.user.awards.all() +
+                 g.user.points.all())
     all_items.sort(key=lambda x: x.timestamp, reverse=True)
-    return render_template("allpoints.html", title="All Points", all_items=all_items[:10], Event=Event, Award=Award, OtherPoints=OtherPoints, isinstance=isinstance)
+    return render_template("allpoints.html",
+                           title="All Points",
+                           all_items=all_items,
+                           Event=Event, Award=Award,
+                           OtherPoints=OtherPoints,
+                           isinstance=isinstance,
+                           user=g.user)
 
 @main.route('/founderscup')
 @login_required

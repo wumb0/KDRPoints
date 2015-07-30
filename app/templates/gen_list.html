@@ -17,7 +17,7 @@
                 <ul class="dropdown-menu" role="menu">
                     {% if not g.user.is_normal_user() %}
                     {% for brother in item.brothers %}
-                    <li><a href="#">{{brother.name}}</a></li>
+                    <li><a href="{{url_for(".allbrotherpoints", username=brother.email.split('@')[0])}}">{{brother.name}}</a></li>
                     {% endfor %}
                     {% endif %}
                 </ul>
@@ -50,7 +50,7 @@
                 <ul class="dropdown-menu" role="menu">
                     {% if not g.user.is_normal_user() %}
                     {% for brother in item.brothers %}
-                    <li><a href="#">{{brother.name}}</a></li>
+                    <li><a href="{{url_for(".allbrotherpoints", username=brother.email.split('@')[0])}}">{{brother.name}}</a></li>
                     {% endfor %}
                     {% endif %}
                 </ul>
