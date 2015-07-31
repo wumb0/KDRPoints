@@ -269,7 +269,7 @@ def service():
 @login_required
 def allservice():
     return redirect(url_for('.allservicesemester',
-                            semester=g.current_semester.get_linkname()))
+                            semester=g.current_semester.linkname))
 
 @main.route('/allservice/<semester>')
 @login_required
