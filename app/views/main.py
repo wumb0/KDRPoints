@@ -265,6 +265,25 @@ def service():
         flash_wtferrors(form)
     return render_template('service.html', title="Service", form=form)
 
+@main.route('/allservice')
+@login_required
+def allservice():
+    return redirect(url_for('.allservicesemester',
+                            semester=g.current_semester.get_linkname()))
+
+@main.route('/allservice/<semester>')
+@login_required
+def allservicesemester(semester):
+    semesterobj = Semester.query.filter_by(linkname=semester).first()
+    if g.user.is_normal_user() or not semesterobj:
+        abort(404)
+    brothers = Brother.query.filter_by(active=True)
+    return render_template('allservice.html',
+                           title="all service",
+                           brothers=brothers,
+                           semester=semesterobj)
+
+
 
 def __get_avg_points():
     all_brothers = Brother.query.filter_by(active=True)

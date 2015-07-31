@@ -162,7 +162,7 @@ class ServiceModelView(ProtectedModelView):
     def on_model_change(self, form, model, created):
         if form.approved.data:
             semester = models.Semester.query.filter_by(current=True).one()
-            donehrs = model.brother.data.total_service_hours(semester)
+            donehrs = form.brother.data.total_service_hours(semester)
             svchrs = (form.end.data - form.start.data).seconds/3600.0
             remaining = 15 - donehrs
 
