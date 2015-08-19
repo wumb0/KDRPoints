@@ -249,16 +249,18 @@ def service():
                        semester_id=g.current_semester.id)
         db.session.add(serv)
         db.session.commit()
-        svcid = Position.query.filter_by(name="Service Chair").one()
-        svcchair = Brother.query.filter_by(position_id=svcid.id).one()
-        path = urlparse(request.base_url)
-        body = "{} has submitted service hours for approval. Go to {}://{}{}?id={} to review.".format(
-                g.user.name, path.scheme, path.netloc, url_for('service.edit_view'), serv.id)
-        send_email("KDRPoints",
-                   "Service hours submitted by " + g.user.name,
-                    [svcchair.email],
-                    body,
-                    body)
+        try:
+            svcid = Position.query.filter_by(name="Service Chair").first()
+            svcchair = Brother.query.filter_by(position_id=svcid.id).first()
+            path = urlparse(request.base_url)
+            body = "{} has submitted service hours for approval. Go to {}://{}{}?id={} to review.".format(
+                    g.user.name, path.scheme, path.netloc, url_for('service.edit_view'), serv.id)
+            send_email("KDRPoints",
+                    "Service hours submitted by " + g.user.name,
+                        [svcchair.email],
+                        body,
+                        body)
+        except: pass
 
         flash("Service submitted successfully", category="good")
     else:
