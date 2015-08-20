@@ -292,6 +292,8 @@ def __get_avg_points():
     if all_brothers.count() > 0:
         avgpoints = sum([ x.get_all_points(g.current_semester) for x in all_brothers ]) / all_brothers.count()
         avgsvc = sum([ x.total_service_hours(g.current_semester) for x in all_brothers ]) / all_brothers.count()
+        avgpoints = round(avgpoints, 2)
+        avgsvc = round(avgsvc, 2)
     else:
         avgpoints = 0
         avgsvc = 0
