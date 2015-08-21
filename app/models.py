@@ -196,7 +196,7 @@ class Event(db.Model):
 
 class Award(db.Model):
     id = db.Column(db.Integer, primary_key = True)
-    name = db.Column(db.String(20), index = True, nullable=False)
+    name = db.Column(db.String(50), index = True, nullable=False)
     icon = db.Column(db.String(50), nullable=False)
     semester = db.relationship("Semester")
     semester_id = db.Column(db.Integer, db.ForeignKey('semester.id'), nullable=False)
