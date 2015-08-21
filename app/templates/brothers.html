@@ -21,7 +21,11 @@ None
     </div>
     <div class="col-md-3 text-center space-above">
         <div class="row">
+            {% if g.user.is_admin() %}
             <h3><a href="{{url_for(".allbrotherpoints", username=brother.email.split('@')[0])}}"><span class="label label-default lblspace">{{brother.name}}</span></a></h3>
+            {% else %}
+            <h3><span class="label label-default lblspace">{{brother.name}}</span></h3>
+            {% endif %}
         </div>
         <div class="row">
             {% if brother.nickname %}
