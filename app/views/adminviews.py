@@ -100,6 +100,7 @@ class PointsModelView(ProtectedModelView):
 
 class SemesterModelView(AdminModelView):
     can_delete = False
+    form_excluded_columns = ('linkname')
     column_default_sort = ('current', True)
 
     def on_model_change(self, form, model):
