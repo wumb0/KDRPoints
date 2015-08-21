@@ -4,12 +4,13 @@ from datetime import datetime
 from flask import render_template, url_for, session, g, redirect, Blueprint, flash, abort, request
 from flask.ext.login import logout_user, login_user, current_user, current_user, login_required
 from app.models import *
-from config import USER_ROLES
+from config import USER_ROLES, basedir
 from app.forms import *
 from app.email import send_email
 from sqlalchemy import desc
 from urlparse import urlparse
 from random import sample
+import os
 
 main = Blueprint('main', __name__)
 
@@ -293,12 +294,16 @@ def randomizer():
     randomizer = Randomizer()
     brothers = []
     if randomizer.validate_on_submit():
-        with open('brotherlist.txt') as f:
-            lines = f.readlines()
+        """
+        # eventually use this when brothers are registered
+        choices = Brother.query.filter_by(active=True)
+        """
+        with open(os.path.join(basedir, 'brotherlist.txt')) as f:
+            choices = f.readlines()
             try:
-                brothers = sample(lines, int(randomizer.number.data))
+                brothers = sample(choices, int(randomizer.number.data))
             except:
-                brothers = sample(lines, 10)
+                brothers = sample(choices, 10)
     return render_template("randomizer.html", title="here you go greg", form=randomizer, brothers=brothers)
 
 
