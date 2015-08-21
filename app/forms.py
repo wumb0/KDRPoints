@@ -75,3 +75,6 @@ class ServiceForm(Form):
         if self.end.data <= self.start.data:
             raise ValidationError("The end must be after the beginning")
 
+class Randomizer(Form):
+    number = TextField("Number of Brothers", validators=[DataRequired(), NumberRange(min=1)])
+    submit = SubmitField('Go!')

@@ -9,6 +9,7 @@ from app.forms import *
 from app.email import send_email
 from sqlalchemy import desc
 from urlparse import urlparse
+from random import sample
 
 main = Blueprint('main', __name__)
 
@@ -285,6 +286,20 @@ def allservicesemester(semester):
                            brothers=brothers,
                            semester=semesterobj)
 
+
+@main.route('/therandomizer', methods= ['GET', 'POST'])
+@login_required
+def randomizer():
+    randomizer = Randomizer()
+    brothers = []
+    if randomizer.validate_on_submit():
+        with open('brotherlist.txt') as f:
+            lines = f.readlines()
+            try:
+                brothers = sample(lines, int(randomizer.number.data))
+            except:
+                brothers = sample(lines, 10)
+    return render_template("randomizer.html", title="here you go greg", form=randomizer, brothers=brothers)
 
 
 def __get_avg_points():

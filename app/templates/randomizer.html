@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+<form action="" method="POST" name="randomizer">
+    {{form.hidden_tag()}}
+    <strong>Number of Brothers: </strong> {{form.number}}
+    {{form.submit(class="btn btn-primary")}}
+</form>
+<br>
+{% for brother in brothers %}
+<p>{{brother}}</p>
+{% endfor %}
+{% endblock %}
