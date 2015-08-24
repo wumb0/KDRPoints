@@ -7,6 +7,7 @@ from config import USER_ROLES
 from wtforms.validators import NumberRange
 from app.email import send_email
 from wtforms import SelectField
+from datetime import datetime
 
 class ProtectedIndexView(AdminIndexView):
     def is_accessible(self):
@@ -99,18 +100,24 @@ class PointsModelView(ProtectedModelView):
         super(PointsModelView, self).__init__(models.OtherPoints, session)
 
 class SemesterModelView(AdminModelView):
-    can_delete = False
     form_excluded_columns = ('linkname')
     column_default_sort = ('current', True)
+    form_args = dict(year=dict(validators=[NumberRange(min=2014, max=2100)]))
+    choices = [ (i, i) for i in ["Fall", "Spring"] ]
+    form_overrides = dict(season=SelectField)
+    form_args = dict(season=dict(choices=choices),
+                     year=dict(default=datetime.utcnow().year))
 
     def on_model_change(self, form, model):
-        sems = model.query.filter_by(current=True)
-        for sem in sems:
-            if sem is not model:
-                sem.current = False
-                db.session.add(sem)
-                db.session.commit()
-
+        model.linkname = (model.season + str(model.year)).lower()
+        db.session.add(model)
+        if model.current:
+            sems = model.query.filter_by(current=True)
+            for sem in sems:
+                if sem is not model:
+                    sem.current = False
+                    db.session.add(sem)
+        db.session.commit()
 
     def __init__(self, session):
         super(SemesterModelView, self).__init__(models.Semester, session)
