@@ -43,14 +43,16 @@ $(function() {
         format: 'MM/DD/YYYY h:mm A',
         timePicker: true,
         opens: 'center',
-        timePickerIncrement: 15
+        timePickerIncrement: 15,
+        startDate: $('#end').val()
     });
     $('#startpicker').daterangepicker({
         singleDatePicker: true,
         format: 'MM/DD/YYYY h:mm A',
         timePicker: true,
         opens: 'center',
-        timePickerIncrement: 15
+        timePickerIncrement: 15,
+        startDate: $('#start').val()
     });
     $('#startpicker').on('apply.daterangepicker', function(ev, picker) {
     $('#start').val(picker.startDate.format('MM/DD/YYYY h:mm A'));
