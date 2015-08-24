@@ -120,10 +120,6 @@ class Semester(db.Model):
     current = db.Column(db.Boolean, default = False, nullable=False )
     linkname = db.Column(db.String(20))
 
-    def __init__(self):
-        linkname = (self.season + self.year).lower()
-        super(Semester, self).__init__(self)
-
     def get_name(self):
         return "{} {}".format(self.season, self.year)
 
