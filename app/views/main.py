@@ -307,6 +307,28 @@ def randomizer():
     return render_template("randomizer.html", title="here you go greg", form=randomizer, brothers=brothers)
 
 
+@main.route('/massattend', methods = ['GET', 'POST'])
+@login_required
+def massattend():
+    massattendform = MassAttendForm()
+    events_query = Event.query.filter_by(event_picker=True, semester=g.current_semester).all()
+    events = []
+    if events is not None:
+        events = [ (x.id, x) for x in events_query ]
+    massattendform.event.choices = events
+    if massattendform.validate_on_submit():
+        event = Event.query.filter_by(id=massattendform.event.data).first()
+        for bro in massattendform.brothers.data:
+            bro = Brother.query.filter_by(id=bro)
+            if bro not in event.brothers:
+                event.brothers.append(bro)
+                db.session.commit()
+            else:
+                flash("{} was already signed in".format(bro), category="warning")
+
+    return render_template('massattend.html', title="Mass Attend", form=massattendform)
+
+
 def __get_avg_points():
     all_brothers = Brother.query.filter_by(active=True)
     if all_brothers.count() > 0:
