@@ -11,7 +11,7 @@
                 <strong>Brothers: </strong>
                 {% for brother in form.brothers %}
                     <div class="small-3 columns">
-                        {{brother()}}  {{brother[1]}}
+                        {{brother()}}  {{brother.label}}
                     </div>
                 {% endfor %}
             </div>

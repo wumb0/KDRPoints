@@ -316,15 +316,18 @@ def massattend():
     if events is not None:
         events = [ (x.id, x) for x in events_query ]
     massattendform.event.choices = events
+    brolist = ""
     if massattendform.validate_on_submit():
         event = Event.query.filter_by(id=massattendform.event.data).first()
         for bro in massattendform.brothers.data:
-            bro = Brother.query.filter_by(id=bro)
+            bro = Brother.query.filter_by(id=bro).first()
             if bro not in event.brothers:
+                brolist += bro.name + ", "
                 event.brothers.append(bro)
                 db.session.commit()
             else:
                 flash("{} was already signed in".format(bro), category="warning")
+        flash("Brothers " + brolist[:-2] + " have been signed in")
 
     return render_template('massattend.html', title="Mass Attend", form=massattendform)
 
