@@ -96,7 +96,9 @@
                             <h3 class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><button type="button"  role="button" class="btn btn-{{svclabel}}" style="float: right;">{{servicehrs}}</button></h3>
                             <ul class="dropdown-menu" role="menu">
                                         {% for event in service %}
-                                        <li>{{event.name}} - {{(event.end - event.start).seconds/3600}}h</li>
+                                        {% if event.approved %}
+                                        <li>{{event.name}} - {{((event.end - event.start).seconds/3600)*event.weight}}h ({{event.weight}})</li>
+                                        {% endif %}
                                         {% endfor %}
                             </ul>
                         </div>

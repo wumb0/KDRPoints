@@ -150,9 +150,11 @@ class AwardModelView(ProtectedModelView):
         super(AwardModelView, self).__init__(models.Award, session)
 
 class ServiceModelView(ProtectedModelView):
+    form_excluded_columns = ('email_sent')
     column_default_sort = ('approved')
     form_args = dict(brother=dict(query_factory=
-                        lambda: models.Brother.query.filter_by(active=True))
+                        lambda: models.Brother.query.filter_by(active=True)),
+                     weight=dict(default=1.0)
                      )
 
     def __init__(self, session):
@@ -167,35 +169,47 @@ class ServiceModelView(ProtectedModelView):
             return True
         return False
 
-    def on_model_change(self, form, model, created):
+    def on_model_change(self, form, model):
         if form.approved.data:
             semester = models.Semester.query.filter_by(current=True).one()
             donehrs = form.brother.data.total_service_hours(semester)
             svchrs = (form.end.data - form.start.data).seconds/3600.0
             remaining = 15 - donehrs
+            if not model.email_sent:
+                svcmsg ="The service hours you reported for '{}' have just been approved by {}. (The weight for this service was {})".format(
+                    form.name.data,
+                    current_user.name,
+                    model.weight)
+                if remaining > 0:
+                    svcmsg += "You have {} service hour(s) left to do this semester (out of 15).".format(remaining)
+                else:
+                    svcmsg += "You have completed your service hours for this semester! You currently have {}.".format(donehrs)
+                send_email("Service Chair (points)",
+                        str(svchrs*float(model.weight)) + " service hour" +
+                        ("" if svchrs == 1 else "s") +
+                        " have been approved!",
+                        [form.brother.data.email],
+                        svcmsg,
+                        svcmsg)
+                model.email_sent = True
+                db.session.add(model)
+                db.session.commit()
+        else:
+            model.email_sent = False
+            db.session.add(model)
+            db.session.commit()
 
-            svcmsg ="The service hours you reported for '{}' have just been approved by {}. ".format(
-                form.name.data,
-                current_user.name)
-            if remaining > 0:
-                svcmsg += "You have {} service hour(s) left to do this semester (out of 15).".format(remaining)
-            else:
-                svcmsg += "You have completed your service hours for this semester! You currently have {}.".format(donehrs)
-            send_email("Service Chair (points)",
-                       str(svchrs) + " service hour" +
-                       ("" if svchrs == 1 else "s") +
-                       " have been approved!",
-                       [form.brother.data.email],
-                       svcmsg,
-                       svcmsg)
+
 
     def on_model_delete(self, model):
         semester = models.Semester.query.filter_by(current=True).one()
         donehrs = model.brother.total_service_hours(semester)
         svchrs = (model.end - model.start).seconds/3600.0
         remaining = 15 - donehrs
-        svcmsg ="The {} service hour(s) you reported for '{}' have been denied by {}. If you want to know why you should ask them about it! ".format(
+        svcmsg ="The {} ({}*{}) service hour(s) you reported for '{}' have been denied by {}. If you want to know why you should ask them about it! ".format(
+            svchrs*float(model.weight),
             svchrs,
+            float(model.weight),
             model.name,
             current_user.name)
         if remaining > 0:

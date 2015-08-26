@@ -60,7 +60,7 @@ class Brother(db.Model):
         total = 0
         for serv in self.service:
             if serv.semester == semester and serv.approved is True:
-                total += (serv.end - serv.start).seconds/3600.0
+                total += ((serv.end - serv.start).seconds/3600.0)*float(serv.weight)
         return total
 
     def is_authenticated(self):
@@ -220,6 +220,8 @@ class Service(db.Model):
     brother_id = db.Column(db.Integer, db.ForeignKey('brother.id'), nullable=False)
     brother = db.relationship("Brother")
     approved = db.Column(db.Boolean, default=False)
+    email_sent = db.Column(db.Boolean, default=False)
+    weight = db.Column(db.Float, default=1.0, nullable=False)
 
     def __str__(self):
         return self.name
