@@ -151,6 +151,7 @@ class AwardModelView(ProtectedModelView):
 
 class ServiceModelView(ProtectedModelView):
     form_excluded_columns = ('email_sent')
+    column_exclude_list = ('email_sent')
     column_default_sort = ('approved')
     form_args = dict(brother=dict(query_factory=
                         lambda: models.Brother.query.filter_by(active=True)),
