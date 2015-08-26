@@ -1,5 +1,5 @@
 from flask.ext.wtf import Form
-from wtforms import TextField, SubmitField, SelectField, IntegerField, widgets, HiddenField, BooleanField, DateTimeField
+from wtforms import TextField, SubmitField, SelectField, IntegerField, widgets, HiddenField, BooleanField, DateTimeField, SelectMultipleField
 from wtforms.fields import TextAreaField
 from wtforms.validators import DataRequired, ValidationError, Length, NumberRange
 from datetime import datetime, timedelta
@@ -75,6 +75,17 @@ class ServiceForm(Form):
         if self.end.data <= self.start.data:
             raise ValidationError("The end must be after the beginning")
 
+
 class Randomizer(Form):
     number = TextField("Number of Brothers", validators=[DataRequired(), NumberRange(min=1)])
     submit = SubmitField('Go!')
+
+
+class MassAttendForm(Form):
+    brothers = [ (x.id, x.name) for x in Brother.query.filter_by(active=True) ]
+    event = SelectField('Event', choices=[], coerce=int)
+    brothers = SelectMultipleField("Brothers", choices=brothers, coerce=int, option_widget=widgets.CheckboxInput())
+    submit = SubmitField("Attend")
+
+    def validate(self): #brothers field fails check because object, just work around for now
+        return True
