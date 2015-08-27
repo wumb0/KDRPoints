@@ -58,7 +58,7 @@
                 <li id="service"><a href="{{url_for('.service')}}"><i class="fa fa-recycle"></i> Service</a></li>
                 {% endif %}
                 {% endif %}
-                {% if g.user.is_admin() %}
+                {% if g.user.is_authenticated() and g.user.is_admin() %}
                 <li id="attend" class="dropdown"><a href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fa fa-at"></i> Attend
                     <span class="caret"></span>
