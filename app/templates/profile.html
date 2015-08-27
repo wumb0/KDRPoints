@@ -97,7 +97,7 @@
                             <ul class="dropdown-menu" role="menu">
                                         {% for event in service %}
                                         {% if event.approved %}
-                                        <li>{{event.name}} - {{((event.end - event.start).seconds/3600)*event.weight}}h ({{event.weight}})</li>
+                                        <li>{{event.name}} - {{((event.end - event.start).seconds/3600)*event.weight}}h (x{{event.weight}})</li>
                                         {% endif %}
                                         {% endfor %}
                             </ul>

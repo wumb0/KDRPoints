@@ -56,6 +56,12 @@ class Brother(db.Model):
             return True
         return False
 
+    def is_service_chair(self):
+        if self.position is None:
+            return False
+        if "service" in self.position.name.lower():
+            return True
+
     def total_service_hours(self, semester):
         total = 0
         for serv in self.service:
