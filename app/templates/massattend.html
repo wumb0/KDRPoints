@@ -1,32 +1,31 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="row jumbotron">
-    <form action="" method="POST" name="massattend">
-        <div class="small-12 columns">
+<div class="row"><div class="col-md-12"><h1><i class="fa fa-users"></i> Mass Attend</h1></div></div>
+<div class="row jumbotron side-pad">
+    <div class="col-md-12">
+        <form action="" method="POST" name="massattend">
             {{form.hidden_tag()}}
             <div class="row">
-                <strong>Event: </strong>{{form.event}}
+                <div class="col-md-12">
+                    <strong>Event: </strong>{{form.event}}
+                </div>
             </div>
             <div class="row">
-                <strong>Brothers: </strong></br>
-                {% set i = 1 %}
-                {% for brother in form.brothers %}
-                {% if i % 2 %}
-                <div class="row">
-                {% endif %}
-                        {{brother()}}  {{brother.label}}
-                {% if not i % 2 %}
+                <div class="col-md-12">
+                    <strong>Brothers: </strong></br>
                 </div>
-                {% else %}
-                ||
-                {% endif %}
-                {% set i = i + 1 %}
+                {% for brother in form.brothers %}
+                <div class="col-xs-6 col-md-3">
+                        {{brother()}}  {{brother.label}}
+                </div>
                 {% endfor %}
             </div>
             <div class="row">
-                {{form.submit(class="btn btn-primary")}}
+                <div class="col-md-12">
+                    {{form.submit(class="btn btn-primary")}}
+                </div>
             </div>
-        </div>
-    </form>
+        </form>
+    </div>
 </div>
 {% endblock %}

@@ -1,26 +1,28 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="row"><div class="col-md-12"><h1><i class="fa fa-at"></i> Attend an Event</h1></div></div>
-<div class="jumbotron">
-    <form action="" method="POST" name="attend">
-        {{form.hidden_tag()}}
-        <p>
-        <h5>{{form.event.label}} </h5>{{form.event}}
-        </p>
-        <p id="codeform">
-        <h5>{{form.code.label}} </h5>
-        {{form.code(size=12)}} <span class="required"></span>
-        </p>
-        <p>
-        <h5>{{form.pin.label}} </h5>
-        {% if g.user.is_authenticated() %}
-        {{form.pin(size=5, disabled=True)}} Logged in
-        {% else %}
-        {{form.pin(size=5)}}
-        {% endif %}
-        </p>
-        {{form.submit(class="btn btn-primary", value="Submit")}}
-    </form>
+<div class="row jumbotron side-pad">
+    <div class="col-md-12">
+        <form action="" method="POST" name="attend">
+            {{form.hidden_tag()}}
+            <p>
+            <h5>{{form.event.label}} </h5>{{form.event}}
+            </p>
+            <p id="codeform">
+            <h5>{{form.code.label}} </h5>
+            {{form.code(size=12)}} <span class="required"></span>
+            </p>
+            <p>
+            <h5>{{form.pin.label}} </h5>
+            {% if g.user.is_authenticated() %}
+            {{form.pin(size=5, disabled=True)}} Logged in
+            {% else %}
+            {{form.pin(size=5)}}
+            {% endif %}
+            </p>
+            {{form.submit(class="btn btn-primary", value="Submit")}}
+        </form>
+    </div>
 </div>
 {% endblock %}
 {% block footer %}
