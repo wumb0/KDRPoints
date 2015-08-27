@@ -82,7 +82,7 @@ class Randomizer(Form):
 
 
 class MassAttendForm(Form):
-    brothers = [ (x.id, x.name) for x in Brother.query.filter_by(active=True) ]
+    brothers = [ (x.id, x.name) for x in sorted(Brother.query.filter_by(active=True), key=lambda x: x.name) ]
     event = SelectField('Event', choices=[], coerce=int)
     brothers = SelectMultipleField("Brothers", choices=brothers, coerce=int, option_widget=widgets.CheckboxInput())
     submit = SubmitField("Attend")
