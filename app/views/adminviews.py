@@ -177,7 +177,7 @@ class ServiceModelView(ProtectedModelView):
             svchrs = (form.end.data - form.start.data).seconds/3600.0
             remaining = 15 - donehrs
             if not model.email_sent:
-                svcmsg ="The service hours you reported for '{}' have just been approved by {}. (The weight for this service was {})".format(
+                svcmsg ="The service hours you reported for '{}' have just been approved by {} (The weight for this service was {}). ".format(
                     form.name.data,
                     current_user.name,
                     model.weight)
