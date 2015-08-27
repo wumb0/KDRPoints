@@ -294,16 +294,11 @@ def randomizer():
     randomizer = Randomizer()
     brothers = []
     if randomizer.validate_on_submit():
-        """
-        # eventually use this when brothers are registered
-        choices = Brother.query.filter_by(active=True)
-        """
-        with open(os.path.join(basedir, 'brotherlist.txt')) as f:
-            choices = f.readlines()
-            try:
-                brothers = sample(choices, int(randomizer.number.data))
-            except:
-                brothers = sample(choices, 10)
+        choices = Brother.query.filter_by(active=True).all()
+        try:
+            brothers = sample(choices, int(randomizer.number.data))
+        except:
+            flash("Try picking a smaller sample size", category="error")
     return render_template("randomizer.html", title="here you go greg", form=randomizer, brothers=brothers)
 
 
