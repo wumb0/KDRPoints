@@ -23,10 +23,6 @@ class ProtectedIndexView(AdminIndexView):
 class ProtectedModelView(ModelView):
     def is_accessible(self):
         if current_user.is_authenticated() and not current_user.is_normal_user():
-            if current_user.is_chair():
-                self.can_create = False
-                self.can_delete = False
-                self.can_edit = False
             return True
         return False
 
@@ -75,9 +71,6 @@ class FamilyModelView(AdminModelView):
         super(FamilyModelView, self).__init__(models.Family, session)
 
 class EventModelView(ProtectedModelView):
-    can_create = True
-    can_delete = True
-    can_edit = True
     semester = models.Semester.query.filter_by(current=True).first()
     form_args = dict(points=dict(validators=[NumberRange(min=0)]),
                      semester=dict(default=semester),
@@ -87,9 +80,6 @@ class EventModelView(ProtectedModelView):
         super(EventModelView, self).__init__(models.Event, session)
 
 class PointsModelView(ProtectedModelView):
-    can_create = True
-    can_delete = True
-    can_edit = True
     semester = models.Semester.query.filter_by(current=True).first()
     form_args = dict(points=dict(validators=[NumberRange(min=0)]),
                      semester=dict(default=semester),
@@ -123,9 +113,6 @@ class SemesterModelView(AdminModelView):
         super(SemesterModelView, self).__init__(models.Semester, session)
 
 class AwardModelView(ProtectedModelView):
-    can_create = True
-    can_delete = True
-    can_edit = True
     form_args = dict(icon=dict(cols=5))
     form_widget_args = {
         'color': {
@@ -164,9 +151,6 @@ class ServiceModelView(ProtectedModelView):
     def is_accessible(self):
         if current_user.is_authenticated() and \
                 ("service" in current_user.position.name.lower() or current_user.is_admin()):
-            self.can_create = True
-            self.can_edit = True
-            self.can_delete = True
             return True
         return False
 
