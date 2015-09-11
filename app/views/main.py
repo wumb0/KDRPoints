@@ -18,7 +18,7 @@ main = Blueprint('main', __name__)
 def before_request():
     g.user = current_user
     g.current_semester = Semester.query.filter_by(current=True).first()
-    if g.user.is_authenticated():
+    if g.user.is_authenticated:
         g.user.last_seen = datetime.utcnow()
         db.session.add(g.user)
         db.session.commit()
@@ -26,7 +26,7 @@ def before_request():
 @main.route('/')
 @main.route('/index')
 def index():
-    if g.user.is_authenticated():
+    if g.user.is_authenticated:
         name=g.user.name.split(" ")[0]
     else:
         name = "stranger"
@@ -42,7 +42,7 @@ def get_google_oauth_token():
 
 @main.route('/login')
 def login():
-    if g.user.is_authenticated():
+    if g.user.is_authenticated:
         flash("You are already logged in as {}.".format(g.user.email), category="warning")
         return redirect(url_for(".index"))
     session.pop('google_token', None)
@@ -121,7 +121,7 @@ def attend():
     events = []
     if events is not None:
         events = [ (x.id, x.name) for x in events_query ]
-    if g.user.is_authenticated():
+    if g.user.is_authenticated:
         form.pin.data = g.user.pin
     form.event.choices = events
     if form.validate_on_submit():

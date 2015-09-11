@@ -37,7 +37,7 @@
             </div>
             <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                {% if g.user.is_authenticated() %}
+                {% if g.user.is_authenticated %}
                 <li id="profile"><a href="{{url_for(".profile")}}"><i class="fa fa-user"></i> Profile</a></li>
                 <li id="allpoints"><a href="{{url_for(".allpoints")}}"><i class="fa fa-sort"></i> My Points</a></li>
                 <li id="founderscup"><a href="{{url_for(".founderscup")}}"><i class="fa fa-trophy"></i> Founders Cup</a></li>
@@ -58,7 +58,7 @@
                 <li id="service"><a href="{{url_for('.service')}}"><i class="fa fa-recycle"></i> Service</a></li>
                 {% endif %}
                 {% endif %}
-                {% if g.user.is_authenticated() and g.user.is_admin() %}
+                {% if g.user.is_authenticated and g.user.is_admin() %}
                 <li id="attend" class="dropdown"><a href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fa fa-at"></i> Attend
                     <span class="caret"></span>
@@ -71,7 +71,7 @@
                 {% else %}
                 <li id="attend"><a href="{{url_for(".attend")}}"><i class="fa fa-at"></i> Attend</a></li>
                 {% endif %}
-                {% if g.user.is_authenticated() %}
+                {% if g.user.is_authenticated %}
                 <li><a href="{{url_for(".logout")}}"><i class="fa fa-sign-out"></i> Logout</a></li>
                 {% if not g.user.is_normal_user() %}
                 <li><a href="/admin"><i class="fa fa-cog"></i> Admin</a></li>

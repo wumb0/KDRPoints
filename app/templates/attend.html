@@ -14,7 +14,7 @@
             </p>
             <p>
             <h5>{{form.pin.label}} </h5>
-            {% if g.user.is_authenticated() %}
+            {% if g.user.is_authenticated %}
             {{form.pin(size=5, disabled=True)}} Logged in
             {% else %}
             {{form.pin(size=5)}}

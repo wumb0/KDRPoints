@@ -11,7 +11,7 @@ from datetime import datetime
 
 class ProtectedIndexView(AdminIndexView):
     def is_accessible(self):
-        if current_user.is_authenticated() and not current_user.is_normal_user():
+        if current_user.is_authenticated and not current_user.is_normal_user():
             return True
         return False
 
@@ -22,7 +22,7 @@ class ProtectedIndexView(AdminIndexView):
 
 class ProtectedModelView(ModelView):
     def is_accessible(self):
-        if current_user.is_authenticated() and not current_user.is_normal_user():
+        if current_user.is_authenticated and not current_user.is_normal_user():
             return True
         return False
 
@@ -33,12 +33,12 @@ class ProtectedModelView(ModelView):
 
 class AdminModelView(ProtectedModelView):
     def is_visible(self):
-        if current_user.is_authenticated() and current_user.is_admin():
+        if current_user.is_authenticated and current_user.is_admin():
             return True
         return False
 
     def is_accessible(self):
-        if current_user.is_authenticated() and current_user.is_admin():
+        if current_user.is_authenticated and current_user.is_admin():
             return True
         return False
 
@@ -149,7 +149,7 @@ class ServiceModelView(ProtectedModelView):
         super(ServiceModelView, self).__init__(models.Service, session)
 
     def is_accessible(self):
-        if current_user.is_authenticated() and \
+        if current_user.is_authenticated and \
                 ("service" in current_user.position.name.lower() or current_user.is_admin()):
             return True
         return False
