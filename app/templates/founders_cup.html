@@ -20,4 +20,22 @@
         {% endfor %}
     </div>
 </div>
+<div class="col-md-12">
+    <div class="row"><h3>The Math:</h3></div>
+    <div class="row">
+<pre>
+for family in families
+    total = 0
+    div = 0
+    for brother in family.brothers
+        if brother.is_active
+            div = div + 1
+            total = brother.get_all_points()
+        endif
+    endfor
+    family.weighted_score = total/div
+endfor
+</pre>
+    </div>
+</div>
 {% endblock %}
