@@ -109,9 +109,12 @@ class Family(db.Model):
 
     def get_points(self, semester):
         total = 0
+        div = 0
         for b in self.brothers:
-            total += b.get_all_points(semester)
-        if len(self.brothers) != 0:
+            if b.active:
+                div += 1
+                total += b.get_all_points(semester)
+        if div:
             return total/len(self.brothers)
         else:
             return 0
