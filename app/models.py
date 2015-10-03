@@ -111,7 +111,10 @@ class Family(db.Model):
         total = 0
         for b in self.brothers:
             total += b.get_all_points(semester)
-        return total
+        if len(self.brothers) != 0:
+            return total/len(self.brothers)
+        else:
+            return 0
 
     def __str__(self):
         return self.name
