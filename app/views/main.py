@@ -239,11 +239,13 @@ def award(id):
     return render_template('award.html', title=award.name, award=award)
 
 @main.route('/service', methods = ['GET', 'POST'])
-@login_required
 def service():
     form = ServiceForm()
+    if g.user.is_authenticated:
+        form.pin.data = g.user.pin
     if form.validate_on_submit():
-        serv = Service(brother_id=g.user.id,
+        brother = Brother.query.filter_by(pin=form.pin.data).first()
+        serv = Service(brother_id=brother.id,
                        start=form.start.data,
                        end=form.end.data,
                        info=form.info.data,
@@ -256,9 +258,9 @@ def service():
             svcchair = Brother.query.filter_by(position_id=svcid.id).first()
             path = urlparse(request.base_url)
             body = "{} has submitted service hours for approval. Go to {}://{}{}?id={} to review.".format(
-                    g.user.name, path.scheme, path.netloc, url_for('service.edit_view'), serv.id)
+                    brother.name, path.scheme, path.netloc, url_for('service.edit_view'), serv.id)
             send_email("KDRPoints",
-                    "Service hours submitted by " + g.user.name,
+                    "Service hours submitted by " + brother.name,
                         [svcchair.email],
                         body,
                         body)

@@ -63,6 +63,7 @@ class ServiceForm(Form):
     name = TextField('Event Name', validators=[DataRequired(), Length(max=50)])
     start = DateTimeField('Start Time', validators=[DataRequired()], format='%m/%d/%Y %I:%M %p', default=roundTime())
     end = DateTimeField('End Time', validators=[DataRequired()], format='%m/%d/%Y %I:%M %p', default=roundTime())
+    pin = IntegerField('Pin', validators=[DataRequired()], default="")
     info = TextAreaField('Additional info')
     submit = SubmitField('submit')
 
@@ -74,6 +75,12 @@ class ServiceForm(Form):
     def validate_end(self, field):
         if self.end.data <= self.start.data:
             raise ValidationError("The end must be after the beginning")
+
+    def validate_pin(self, field):
+        if self.pin.data <= 0:
+            raise ValidationError("Invalid PIN entered")
+        if not self.pin.data in [ x.pin for x in Brother.query.all() ]:
+            raise ValidationError("The PIN number does not exist in the database")
 
 
 class Randomizer(Form):

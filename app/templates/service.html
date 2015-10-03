@@ -15,6 +15,16 @@
             </div>
             <div class="row">
                 <div class="col-md-12">
+                    <h5>{{form.pin.label}} </h5>
+                    {% if g.user.is_authenticated %}
+                    {{form.pin(size=5, disabled=True)}} Logged in
+                    {% else %}
+                    {{form.pin(size=5)}}
+                    {% endif %}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
                     <h5>{{form.start.label}} </h5>{{form.start}}<button type="button" id="startpicker" class="btn fa fa-calendar"></button>
                 </div>
             </div>

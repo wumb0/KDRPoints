@@ -44,7 +44,8 @@
                 <li id="awards"><a href="{{url_for('.awards')}}"><i class="fa fa-star"></i> Awards</a></li>
                 <li id="events"><a href="{{url_for('.events')}}"><i class="fa fa-calendar"></i> Events</a></li>
                 <li id="brothers"><a href="{{url_for('.brothers')}}"><i class="fa fa-users"></i> Brothers</a></li>
-                {% if g.user.is_service_chair() or g.user.is_admin() %}
+                {% endif %}
+                {% if g.user.is_authenticated and (g.user.is_service_chair() or g.user.is_admin()) %}
                 <li id="service" class="dropdown"><a href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fa fa-recycle"></i> Service
                     <span class="caret"></span>
@@ -56,7 +57,6 @@
                 </li>
                 {% else %}
                 <li id="service"><a href="{{url_for('.service')}}"><i class="fa fa-recycle"></i> Service</a></li>
-                {% endif %}
                 {% endif %}
                 {% if g.user.is_authenticated and g.user.is_admin() %}
                 <li id="attend" class="dropdown"><a href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
