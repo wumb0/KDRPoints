@@ -76,11 +76,9 @@ None
                 {% endif %}
                 <h3 class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><button type="button"  role="button" class="btn btn-primary" style="float: right;">{{awards|length}}</button></h3>
                 <ul class="dropdown-menu dropdown-menu-center" role="menu">
-                    {% if not g.user.is_normal_user() %}
                     {% for award in awards %}
                     <li><a href="#" data-toggle="modal" data-target="#awmo{{award.id}}"><i class="fa {{award.icon}}" style="color: #{{award.color}};"></i> {{award.name}}</a></li>
                     {% endfor %}
-                    {% endif %}
                 </ul>
             </div>
         </div>
