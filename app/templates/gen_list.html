@@ -16,8 +16,8 @@
                     <h3><span class="btn btn-primary">{{item.brothers|length}}</span></h3></a>
                 <ul class="dropdown-menu dropdown-menu-center" role="menu">
                     {% if not g.user.is_normal_user() %}
-                    {% for brother in item.brothers %}
-                    <li><a href="{{url_for(".allbrotherpoints", username=brother.email.split('@')[0])}}">{{brother.name}}</a></li>
+                    {% for brother in item.brothers|sort(attribute='pin') %}
+                    <li><a href="{{url_for(".allbrotherpoints", username=brother.email.split('@')[0])}}">{{brother.pin}} {{brother.name}}</a></li>
                     {% endfor %}
                     {% endif %}
                 </ul>
@@ -48,8 +48,8 @@
 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                     <h3><span class="btn btn-primary">{{item.brothers|length}}</span></h3></a>
                 <ul class="dropdown-menu dropdown-menu-center" role="menu">
-                    {% for brother in item.brothers %}
-                    <li><a href="{{url_for(".allbrotherpoints", username=brother.email.split('@')[0])}}">{{brother.name}}</a></li>
+                    {% for brother in item.brothers|sort(attribute='pin') %}
+                    <li><a href="{{url_for(".allbrotherpoints", username=brother.email.split('@')[0])}}">{{brother.pin}} {{brother.name}}</a></li>
                     {% endfor %}
                 </ul>
             </div>
