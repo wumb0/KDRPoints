@@ -128,7 +128,7 @@ def attend():
         bro = Brother.query.filter_by(pin=form.pin.data).first()
         if bro is not None:
             event = Event.query.filter_by(id=form.event.data).first()
-            if not event.code_enable or form.code.data == event.code:
+            if not event.code_enable or form.code.data.strip().lower() == event.code.strip().lower():
                 if bro not in event.brothers:
                     event.brothers.append(bro)
                     db.session.commit()
