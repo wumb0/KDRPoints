@@ -1,6 +1,6 @@
 from app import app, db, models
 from flask.ext.admin import AdminIndexView
-from flask_admin.contrib.sqla import ModelView
+from flask.ext.admin.contrib.sqla.view import ModelView, func
 from flask.ext.login import current_user
 from flask import redirect, url_for, flash
 from config import USER_ROLES
@@ -80,6 +80,14 @@ class EventModelView(ProtectedModelView):
     def __init__(self, session):
         super(EventModelView, self).__init__(models.Event, session)
 
+    def get_query(self):
+        semester = models.Semester.query.filter_by(current=True).one()
+        return self.session.query(self.model).filter(self.model.semester==semester)
+
+    def get_count_query(self):
+        semester = models.Semester.query.filter_by(current=True).one()
+        return self.session.query(func.count('*')).filter(self.model.semester==semester)
+
 class PointsModelView(ProtectedModelView):
     column_default_sort = ('timestamp', True)
     semester = models.Semester.query.filter_by(current=True).first()
@@ -91,6 +99,14 @@ class PointsModelView(ProtectedModelView):
     def __init__(self, session):
         super(PointsModelView, self).__init__(models.OtherPoints, session)
 
+    def get_query(self):
+        semester = models.Semester.query.filter_by(current=True).one()
+        return self.session.query(self.model).filter(self.model.semester==semester)
+
+    def get_count_query(self):
+        semester = models.Semester.query.filter_by(current=True).one()
+        return self.session.query(func.count('*')).filter(self.model.semester==semester)
+
 class SemesterModelView(AdminModelView):
     form_excluded_columns = ('linkname')
     column_default_sort = ('current', True)
@@ -100,7 +116,7 @@ class SemesterModelView(AdminModelView):
     form_args = dict(season=dict(choices=choices),
                      year=dict(default=datetime.utcnow().year))
 
-    def on_model_change(self, form, model):
+    def on_model_change(self, form, model, is_created):
         model.linkname = (model.season + str(model.year)).lower()
         db.session.add(model)
         if model.current:
@@ -139,6 +155,14 @@ class AwardModelView(ProtectedModelView):
     def __init__(self, session):
         super(AwardModelView, self).__init__(models.Award, session)
 
+    def get_query(self):
+        semester = models.Semester.query.filter_by(current=True).one()
+        return self.session.query(self.model).filter(self.model.semester==semester)
+
+    def get_count_query(self):
+        semester = models.Semester.query.filter_by(current=True).one()
+        return self.session.query(func.count('*')).filter(self.model.semester==semester)
+
 class ServiceModelView(ProtectedModelView):
     form_excluded_columns = ('email_sent')
     column_exclude_list = ('email_sent')
@@ -157,7 +181,7 @@ class ServiceModelView(ProtectedModelView):
             return True
         return False
 
-    def on_model_change(self, form, model):
+    def on_model_change(self, form, model, is_created):
         if form.approved.data:
             semester = models.Semester.query.filter_by(current=True).one()
             donehrs = form.brother.data.total_service_hours(semester)
@@ -209,3 +233,11 @@ class ServiceModelView(ProtectedModelView):
                     [model.brother.email],
                     svcmsg,
                     svcmsg)
+
+    def get_query(self):
+        semester = models.Semester.query.filter_by(current=True).one()
+        return self.session.query(self.model).filter(self.model.semester==semester)
+
+    def get_count_query(self):
+        semester = models.Semester.query.filter_by(current=True).one()
+        return self.session.query(func.count('*')).filter(self.model.semester==semester)
