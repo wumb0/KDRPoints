@@ -35,10 +35,10 @@
                                     <h3 class="panel-title">Brothers</h3>
                                 </div>
                                 <div class="panel-body">
-                                    {% for brother in event.brothers %}
+                                    {% for brother in event.brothers|sort(attribute="pin") %}
                                     <div class="row">
                                         <div class="container">
-                                            <a href="{{url_for(".allbrotherpoints", username=brother.email.split('@')[0])}}">{{brother.name}}</a>
+                                            <a href="{{url_for(".allbrotherpoints", username=brother.email.split('@')[0])}}">{{brother.pin}} {{brother.name}}</a>
                                         </div>
                                     </div>
                                     {% endfor %}
