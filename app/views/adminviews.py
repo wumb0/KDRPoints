@@ -71,6 +71,7 @@ class FamilyModelView(AdminModelView):
         super(FamilyModelView, self).__init__(models.Family, session)
 
 class EventModelView(ProtectedModelView):
+    column_default_sort = ('timestamp', True)
     semester = models.Semester.query.filter_by(current=True).first()
     form_args = dict(points=dict(validators=[NumberRange(min=0)]),
                      semester=dict(default=semester),
@@ -80,6 +81,7 @@ class EventModelView(ProtectedModelView):
         super(EventModelView, self).__init__(models.Event, session)
 
 class PointsModelView(ProtectedModelView):
+    column_default_sort = ('timestamp', True)
     semester = models.Semester.query.filter_by(current=True).first()
     form_args = dict(points=dict(validators=[NumberRange(min=0)]),
                      semester=dict(default=semester),
@@ -127,6 +129,7 @@ class AwardModelView(ProtectedModelView):
     }
     edit_template = 'admin/editaward.html'
     create_template = 'admin/createaward.html'
+    column_default_sort = ('timestamp', True)
     semester = models.Semester.query.filter_by(current=True).first()
     form_args = dict(points=dict(validators=[NumberRange(min=0)]),
                      semester=dict(default=semester),
