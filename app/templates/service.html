@@ -25,12 +25,12 @@
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <h5>{{form.start.label}} </h5>{{form.start(disabled=True)}}<button type="button" id="startpicker" class="btn fa fa-calendar"></button>
+                    <h5>{{form.start.label}} </h5>{{form.start(readonly=True)}}<button type="button" id="startpicker" class="btn fa fa-calendar"></button>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <h5>{{form.end.label}} </h5>{{form.end(disabled=True)}}<button type="button" id="endpicker" class="btn fa fa-calendar"></button>
+                    <h5>{{form.end.label}} </h5>{{form.end(readonly=True)}}<button type="button" id="endpicker" class="btn fa fa-calendar"></button>
                 </div>
             </div>
             <div class="row">
@@ -65,10 +65,10 @@ $(function() {
         startDate: $('#start').val()
     });
     $('#startpicker').on('apply.daterangepicker', function(ev, picker) {
-    $('#start').val(picker.startDate.format('MM/DD/YYYY h:mm A'));
+        $('#start').val(picker.startDate.format('MM/DD/YYYY h:mm A'));
     });
     $('#endpicker').on('apply.daterangepicker', function(ev, picker) {
-    $('#end').val(picker.startDate.format('MM/DD/YYYY h:mm A'));
+        $('#end').val(picker.startDate.format('MM/DD/YYYY h:mm A'));
     });
 });
 </script>
