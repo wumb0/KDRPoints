@@ -1,6 +1,6 @@
 #!flask/bin/python
 from app import db, app, lm, google
-from datetime import datetime
+from datetime import datetime, timedelta
 from flask import render_template, url_for, session, g, redirect, Blueprint, flash, abort, request
 from flask.ext.login import logout_user, login_user, current_user, current_user, login_required
 from app.models import *
@@ -16,6 +16,8 @@ main = Blueprint('main', __name__)
 
 @main.before_request
 def before_request():
+    session.permanent = True
+    app.permanent_session_lifetime = timedelta(hours=24)
     g.user = current_user
     g.current_semester = Semester.query.filter_by(current=True).first()
     if g.user.is_authenticated:
