@@ -78,7 +78,7 @@ def authorized(response):
         bro = Brother(name=me.data['name'], nickname="", email=me.data['email'], position=None, pin=0)
         db.session.add(bro)
         db.session.commit()
-    login_user(bro, remember = False)
+    login_user(bro, remember = True)
     if bro.pin == 0 or bro.family is None:
         return redirect(url_for('main.first_login'))
     return redirect(url_for("main.index"))
