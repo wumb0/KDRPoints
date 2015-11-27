@@ -297,7 +297,7 @@ def service_download(semester):
         brosSvcUn += broSvcUn
         brosSvc += brosSvc
         data += ",".join(["", "Total", "", str(broSvcUn), str(broSvc)]) + "\n"
-        data += ",".join(["All brothers", "All Events", "", str(brosSvcUn), str(brosSvc)]) + "\n"
+    data += ",".join(["All brothers", "All Events", "", str(brosSvcUn), str(brosSvc)]) + "\n"
     resp = make_response(data)
     resp.headers["Content-Disposition"] = "attachment; filename=service_" + semester.lower() + ".csv"
     return resp
