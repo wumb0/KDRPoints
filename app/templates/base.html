@@ -53,6 +53,7 @@
                 <ul class="dropdown-menu" role="menu" aria-labelledby="service">
                     <li><a href="{{url_for('.service')}}">Report Service</a></li>
                     <li><a href="{{url_for('.allservice')}}">All Service</a></li>
+                    <li><a href="{{url_for('.service_download', semester=g.current_semester.linkname)}}">Service Report</a></li>
                 </ul>
                 </li>
                 {% else %}

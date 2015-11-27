@@ -1,7 +1,7 @@
 #!flask/bin/python
 from app import db, app, lm, google
 from datetime import datetime, timedelta
-from flask import render_template, url_for, session, g, redirect, Blueprint, flash, abort, request
+from flask import render_template, url_for, session, g, redirect, Blueprint, flash, abort, request, make_response
 from flask.ext.login import logout_user, login_user, current_user, current_user, login_required
 from app.models import *
 from config import USER_ROLES, basedir
@@ -278,6 +278,29 @@ def service():
 def allservice():
     return redirect(url_for('.allservicesemester',
                             semester=g.current_semester.linkname))
+
+@main.route('/service/<semester>/download')
+@login_required
+def service_download(semester):
+    semesterobj = Semester.query.filter_by(linkname=semester).first()
+    bros = Brother.query.filter_by(active=True)
+    data = "Brother,Service Event,Weight,Unweighted,Weighted\n"
+    broSvcUn = brosSvcUn = broSvc = brosSvc = 0
+    for bro in bros:
+        broSvcUn = broSvc = 0
+        data += bro.name + ",,,,\n"
+        for svc in bro.service:
+            if svc.semester == semesterobj:
+                data += ",".join(["", svc.name, str(svc.weight), str(svc.get_unweighted_hours()), str(svc.get_weighted_hours())]) + "\n"
+                broSvcUn += svc.get_unweighted_hours()
+                broSvc += svc.get_weighted_hours()
+        brosSvcUn += broSvcUn
+        brosSvc += brosSvc
+        data += ",".join(["", "Total", "", str(broSvcUn), str(broSvc)]) + "\n"
+        data += ",".join(["All brothers", "All Events", "", str(brosSvcUn), str(brosSvc)]) + "\n"
+    resp = make_response(data)
+    resp.headers["Content-Disposition"] = "attachment; filename=service_" + semester.lower() + ".csv"
+    return resp
 
 @main.route('/allservice/<semester>')
 @login_required

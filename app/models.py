@@ -235,6 +235,12 @@ class Service(db.Model):
     email_sent = db.Column(db.Boolean, default=False)
     weight = db.Column(db.Float, default=1.0, nullable=False)
 
+    def get_weighted_hours(self):
+        return ((self.end - self.start).seconds/3600.0)*float(self.weight)
+
+    def get_unweighted_hours(self):
+        return (self.end - self.start).seconds/3600.0
+
     def __str__(self):
         return self.name
 
