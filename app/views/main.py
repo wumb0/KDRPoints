@@ -295,7 +295,7 @@ def service_download(semester):
                 broSvcUn += svc.get_unweighted_hours()
                 broSvc += svc.get_weighted_hours()
         brosSvcUn += broSvcUn
-        brosSvc += brosSvc
+        brosSvc += broSvc
         data += ",".join(["", "Total", "", str(broSvcUn), str(broSvc)]) + "\n"
     data += ",".join(["All brothers", "All Events", "", str(brosSvcUn), str(brosSvc)]) + "\n"
     resp = make_response(data)
