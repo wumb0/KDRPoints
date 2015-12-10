@@ -290,7 +290,7 @@ def service_download(semester):
         broSvcUn = broSvc = 0
         data += bro.name + ",,,,\n"
         for svc in bro.service:
-            if svc.semester == semesterobj:
+            if svc.semester == semesterobj and svc.approved:
                 data += ",".join(["", svc.name, str(svc.weight), str(svc.get_unweighted_hours()), str(svc.get_weighted_hours())]) + "\n"
                 broSvcUn += svc.get_unweighted_hours()
                 broSvc += svc.get_weighted_hours()
