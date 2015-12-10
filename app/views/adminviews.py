@@ -124,6 +124,9 @@ class SemesterModelView(AdminModelView):
             for sem in sems:
                 if sem is not model:
                     sem.current = False
+                    if not sem.ended:
+                        sem.active_brothers = models.Brother.query.filter_by(active=True).all()
+                    sem.ended = True
                     db.session.add(sem)
         db.session.commit()
 
