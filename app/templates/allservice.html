@@ -8,7 +8,7 @@
         <h3><div class="label label-primary">{{brother.name}}</div></h3>
     </div>
     <div class="col-md-4">
-        <h3><div class="label label-success">{{brother.total_service_hours(semester=g.current_semester)}}hrs</div></h3>
+        <h3><div class="label label-success">{{brother.total_service_hours(semester=g.current_semester)|round(2)}}hrs</div></h3>
     </div>
 </div>
 </div>

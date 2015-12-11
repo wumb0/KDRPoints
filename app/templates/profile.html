@@ -93,11 +93,11 @@
                         </div>
                         <div class="col-xs-2">
                             {% set service = g.user.service %}
-                            <h3 class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><button type="button"  role="button" class="btn btn-{{svclabel}}" style="float: right;">{{servicehrs}}</button></h3>
+                            <h3 class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><button type="button"  role="button" class="btn btn-{{svclabel}}" style="float: right;">{{servicehrs|round(2)}}</button></h3>
                             <ul class="dropdown-menu dropdown-menu-center" role="menu">
                                         {% for event in service %}
                                         {% if event.approved %}
-                                        <li>{{event.name}} - {{((event.end - event.start).seconds/3600)*event.weight}}h (x{{event.weight}})</li>
+                                        <li>{{event.name}} - {{((event.end - event.start).seconds/3600)*event.weight|round(2)}}h (x{{event.weight}})</li>
                                         {% endif %}
                                         {% endfor %}
                             </ul>
