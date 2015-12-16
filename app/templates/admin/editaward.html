@@ -27,4 +27,9 @@
         <script type='text/javascript'>
             $('#icon').iconpicker();
         </script>
+        <script type='text/javascript'>
+            $('.iconpicker-input').focus(function(){
+                $('.iconpicker-search').focus();
+            });
+        </script>
 {% endblock %}
