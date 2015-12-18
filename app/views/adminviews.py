@@ -1,5 +1,5 @@
 from app import app, db, models
-from flask.ext.admin import AdminIndexView
+from flask.ext.admin import AdminIndexView, BaseView
 from flask.ext.admin.contrib.sqla.view import ModelView, func
 from flask.ext.login import current_user
 from flask import redirect, url_for, flash
@@ -9,7 +9,7 @@ from app.email import send_email
 from wtforms import SelectField
 from datetime import datetime
 
-class ProtectedIndexView(AdminIndexView):
+class ProtectedBaseView(BaseView):
     def is_accessible(self):
         if current_user.is_authenticated and not current_user.is_normal_user():
             return True
@@ -20,18 +20,7 @@ class ProtectedIndexView(AdminIndexView):
                 flash("You don't have permission to go there", category="warning")
                 return redirect(url_for('main.index'))
 
-class ProtectedModelView(ModelView):
-    def is_accessible(self):
-        if current_user.is_authenticated and not current_user.is_normal_user():
-            return True
-        return False
-
-    def _handle_view(self, name, **kwargs):
-            if not self.is_accessible():
-                flash("You don't have permission to go there", category="warning")
-                return redirect(url_for('main.index'))
-
-class AdminModelView(ProtectedModelView):
+class AdminBaseView(ProtectedBaseView):
     def is_visible(self):
         if current_user.is_authenticated and current_user.is_admin():
             return True
@@ -41,6 +30,15 @@ class AdminModelView(ProtectedModelView):
         if current_user.is_authenticated and current_user.is_admin():
             return True
         return False
+
+class ProtectedIndexView(AdminIndexView, ProtectedBaseView):
+    pass
+
+class ProtectedModelView(ModelView, ProtectedBaseView):
+    pass
+
+class AdminModelView(ModelView, AdminBaseView):
+    pass
 
 class BrotherModelView(AdminModelView):
     column_exclude_list = ['points']
