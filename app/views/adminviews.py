@@ -189,14 +189,14 @@ class ServiceModelView(ProtectedModelView):
             semester = models.Semester.query.filter_by(current=True).one()
             donehrs = form.brother.data.total_service_hours(semester)
             svchrs = (form.end.data - form.start.data).seconds/3600.0
-            remaining = 15 - donehrs
+            remaining = semester.required_service - donehrs
             if not model.email_sent:
                 svcmsg ="The service hours you reported for '{}' have just been approved by {} (The weight for this service was {}). ".format(
                     form.name.data,
                     current_user.name,
                     model.weight)
                 if remaining > 0:
-                    svcmsg += "You have {} service hour(s) left to do this semester (out of 15).".format(remaining)
+                    svcmsg += "You have {} service hour(s) left to do this semester (out of {}).".format(remaining, semester.required_service)
                 else:
                     svcmsg += "You have completed your service hours for this semester! You currently have {}.".format(donehrs)
                 send_email("Service Chair (points)",
@@ -220,7 +220,7 @@ class ServiceModelView(ProtectedModelView):
         semester = models.Semester.query.filter_by(current=True).one()
         donehrs = model.brother.total_service_hours(semester)
         svchrs = (model.end - model.start).seconds/3600.0
-        remaining = 15 - donehrs
+        remaining = semester.required_hours - donehrs
         svcmsg ="The {} ({}*{}) service hour(s) you reported for '{}' have been denied by {}. If you want to know why you should ask them about it! ".format(
             svchrs*float(model.weight),
             svchrs,
@@ -228,7 +228,7 @@ class ServiceModelView(ProtectedModelView):
             model.name,
             current_user.name)
         if remaining > 0:
-            svcmsg += "You have {} service hour(s) left to do this semester (out of 15).".format(remaining)
+            svcmsg += "You have {} service hour(s) left to do this semester (out of {}).".format(remaining, semester.required_service)
         else:
             svcmsg += "You have completed your service hours for this semester! You currently have {}.".format(donehrs)
         send_email("Service Chair (points)",

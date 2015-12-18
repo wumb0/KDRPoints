@@ -138,6 +138,7 @@ class Semester(db.Model):
     current = db.Column(db.Boolean, default = False, nullable=False )
     linkname = db.Column(db.String(20))
     ended = db.Column(db.Boolean, default=False, nullable=False)
+    required_service = db.Column(db.Integer, default=15)
 
     def get_name(self):
         return "{} {}".format(self.season, self.year)
