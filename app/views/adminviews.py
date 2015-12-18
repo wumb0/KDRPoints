@@ -115,6 +115,17 @@ class SemesterModelView(AdminModelView):
     form_overrides = dict(season=SelectField)
     form_args = dict(season=dict(choices=choices),
                      year=dict(default=datetime.utcnow().year))
+    form_widget_args = {
+        'required_service': {
+            'style': "width: 5em;"
+        },
+        'year': {
+            'style': "width: 7em;"
+        },
+        'season': {
+            'style': "width: 7em;"
+        }
+    }
 
     def on_model_change(self, form, model, is_created):
         model.linkname = (model.season + str(model.year)).lower()
