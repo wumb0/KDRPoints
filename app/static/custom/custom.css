@@ -3,8 +3,14 @@ html {
   min-height: 100%;
 }
 
+.content {
+    padding-top: 3em;
+}
+
 .jumbotron {
-    padding-top: 15px;
+    padding-top: 1em;
+    padding-left: 1em;
+    padding-right: 1em;
 }
 
 body {
@@ -37,11 +43,6 @@ body {
 .side-pad {
     margin-left: 0.3em;
     margin-right: 0.3em;
-}
-
-.jmargins {
-    margin-left: 1em;
-    margin-right: 1em;
 }
 
 .row-eq-height {

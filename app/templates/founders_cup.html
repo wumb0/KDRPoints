@@ -2,7 +2,7 @@
 {% block content %}
 <div class="row"><div class="col-md-12"><h1><i class="fa fa-trophy"></i> Founders Cup Standings</h1></div></div>
 <div class="jumbotron">
-    <div class="container jmargins">
+    <div class="container">
         {% set maxpoints = families[0].get_points(g.current_semester) * 1.1 %}
         {% if maxpoints == 0 %}
         {% set maxpoints = 1 %}
