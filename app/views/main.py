@@ -78,7 +78,7 @@ def authorized(response):
         bro = Brother(name=me.data['name'], nickname="", email=me.data['email'], position=None, pin=0)
         db.session.add(bro)
         db.session.commit()
-    login_user(bro, remember = True)
+    login_user(bro, remember = False)
     if bro.pin == 0 or bro.family is None:
         return redirect(url_for('main.first_login'))
     return redirect(url_for("main.index"))
@@ -356,7 +356,29 @@ def massattend():
 @main.route('/signupsheets')
 @login_required
 def signupsheets():
-    return render_template('signupsheets.html', title="Sign Up Sheets")
+    sheetz = SignUpSheet.query.filter_by(semester=g.current_semester).all()
+    return render_template('signupsheets.html', title="Sign Up Sheets", sheets=sheetz)
+
+@main.route('/signup/<int:id>', methods=['GET', 'POST'])
+@login_required
+def signup(id):
+    form = AddOrDeleteFromSignup()
+    sheet = SignUpSheet.query.filter_by(id=id).one()
+    if request.method == 'POST':
+        role = SignUpRole.query.filter_by(id=form.role_id.data).one()
+        if sheet.closed:
+            flash("This signup sheet is closed for modification")
+        else:
+            if g.user in role.brothers:
+                role.brothers.remove(g.user)
+            else:
+                if len(role.brothers) < role.max:
+                    role.brothers.append(g.user)
+                else:
+                    flash("No more brothers can sign up for this role.", category='error')
+            db.session.add(role)
+            db.session.commit()
+    return render_template("signup.html", title="Sign Up - "+sheet.name, sheet=sheet, form=form)
 
 def __get_avg_points():
     all_brothers = Brother.query.filter_by(active=True)

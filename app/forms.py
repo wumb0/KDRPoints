@@ -96,3 +96,6 @@ class MassAttendForm(Form):
 
     def validate(self): #brothers field fails check because object, just work around for now
         return True
+
+class AddOrDeleteFromSignup(Form):
+    role_id = HiddenField()

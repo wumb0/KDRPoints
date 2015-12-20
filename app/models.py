@@ -1,6 +1,7 @@
 from app import db
 from config import USER_ROLES
 from datetime import datetime
+from sqlalchemy.ext.hybrid import hybrid_property
 
 events = db.Table('events',
     db.Column('event_id', db.Integer, db.ForeignKey('event.id')),
@@ -46,6 +47,10 @@ class Brother(db.Model):
     studyhours = db.relationship('StudyHours')
     family_id = db.Column(db.Integer, db.ForeignKey('family.id'))
     family = db.relationship('Family', backref="brothers")
+
+    @hybrid_property
+    def print_signups(self):
+        return ", ".join([x.name for x in self.signups])
 
     def is_admin(self):
         if self.position is None:
@@ -299,8 +304,12 @@ class SignUpSheet(db.Model):
     semester_id = db.Column(db.Integer, db.ForeignKey('semester.id'), nullable=False)
     event = db.relationship("Event", backref='signupsheet')
     event_id = db.Column(db.Integer, db.ForeignKey('event.id'), nullable=True)
+    closed = db.Column(db.Boolean)
     __table_args__ = (db.UniqueConstraint('name', 'semester_id', name='_name_semester_uc'),)
 
+    @hybrid_property
+    def available_role_list_print(self):
+        return ", ".join([x.name for x in self.roles if len(x.brothers) < x.max])
 
 class SignUpRole(db.Model):
     __tablename__ = 'signuprole'
@@ -311,3 +320,7 @@ class SignUpRole(db.Model):
     signupsheet_id = db.Column(db.Integer, db.ForeignKey('signupsheet.id'), nullable=False)
     signupsheet = db.relationship("SignUpSheet", backref='roles')
     __table_args__ = (db.UniqueConstraint('signupsheet_id', 'name', name='_sheetid_name_uc'),)
+
+    @hybrid_property
+    def brother_list_print(self):
+        return ", ".join([x.name for x in self.brothers])

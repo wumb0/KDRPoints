@@ -1,4 +1,32 @@
 {% extends "base.html" %}
 {% block content %}
-    
+<div class="row"><div class="col-md-12"><h1><i class="fa fa-pencil"></i> Sign Up Sheets</h1></div></div>
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-hover table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Associated Event</th>
+                    <th>Available Roles</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for sheet in sheets %}
+            {% set event = sheet.event %}
+                <tr>
+                    <td><a href="{{url_for('.signup', id=sheet.id)}}">{{sheet.name}}</a></td>
+                    {% if event %}
+                    {% include 'event.html' %}
+                    <td><a href="#" data-toggle="modal" data-target="#evmo{{event.id}}">{{event.name}}</a></td>
+                    {% else %}
+                    <td>None</td>
+                    {% endif %}
+                    <td>{{sheet.available_role_list_print}}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 {% endblock content %}

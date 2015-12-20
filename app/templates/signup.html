@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row"><div class="col-md-12"><h1><i class="fa fa-pencil"></i> Sign Up - {{sheet.name}}</h1></div></div>
+<div class="row">
+    <div class="col-md-12">
+        <form action="" method="POST" name="signup">
+            {{form.hidden_tag()}}
+            {{form.role_id()}}
+            <table class="table table-hover table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>Role</th>
+                        <th>Brothers Required</th>
+                        <th>Brothers</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for role in sheet.roles %}
+                    <tr>
+                        <td>{{role.name}}</td>
+                            {% if role.max == role.min %}
+                        <td>{{role.max}}</td>
+                        {% else %}
+                            <td>{{role.min}} - {{role.max}}</td>
+                        {% endif %}
+                        <td>
+                            {{role.brother_list_print}}
+                            {% if not sheet.closed %}
+                            {% if g.user not in role.brothers %}
+                                {% if role.brothers|count < role.max %}
+                                    <i id="{{role.id}}" name="plusminus" class="fa fa-plus pull-right"></i>
+                                {% endif %}
+                            {% else %}
+                                <i id="{{role.id}}" name="plusminus" class="fa fa-minus pull-right"></i>
+                            {% endif %}
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </form>
+    </div>
+</div>
+{% endblock content %}
+
+{% block footer %}
+    <script>
+        $('[name=plusminus]').click(function(e){
+            $('#role_id').val($(this).attr('id'));
+            $('form').submit();
+        });
+    </script>
+{% endblock footer %}
