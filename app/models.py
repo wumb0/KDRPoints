@@ -7,6 +7,11 @@ events = db.Table('events',
     db.Column('brother_id', db.Integer, db.ForeignKey('brother.id'))
 )
 
+signups = db.Table('signups',
+    db.Column('signup_id', db.Integer, db.ForeignKey('signuprole.id')),
+    db.Column('brother_id', db.Integer, db.ForeignKey('brother.id'))
+)
+
 active_semesters = db.Table('active_semesters',
     db.Column('semester_id', db.Integer, db.ForeignKey('semester.id')),
     db.Column('brother_id', db.Integer, db.ForeignKey('brother.id'))
@@ -35,6 +40,7 @@ class Brother(db.Model):
     points = db.relationship('OtherPoints', secondary=points, backref = 'brothers', lazy = 'dynamic')
     awards = db.relationship('Award', secondary=awards, backref = 'brothers', lazy = 'dynamic')
     events = db.relationship('Event', secondary=events, backref='brothers', lazy='dynamic')
+    signups = db.relationship('SignUpRole', secondary=signups, backref='brothers', lazy='dynamic')
     active_semesters = db.relationship('Semester', secondary=active_semesters, backref='active_brothers', lazy='dynamic')
     service = db.relationship('Service')
     studyhours = db.relationship('StudyHours')
@@ -283,3 +289,22 @@ class Position(db.Model):
 
     def __str__(self):
         return self.name
+
+
+class SignUpSheet(db.Model):
+    __tablename__ = 'signupsheet'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(60), nullable=False)
+    semester = db.relationship("Semester", backref="signupsheets")
+    semester_id = db.Column(db.Integer, db.ForeignKey('semester.id'), nullable=False)
+    event = db.relationship("Event", backref='signupsheet')
+    event_id = db.Column(db.Integer, db.ForeignKey('event.id'), nullable=True)
+
+class SignUpRole(db.Model):
+    __tablename__ = 'signuprole'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(40), nullable=False)
+    min = db.Column(db.Integer)
+    max = db.Column(db.Integer)
+    signupsheet_id = db.Column(db.Integer, db.ForeignKey('signupsheet.id'), nullable=False)
+    signupsheet = db.relationship("SignUpSheet", backref='roles')

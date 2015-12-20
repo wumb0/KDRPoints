@@ -1,8 +1,8 @@
 from app import app, db, models
-from flask.ext.admin import AdminIndexView, BaseView
+from flask.ext.admin import AdminIndexView, BaseView, expose
 from flask.ext.admin.contrib.sqla.view import ModelView, func
 from flask.ext.login import current_user
-from flask import redirect, url_for, flash
+from flask import redirect, url_for, flash, request
 from config import USER_ROLES
 from wtforms.validators import NumberRange
 from app.email import send_email
@@ -163,7 +163,7 @@ class AwardModelView(ProtectedModelView):
                      semester=dict(default=semester),
                      brothers=dict(query_factory=
                         lambda: models.Brother.query.filter_by(active=True))
-                    )
+    )
     def __init__(self, session):
         super(AwardModelView, self).__init__(models.Award, session)
 
@@ -223,8 +223,6 @@ class ServiceModelView(ProtectedModelView):
             db.session.add(model)
             db.session.commit()
 
-
-
     def on_model_delete(self, model):
         semester = models.Semester.query.filter_by(current=True).one()
         donehrs = model.brother.total_service_hours(semester)
@@ -253,3 +251,36 @@ class ServiceModelView(ProtectedModelView):
     def get_count_query(self):
         semester = models.Semester.query.filter_by(current=True).one()
         return self.session.query(func.count('*')).filter(self.model.semester==semester)
+
+class SignUpSheetsView(ProtectedModelView):
+    create_template = 'admin/createsignup.html'
+    form_excluded_columns = ["roles"]
+    form_args = dict(event=dict(query_factory=
+                        lambda: models.Event.query.filter_by(semester=models.Semester.query.filter_by(current=True).one())
+                    )
+    )
+
+    def __init__(self, session):
+        super(ProtectedModelView, self).__init__(models.SignUpSheet, session)
+
+    def get_query(self):
+        semester = models.Semester.query.filter_by(current=True).one()
+        return self.session.query(self.model).filter(self.model.semester==semester)
+
+    def get_count_query(self):
+        semester = models.Semester.query.filter_by(current=True).one()
+        return self.session.query(func.count('*')).filter(self.model.semester==semester)
+
+    def on_model_change(self, form, model, is_created):
+        nums = []
+        if is_created:
+            for key in request.form.keys():
+                if "role-name" in key and key.split('-')[-1] not in nums:
+                    nums.append(key.split('-')[-1])
+            for num in nums:
+                import ipdb; ipdb.set_trace()  # XXX BREAKPOINT
+                try: max = request.form['role-max-'+num]
+                except: max = request.form['role-min-'+num]
+                role = models.SignUpRole(name=request.form['role-name-'+num], min=request.form['role-min-'+num], max=max, signupsheet=model)
+                db.session.add(role)
+            db.session.commit()
