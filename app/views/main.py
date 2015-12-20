@@ -353,6 +353,10 @@ def massattend():
 
     return render_template('massattend.html', title="Mass Attend", form=massattendform)
 
+@main.route('/signupsheets')
+@login_required
+def signupsheets():
+    return render_template('signupsheets.html', title="Sign Up Sheets")
 
 def __get_avg_points():
     all_brothers = Brother.query.filter_by(active=True)

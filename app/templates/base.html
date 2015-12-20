@@ -41,9 +41,6 @@
                 <li id="profile"><a href="{{url_for(".profile")}}"><i class="fa fa-user"></i> Profile</a></li>
                 <li id="allpoints"><a href="{{url_for(".allpoints")}}"><i class="fa fa-sort"></i> My Points</a></li>
                 <li id="founderscup"><a href="{{url_for(".founderscup")}}"><i class="fa fa-trophy"></i> Founders Cup</a></li>
-                <li id="awards"><a href="{{url_for('.awards')}}"><i class="fa fa-star"></i> Awards</a></li>
-                <li id="events"><a href="{{url_for('.events')}}"><i class="fa fa-calendar"></i> Events</a></li>
-                <li id="brothers"><a href="{{url_for('.brothers')}}"><i class="fa fa-users"></i> Brothers</a></li>
                 {% endif %}
                 {% if g.user.is_authenticated and (g.user.is_service_chair() or g.user.is_admin()) %}
                 <li id="service" class="dropdown"><a href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -59,20 +56,24 @@
                 {% else %}
                 <li id="service"><a href="{{url_for('.service')}}"><i class="fa fa-recycle"></i> Service</a></li>
                 {% endif %}
-                {% if g.user.is_authenticated and g.user.is_admin() %}
-                <li id="attend" class="dropdown"><a href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="fa fa-at"></i> Attend
+                <li id="events" class="dropdown"><a href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fa fa-calendar"></i> Events
                     <span class="caret"></span>
                 </a>
-                <ul class="dropdown-menu" role="menu" aria-labelledby="attend">
+                <ul class="dropdown-menu" role="menu" aria-labelledby="service">
                     <li><a href="{{url_for('.attend')}}">Attend</a></li>
+                    {% if g.user.is_authenticated %}
+                    <li><a href="{{url_for('.events')}}">Events List</a></li>
+                    {% if g.user.is_admin() %}
                     <li><a href="{{url_for('.massattend')}}">Mass Attend</a></li>
+                    {% endif %}
+                    <li><a href="{{url_for('.signupsheets')}}">Sign Up Sheets</a></li>
+                    {% endif %}
                 </ul>
                 </li>
-                {% else %}
-                <li id="attend"><a href="{{url_for(".attend")}}"><i class="fa fa-at"></i> Attend</a></li>
-                {% endif %}
                 {% if g.user.is_authenticated %}
+                <li id="awards"><a href="{{url_for('.awards')}}"><i class="fa fa-star"></i> Awards</a></li>
+                <li id="brothers"><a href="{{url_for('.brothers')}}"><i class="fa fa-users"></i> Brothers</a></li>
                 <li><a href="{{url_for(".logout")}}"><i class="fa fa-sign-out"></i> Logout</a></li>
                 {% if not g.user.is_normal_user() %}
                 <li><a href="/admin"><i class="fa fa-cog"></i> Admin</a></li>
