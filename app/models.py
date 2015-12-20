@@ -299,6 +299,8 @@ class SignUpSheet(db.Model):
     semester_id = db.Column(db.Integer, db.ForeignKey('semester.id'), nullable=False)
     event = db.relationship("Event", backref='signupsheet')
     event_id = db.Column(db.Integer, db.ForeignKey('event.id'), nullable=True)
+    __table_args__ = (db.UniqueConstraint('name', 'semester_id', name='_name_semester_uc'),)
+
 
 class SignUpRole(db.Model):
     __tablename__ = 'signuprole'
@@ -308,3 +310,4 @@ class SignUpRole(db.Model):
     max = db.Column(db.Integer)
     signupsheet_id = db.Column(db.Integer, db.ForeignKey('signupsheet.id'), nullable=False)
     signupsheet = db.relationship("SignUpSheet", backref='roles')
+    __table_args__ = (db.UniqueConstraint('signupsheet_id', 'name', name='_sheetid_name_uc'),)

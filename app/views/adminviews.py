@@ -1,5 +1,5 @@
 from app import app, db, models
-from flask.ext.admin import AdminIndexView, BaseView, expose
+from flask.ext.admin import AdminIndexView, BaseView
 from flask.ext.admin.contrib.sqla.view import ModelView, func
 from flask.ext.login import current_user
 from flask import redirect, url_for, flash, request
@@ -254,11 +254,13 @@ class ServiceModelView(ProtectedModelView):
 
 class SignUpSheetsView(ProtectedModelView):
     create_template = 'admin/createsignup.html'
+    edit_template = 'admin/editsignup.html'
     form_excluded_columns = ["roles"]
-    form_args = dict(event=dict(query_factory=
+    form_args = dict(semester=dict(default=models.Semester.query.filter_by(current=True).one()),
+                     event=dict(query_factory=
                         lambda: models.Event.query.filter_by(semester=models.Semester.query.filter_by(current=True).one())
                     )
-    )
+                )
 
     def __init__(self, session):
         super(ProtectedModelView, self).__init__(models.SignUpSheet, session)
@@ -272,15 +274,49 @@ class SignUpSheetsView(ProtectedModelView):
         return self.session.query(func.count('*')).filter(self.model.semester==semester)
 
     def on_model_change(self, form, model, is_created):
+        #TODO: stop being a savage and put form data into a data structure
         nums = []
+        names = []
+        for key in request.form.keys():
+            if "role-name" in key and key.split('-')[-1] not in nums:
+                nums.append(key.split('-')[-1])
+                names.append(request.form[key])
+        #create all roles from scratch
         if is_created:
-            for key in request.form.keys():
-                if "role-name" in key and key.split('-')[-1] not in nums:
-                    nums.append(key.split('-')[-1])
             for num in nums:
-                import ipdb; ipdb.set_trace()  # XXX BREAKPOINT
-                try: max = request.form['role-max-'+num]
-                except: max = request.form['role-min-'+num]
-                role = models.SignUpRole(name=request.form['role-name-'+num], min=request.form['role-min-'+num], max=max, signupsheet=model)
-                db.session.add(role)
-            db.session.commit()
+                self.add_or_edit_role(model, num)
+        #edit roles
+        else:
+            #modify existing roles or add new ones
+            for num in nums:
+                roles = models.SignUpRole.query.filter_by(name=request.form['role-name-'+num], signupsheet=model).all()
+                for role in roles:
+                    self.add_or_edit_role(model, num, role)
+                if len(roles) == 0:
+                    self.add_or_edit_role(model, num)
+            #if a name is not in the names array but is in the model.roles then delete the role
+            for n in models.SignUpRole.query.filter_by(signupsheet=model).all():
+                if n.name not in names:
+                    #TODO: delete members in that role
+                    db.session.delete(n)
+        db.session.commit()
+
+    def add_or_edit_role(self, model, num, role=None):
+        if role: #edit
+            try: max = request.form['role-max-'+num]
+            except: max = request.form['role-min-'+num]
+            role.max = max
+            role.min = request.form['role-min-'+num]
+            role.name = request.form['role-name-'+num]
+            db.session.add(role)
+        else: #new role
+            try: max = request.form['role-max-'+num]
+            except: max = request.form['role-min-'+num]
+            role = models.SignUpRole(name=request.form['role-name-'+num], min=request.form['role-min-'+num], max=max, signupsheet=model)
+            db.session.add(role)
+
+    def on_model_delete(self, model):
+        #TODO: delete users that are part of each role
+        for r in model.roles:
+            db.session.delete(r)
+        db.session.commit()

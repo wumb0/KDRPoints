@@ -1,0 +1,40 @@
+{% extends 'admin/model/create.html' %}
+{% block body %}
+    {% block navlinks %}
+        {{super()}}
+    {% endblock %}
+    {% call lib.form_tag(action=action) %}
+        {{lib.render_form_fields(form, form_opts=form_opts)}}
+        <h3>Roles <button class="btn btn-success" id="addrole"><i class="glyphicon glyphicon-plus"></i> Add</button></h3>
+        <div class="row">
+            <div class="col-md-12" id="rolesid">
+            </div>
+        </div>
+        {{lib.render_form_buttons(return_url, extra(), is_modal) }}
+    {% endcall %}
+{% endblock body %}
+{% block tail %}
+    {{super()}}
+    <script>
+        var i = 0;
+        $("#addrole").click(function(e){
+            e.preventDefault();
+            $("#rolesid").append('<div class="form-group form-inline"> <div class="col-md-10 col-md-offset-2"> <input placeholder="Role name" class="form-control" type="text" name="role-name-' + i + '"></input> <label class="control-label">&nbsp;Min/Max?&nbsp;</label><input class="form-control" type="checkbox" id="minmax-' + i + '"></input> <input placeholder="# Brothers" class="form-control" type="text" name="role-min-' + i + '"></input>&nbsp;<i class="glyphicon glyphicon-remove" id="rm-' + i + '"></i></div> </div>');
+            $("#rm-"+i).click(function(e){
+                    e.preventDefault();
+                    $(this).parent().parent().remove();
+            });
+            $("input:checkbox[id=minmax-" + i + "]").click(function(e){
+                    var iid = $(this).attr('id').split('-').slice(-1)[0];
+                    if ($(this).is(":checked")){
+                        $(this).next().attr("placeholder", "Min");
+                        $(this).next().after('<span id="maxspan-' + iid + '">&nbsp;to&nbsp;<input placeholder="Max" class="form-control" type="text" name="role-max-' + iid + '"></input></span>');
+                    } else {
+                        $(this).parent().find("[id^='maxspan-']").remove();
+                        $(this).next().attr("placeholder", "# Brothers");
+                    }
+            });
+            i++;
+        });
+    </script>
+{% endblock tail %}
