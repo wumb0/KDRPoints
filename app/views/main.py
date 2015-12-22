@@ -363,11 +363,14 @@ def signupsheets():
 @login_required
 def signup(id):
     form = AddOrDeleteFromSignup()
-    sheet = SignUpSheet.query.filter_by(id=id).one()
+    sheet = SignUpSheet.query.filter_by(id=id).first_or_404()
     if request.method == 'POST':
-        role = SignUpRole.query.filter_by(id=form.role_id.data).one()
-        if sheet.closed:
-            flash("This signup sheet is closed for modification")
+        try:
+            role = SignUpRole.query.filter_by(id=form.role_id.data).one()
+        except:
+            role = None
+        if sheet.closed or not role:
+            flash("This signup sheet is closed for modification or the role does not exist")
         else:
             if g.user in role.brothers:
                 role.brothers.remove(g.user)
