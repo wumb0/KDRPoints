@@ -48,10 +48,6 @@ class Brother(db.Model):
     family_id = db.Column(db.Integer, db.ForeignKey('family.id'))
     family = db.relationship('Family', backref="brothers")
 
-    @hybrid_property
-    def print_signups(self):
-        return ", ".join([x.name for x in self.signups])
-
     def is_admin(self):
         if self.position is None:
             return False
@@ -119,6 +115,15 @@ class Brother(db.Model):
             if a.semester is semester:
                 total += a.points
         return total
+
+    #poc test function to show what we can do now :)
+    def get_missed_events(self, semester):
+        l = set()
+        for s in self.signups:
+            if s.signupsheet.semester == semester and s.signupsheet.event and self in s.signupsheet.signed_up_didnt_attend(s.signupsheet.event):
+                l.add(s.signupsheet.event)
+        return list(l)
+
 
 class Family(db.Model):
     id = db.Column(db.Integer, primary_key = True)
@@ -311,6 +316,24 @@ class SignUpSheet(db.Model):
     def available_role_list_print(self):
         return ", ".join([x.name for x in self.roles if len(x.brothers) < x.max])
 
+    def signed_up_brothers(self):
+        l = []
+        for r in self.roles:
+            l = list(set(l) | set(r.brothers))
+        return l
+
+    def signed_up_attended(self, event):
+        return list(set(self.signed_up_brothers()) & set(event.brothers))
+
+    def signed_up_didnt_attend(self, event):
+        return list(set(self.signed_up_brothers()) - set(event.brothers))
+
+    def didnt_sign_up_attended(self, event):
+        return list(set(event.brothers) - set(self.signed_up_brothers()))
+
+    def __str__(self):
+        return self.name
+
 class SignUpRole(db.Model):
     __tablename__ = 'signuprole'
     id = db.Column(db.Integer, primary_key=True)
@@ -324,3 +347,6 @@ class SignUpRole(db.Model):
     @hybrid_property
     def brother_list_print(self):
         return ", ".join([x.name for x in self.brothers])
+
+    def __str__(self):
+        return self.name

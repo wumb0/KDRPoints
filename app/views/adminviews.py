@@ -70,6 +70,7 @@ class FamilyModelView(AdminModelView):
 
 class EventModelView(ProtectedModelView):
     column_default_sort = ('timestamp', True)
+    form_excluded_columns = ['signupsheet']
     semester = models.Semester.query.filter_by(current=True).first()
     form_args = dict(points=dict(validators=[NumberRange(min=0)]),
                      semester=dict(default=semester),

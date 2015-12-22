@@ -9,6 +9,7 @@
                     <th>Name</th>
                     <th>Associated Event</th>
                     <th>Available Roles</th>
+                    <th>Open/Closed</th>
                 </tr>
             </thead>
             <tbody>
@@ -23,6 +24,7 @@
                     <td>None</td>
                     {% endif %}
                     <td>{{sheet.available_role_list_print}}</td>
+                    <td><div class="label label-{% if sheet.closed %}error">Closed{% else %}success">Open{% endif %}</div></td>
                 </tr>
             {% endfor %}
             </tbody>

@@ -22,6 +22,14 @@
                             <small>{{event.description}}</small>
                         </div>
                     </div>
+                    {% if event.signupsheet %}
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <small>Signup: <a href="{{url_for('.signup', id=event.signupsheet[0].id)}}">{{event.signupsheet[0].name}}</a></small>
+                                <div class="label label-{% if event.signupsheet[0].closed %}error">Closed{% else %}success">Open{% endif %}</div>
+                        </div>
+                    </div>
+                    {% endif %}
                     <div class="row space-above">
                         <div class="col-sm-12">
                             <div class="label label-primary">{{event.brothers|length}} Brother{% if event.brothers|length != 1 %}s{% endif %}</div>
@@ -29,19 +37,53 @@
                     </div>
                     {% if g.user.is_admin() %}
                     <div class="row space-above">
-                        <div class="col-sm-12">
-                            <div class="panel panel-primary">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title">Brothers</h3>
+                        <div class="col-md-12">
+                            <div class="panel panel-default">
+                                <div class="panel-heading force-bottom">
+                                <ul class="nav nav-tabs">
+                                    <li class="active"><a href="#attended-{{event.id}}" data-toggle="tab">Attended</a></li>
+                                    {% if event.signupsheet %}
+                                    <li><a href="#signedup-{{event.id}}" data-toggle="tab">Signed Up</a></li>
+                                    <li><a href="#attendedvsignedup-{{event.id}}" data-toggle="tab">Signed Up vs. Attended</a></li>
+                                    {% endif %}
+                                </ul>
                                 </div>
+                                {% macro brother_line(brother, roles=False) -%}
+                                {% if roles %}
+                                    <a href="{{url_for(".allbrotherpoints", username=brother.email.split('@')[0])}}">{{brother.pin}} {{brother.name}} - {{brother.signups|selectattr('signupsheet_id', "equalto", event.signupsheet[0].id)|map(attribute="name")|join(", ")}}</a>
+                                {% else %}
+                                    <a href="{{url_for(".allbrotherpoints", username=brother.email.split('@')[0])}}">{{brother.pin}} {{brother.name}}</a>
+                                {% endif %}
+                                {%- endmacro %}
                                 <div class="panel-body">
-                                    {% for brother in event.brothers|sort(attribute="pin") %}
-                                    <div class="row">
-                                        <div class="container">
-                                            <a href="{{url_for(".allbrotherpoints", username=brother.email.split('@')[0])}}">{{brother.pin}} {{brother.name}}</a>
-                                        </div>
+                                <div class="tab-content">
+                                    <div class="tab-pane active" id="attended-{{event.id}}">
+                                        {% for brother in event.brothers|sort(attribute="pin") %}
+                                            {{ brother_line(brother) }}
+                                        {% endfor %}
                                     </div>
-                                    {% endfor %}
+                                    {% if event.signupsheet %}
+                                    <div class="tab-pane" id="signedup-{{event.id}}">
+                                        {% for brother in event.signupsheet[0].signed_up_brothers()|sort(attribute="pin") %}
+                                            {{ brother_line(brother, True) }}
+                                        {% endfor %}
+                                    </div>
+                                    <div class="tab-pane" id="attendedvsignedup-{{event.id}}">
+                                        <h4>Signed up and attended</h4>
+                                        {% for brother in event.signupsheet[0].signed_up_attended(event)|sort(attribute="pin") %}
+                                            {{ brother_line(brother, True) }}
+                                        {% endfor %}
+                                        <h4>Signed up and did not attend</h4>
+                                        {% for brother in event.signupsheet[0].signed_up_didnt_attend(event)|sort(attribute="pin") %}
+                                            {{ brother_line(brother) }}
+                                        {% endfor %}
+                                        <h4>Attended and did not sign up</h4>
+                                        {% for brother in event.signupsheet[0].didnt_sign_up_attended(event)|sort(attribute="pin") %}
+                                            {{ brother_line(brother) }}
+                                        {% endfor %}
+                                    </div>
+                                    {% endif %}
+                                </div>
                                 </div>
                             </div>
                         </div>
