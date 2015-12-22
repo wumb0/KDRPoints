@@ -305,6 +305,7 @@ class SignUpSheet(db.Model):
     __tablename__ = 'signupsheet'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(60), nullable=False)
+    description = db.Column(db.String(1000))
     semester = db.relationship("Semester", backref="signupsheets")
     semester_id = db.Column(db.Integer, db.ForeignKey('semester.id'), nullable=False)
     event = db.relationship("Event", backref='signupsheet')
