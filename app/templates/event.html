@@ -54,6 +54,7 @@
                                 {% else %}
                                     <a href="{{url_for(".allbrotherpoints", username=brother.email.split('@')[0])}}">{{brother.pin}} {{brother.name}}</a>
                                 {% endif %}
+                                <br>
                                 {%- endmacro %}
                                 <div class="panel-body">
                                 <div class="tab-content">
