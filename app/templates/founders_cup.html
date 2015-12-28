@@ -24,17 +24,26 @@
     <div class="row"><h3>The Math:</h3></div>
     <div class="row">
 <pre>
-for family in families
+for family in families:
     total = 0
-    div = 0
-    for brother in family.brothers
-        if brother.is_active
-            div = div + 1
-            total = brother.get_all_points()
-        endif
-    endfor
-    family.weighted_score = total/div
-endfor
+    bros = set()
+    for bro in family.brothers:
+        if bro.active:
+            bros.add(bro)
+            total += bro.get_all_points(semester)
+    if semester.season == "Spring":
+        try:
+            fallsemester = Semester.query.filter_by(season="Fall", year=semester.year-1).one()
+            for bro in fallsemester.active_brothers:
+                if bro.family is family:
+                    bros.add(bro)
+                    total += bro.get_all_points(fallsemester)
+        except: pass
+
+    if len(sembros):
+        family.weighted_score = total/len(bros)
+    else:
+        family.weighted_score = 0
 </pre>
     </div>
 </div>

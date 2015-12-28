@@ -131,13 +131,22 @@ class Family(db.Model):
 
     def get_points(self, semester):
         total = 0
-        div = 0
+        sembros = set()
         for b in self.brothers:
             if b.active:
-                div += 1
+                sembros.add(b)
                 total += b.get_all_points(semester)
-        if div:
-            return total/len(self.brothers)
+        if semester.season == "Spring":
+            try:
+                fallsemester = Semester.query.filter_by(season="Fall", year=semester.year-1).one()
+                for b in fallsemester.active_brothers:
+                    if b.family is self:
+                        sembros.add(b)
+                        total += b.get_all_points(fallsemester)
+            except: pass
+
+        if len(sembros):
+            return total/len(sembros)
         else:
             return 0
 
