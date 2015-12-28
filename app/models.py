@@ -114,6 +114,7 @@ class Brother(db.Model):
         for a in self.awards:
             if a.semester is semester:
                 total += a.points
+        total += self.total_service_hours(semester) * 5
         return total
 
     #poc test function to show what we can do now :)
