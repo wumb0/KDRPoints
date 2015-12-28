@@ -114,7 +114,7 @@ class PointsModelView(ProtectedModelView):
         return self.session.query(func.count('*')).filter(self.model.semester==semester)
 
 class SemesterModelView(AdminModelView):
-    form_excluded_columns = ('linkname')
+    form_excluded_columns = ('linkname', 'signupsheets')
     column_default_sort = ('current', True)
     form_args = dict(year=dict(validators=[NumberRange(min=2014, max=2100)]))
     choices = [ (i, i) for i in ["Fall", "Spring"] ]
