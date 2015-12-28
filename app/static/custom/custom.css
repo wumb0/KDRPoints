@@ -89,6 +89,11 @@ body {
     padding-bottom: 0px;
 }
 
+.service-dropdown {
+    padding-left: 7px;
+    padding-right: 7px;
+}
+
 /* Modifications for Flatly theme */
 .navbar-inverse .navbar-nav>li>a:hover, .navbar-inverse .navbar-nav>li>a:focus {
     color: #18bc9c;
