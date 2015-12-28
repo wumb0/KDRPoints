@@ -6,7 +6,7 @@ None
 {% else %}
 {% set i = 0 %}
 {% for brother in brothers %}
-{% set points = brother.get_all_points(g.current_semester) %}
+{% set points = brother.get_all_points(g.current_semester)|round(2) %}
 {% if points < (avg-(0.25*avg)) %}
 {% set label = "danger" %}
 {% else %}
