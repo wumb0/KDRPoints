@@ -308,7 +308,9 @@ def allservicesemester(semester):
     semesterobj = Semester.query.filter_by(linkname=semester).first()
     if g.user.is_normal_user() or not semesterobj:
         abort(404)
-    brothers = Brother.query.filter_by(active=True)
+    brothers=semesterobj.active_brothers
+    if semesterobj == g.current_semester:
+        brothers = Brother.query.filter_by(active=True)
     return render_template('allservice.html',
                            title="all service",
                            brothers=brothers,
