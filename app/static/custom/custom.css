@@ -24,6 +24,26 @@ body {
   padding-top: 5px;
 }
 
+.navbar-inverse .navbar-nav>li>a:hover, .navbar-inverse .navbar-nav>li>a:focus {
+    color: #18bc9c;
+}
+
+.navbar-inverse .navbar-brand:hover, .navbar-inverse .navbar-brand:focus {
+    color: #18bc9c;
+}
+
+.dropdown-menu>li>a:focus, .dropdown-menu>li>a:hover {
+    color: #4d4d4d;
+}
+
+.panel-success>.panel-heading {
+    color: #000000;
+}
+
+.btn {
+    padding: 3px 13px;
+}
+
 .github a:link {
     color: #000000;
 }
