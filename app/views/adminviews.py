@@ -1,4 +1,4 @@
-from app import app, db, models
+from app import db, models
 from flask.ext.admin import AdminIndexView, BaseView
 from flask.ext.admin.contrib.sqla.view import ModelView, func
 from flask.ext.login import current_user
@@ -50,32 +50,38 @@ class BrotherModelView(AdminModelView):
                              'events', 'studyhours',
                              'service', 'last_seen',
                              'email')
+
     def __init__(self, session):
         super(BrotherModelView, self).__init__(models.Brother, session)
 
 class PositionModelView(AdminModelView):
+    column_list = ('name', 'brothers', 'permission')
+    column_choices = {'permission': [(0, 'User'), (1, 'Chair'), (2, 'Admin')]}
     choices = [ (int(USER_ROLES[i]), i) for i in USER_ROLES.keys() ]
     form_overrides = dict(permission=SelectField)
     form_args = dict(permission=dict(choices=choices,
                                      validators=[NumberRange(min=0, max=2)],
                                      coerce=int))
+
     def __init__(self, session):
         super(PositionModelView, self).__init__(models.Position, session)
 
 class FamilyModelView(AdminModelView):
     can_create = False
     can_edit = False
+
     def __init__(self, session):
         super(FamilyModelView, self).__init__(models.Family, session)
 
 class EventModelView(ProtectedModelView):
     column_default_sort = ('timestamp', True)
-    form_excluded_columns = ['signupsheet']
+    form_excluded_columns = ['signupsheet', 'semester']
     semester = models.Semester.query.filter_by(current=True).first()
     form_args = dict(points=dict(validators=[NumberRange(min=0)]),
                      semester=dict(default=semester),
                      brothers=dict(query_factory=
                                    lambda: models.Brother.query.filter_by(active=True)))
+
     def __init__(self, session):
         super(EventModelView, self).__init__(models.Event, session)
 
@@ -86,6 +92,7 @@ class EventModelView(ProtectedModelView):
     def get_count_query(self):
         semester = models.Semester.query.filter_by(current=True).one()
         return self.session.query(func.count('*')).filter(self.model.semester==semester)
+
 
 class PointsModelView(ProtectedModelView):
     column_default_sort = ('timestamp', True)
@@ -164,7 +171,8 @@ class AwardModelView(ProtectedModelView):
                      semester=dict(default=semester),
                      brothers=dict(query_factory=
                         lambda: models.Brother.query.filter_by(active=True))
-    )
+                     )
+
     def __init__(self, session):
         super(AwardModelView, self).__init__(models.Award, session)
 
@@ -210,12 +218,12 @@ class ServiceModelView(ProtectedModelView):
                 else:
                     svcmsg += "You have completed your service hours for this semester! You currently have {}.".format(donehrs)
                 send_email("Service Chair (points)",
-                        str(svchrs*float(model.weight)) + " service hour" +
-                        ("" if svchrs == 1 else "s") +
-                        " have been approved!",
-                        [form.brother.data.email],
-                        svcmsg,
-                        svcmsg)
+                           str(svchrs*float(model.weight)) + " service hour" +
+                           ("" if svchrs == 1 else "s") + " have been approved!",
+                           [form.brother.data.email],
+                           svcmsg,
+                           svcmsg
+                           )
                 model.email_sent = True
                 db.session.add(model)
                 db.session.commit()
@@ -240,10 +248,10 @@ class ServiceModelView(ProtectedModelView):
         else:
             svcmsg += "You have completed your service hours for this semester! You currently have {}.".format(donehrs)
         send_email("Service Chair (points)",
-                    "Service hours have been DENIED!",
-                    [model.brother.email],
-                    svcmsg,
-                    svcmsg)
+                   "Service hours have been DENIED!",
+                   [model.brother.email],
+                   svcmsg,
+                   svcmsg)
 
     def get_query(self):
         semester = models.Semester.query.filter_by(current=True).one()
@@ -260,8 +268,8 @@ class SignUpSheetsView(ProtectedModelView):
     form_args = dict(semester=dict(default=models.Semester.query.filter_by(current=True).one()),
                      event=dict(query_factory=
                         lambda: models.Event.query.filter_by(semester=models.Semester.query.filter_by(current=True).one())
-                    )
-                )
+                                )
+                     )
 
     def __init__(self, session):
         super(ProtectedModelView, self).__init__(models.SignUpSheet, session)
@@ -303,14 +311,14 @@ class SignUpSheetsView(ProtectedModelView):
         db.session.commit()
 
     def add_or_edit_role(self, model, num, role=None):
-        if role: #edit
+        if role:
             try: max = request.form['role-max-'+num]
             except: max = request.form['role-min-'+num]
             role.max = max
             role.min = request.form['role-min-'+num]
             role.name = request.form['role-name-'+num]
             db.session.add(role)
-        else: #new role
+        else:
             try: max = request.form['role-max-'+num]
             except: max = request.form['role-min-'+num]
             role = models.SignUpRole(name=request.form['role-name-'+num], min=request.form['role-min-'+num], max=max, signupsheet=model)
