@@ -9,7 +9,7 @@
         {% endif %}
         {% set i = 1 %}
         {% for family in families %}
-        {% set points = family.get_points(g.current_semester) %}
+        {% set points = family.get_points(g.current_semester)|round(2) %}
         <div class="row">
             <p>{{i}}. {{family.name}}: {{points}}</p>
             <div class="progress">
