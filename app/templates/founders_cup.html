@@ -13,7 +13,7 @@
         <div class="row">
             <p>{{i}}. {{family.name}}: {{points}}</p>
             <div class="progress">
-                <div class="progress-bar progress-bar-striped" aria-valuenow="{{points}}" aria-valuemin="0" aria-valuemax="{{maxpoints}}" style="width: {{points*100/maxpoints}}%;"></div>
+                <div class="progress-bar progress-bar-striped" aria-valuenow="{{points|round(2)}}" aria-valuemin="0" aria-valuemax="{{maxpoints}}" style="width: {{points*100/maxpoints}}%;"></div>
             </div>
         </div>
         {% set i = i + 1 %}
