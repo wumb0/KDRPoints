@@ -129,10 +129,12 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
         <script type='text/javascript' src="{{url_for('static', filename='bs/js/bootstrap.min.js')}}"></script>
         <script type='text/javascript' src="{{url_for('static', filename='custom/custom.js')}}"></script>
+        {% block activetab %}
         <script>
             $(document).ready(function () {
                     $("#" + "{{request.endpoint}}".split(".")[1]).addClass("active"); })
         </script>
+        {% endblock activetab %}
         {% block footer %}
 
         {% endblock %}
