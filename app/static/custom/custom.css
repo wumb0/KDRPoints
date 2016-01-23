@@ -118,3 +118,8 @@ body {
 .btn {
     padding: 3px 13px;
 }
+
+.alert {
+    color: #000000;
+}
+/* End modifications for Flatly theme */

@@ -64,7 +64,7 @@
                     <li><a href="{{url_for('.attend')}}">Attend</a></li>
                     {% if g.user.is_authenticated %}
                     <li><a href="{{url_for('.events')}}">Events List</a></li>
-                    {% if g.user.is_admin() %}
+                    {% if not g.user.is_normal_user() %}
                     <li><a href="{{url_for('.massattend')}}">Mass Attend</a></li>
                     {% endif %}
                     <li><a href="{{url_for('.signupsheets')}}">Sign Up Sheets</a></li>
