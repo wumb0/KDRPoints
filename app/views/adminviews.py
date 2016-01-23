@@ -1,5 +1,5 @@
 from app import db, models
-from flask.ext.admin import AdminIndexView, BaseView
+from flask.ext.admin import AdminIndexView, BaseView, expose
 from flask.ext.admin.contrib.sqla.view import ModelView, func
 from flask.ext.login import current_user
 from flask import redirect, url_for, flash, request
@@ -39,6 +39,11 @@ class ProtectedModelView(ModelView, ProtectedBaseView):
 
 class AdminModelView(ModelView, AdminBaseView):
     pass
+
+class ProtectedAdminIndex(ProtectedIndexView):
+    @expose('/')
+    def index(self):
+        return self.render('admin/index.html', user=current_user)
 
 class BrotherModelView(AdminModelView):
     column_exclude_list = ['points']

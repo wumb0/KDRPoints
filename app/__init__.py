@@ -38,7 +38,7 @@ db.create_all()
 db.session.commit()
 from app.views import main, adminviews
 
-admin = Admin(app, 'KDR Points Admin', template_mode='bootstrap3', index_view=adminviews.ProtectedIndexView())
+admin = Admin(app, 'KDR Points Admin', template_mode='bootstrap3', index_view=adminviews.ProtectedAdminIndex())
 admin.add_link(MenuLink(name='Back to Site', url='/'))
 admin.add_view(adminviews.EventModelView(db.session))
 admin.add_view(adminviews.AwardModelView(db.session))

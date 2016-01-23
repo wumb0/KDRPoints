@@ -1,4 +1,13 @@
 {% extends 'admin/master.html' %}
 {% block body %}
+<div class="jumbotron">
 <h1>Welcome to the admin page!</h1>
+{% if not user.is_normal_user() %}
+<p>Here's how to be a chair: <a href="https://docs.google.com/a/kdrib.org/document/d/1BOIo9AkZ0ABtsnEbLoe-MAoZQ0Aq3DNOWLFuheDM6hM/edit?usp=sharing" target="_blank">Link!</a></p>
+{% endif %}
+{% if user.is_admin() %}
+<p>Here's how to be an admin (eboard): <a href="https://docs.google.com/a/kdrib.org/document/d/148aR58Uf-7RgHfcTtPuuTxY94ordmEMneMM4F_FCccY/edit?usp=sharing" target="_blank">Link!</a></p>
+<p>As an admin you need to read and understand <strong><u>BOTH</u></strong> of the documents linked above</p>
+</div>
+{% endif %}
 {% endblock %}
