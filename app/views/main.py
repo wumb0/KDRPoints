@@ -385,6 +385,11 @@ def signup(id):
             db.session.commit()
     return render_template("signup.html", title="Sign Up - "+sheet.name, sheet=sheet, form=form)
 
+@main.route('/calendar')
+@login_required
+def calendar():
+    return render_template('calendar.html', title="KDRIB Calendar")
+
 def __get_avg_points():
     all_brothers = Brother.query.filter_by(active=True)
     if all_brothers.count() > 0:
