@@ -16,8 +16,8 @@ main = Blueprint('main', __name__)
 
 @main.before_request
 def before_request():
-    session.permanent = True
-    app.permanent_session_lifetime = timedelta(hours=24)
+    #session.permanent = True
+    #app.permanent_session_lifetime = timedelta(hours=24)
     g.user = current_user
     g.current_semester = Semester.query.filter_by(current=True).first()
     if g.user.is_authenticated:
