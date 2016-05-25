@@ -35,10 +35,10 @@ class ProtectedIndexView(AdminIndexView, ProtectedBaseView):
     pass
 
 class ProtectedModelView(ModelView, ProtectedBaseView):
-    pass
+    column_display_actions = True
 
 class AdminModelView(ModelView, AdminBaseView):
-    pass
+    column_display_actions = True
 
 class ProtectedAdminIndex(ProtectedIndexView):
     @expose('/')

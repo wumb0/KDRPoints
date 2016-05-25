@@ -97,6 +97,9 @@ class Brother(db.Model):
     def __str__(self):
         return self.name
 
+    def __unicode__(self):
+        return unicode(self.name)
+
     def __repr__(self):
         return "<Brother: {}>".format(self.name)
 
@@ -154,6 +157,9 @@ class Family(db.Model):
     def __str__(self):
         return self.name
 
+    def __unicode__(self):
+        return unicode(self.name)
+
     def __repr__(self):
         return "<Family: {}>".format(self.name)
 
@@ -171,6 +177,9 @@ class Semester(db.Model):
 
     def __str__(self):
         return '{}'.format(self.get_name())
+
+    def __unicode__(self):
+        return unicode(self.get_name())
 
     def __repr__(self):
         return "<Semester: {}>".format(self.get_name())
@@ -198,6 +207,9 @@ class OtherPoints(db.Model):
     def __str__(self):
         return '{} Points'.format(self.amount)
 
+    def __unicode__(self):
+        return unicode(self.amount)
+
     def __repr__(self):
         return "<Points: {} - {} {}>".format(self.reason, self.semester.get_name())
 
@@ -218,6 +230,9 @@ class Event(db.Model):
 
     def __str__(self):
         return self.name
+
+    def __unicode__(self):
+        return unicode(self.name)
 
     def __repr__(self):
         return "<Event: {} - {} {}>".format(self.name, self.semester.get_name())
@@ -249,6 +264,9 @@ class Award(db.Model):
     def __str__(self):
         return self.name
 
+    def __unicode__(self):
+        return unicode(self.name)
+
     def __repr__(self):
         return "<Award: {} - {}>".format(self.name, self.semester.get_name())
 
@@ -278,6 +296,9 @@ class Service(db.Model):
     def __str__(self):
         return self.name
 
+    def __unicode__(self):
+        return unicode(self.name)
+
     def __repr__(self):
         return "<Service: {} - {}>".format(self.name, self.semester.get_name())
 
@@ -296,6 +317,9 @@ class StudyHours(db.Model):
     def __str__(self):
         return self.info
 
+    def __unicode__(self):
+        return unicode(self.info)
+
     def __repr__(self):
         return "<Study hours: {} - {}>".format(self.semester.get_name(), self.brother.name)
 
@@ -309,6 +333,9 @@ class Position(db.Model):
 
     def __str__(self):
         return self.name
+
+    def __unicode__(self):
+        return unicode(self.name)
 
 
 class SignUpSheet(db.Model):
@@ -345,6 +372,9 @@ class SignUpSheet(db.Model):
     def __str__(self):
         return self.name
 
+    def __unicode__(self):
+        return unicode(self.name)
+
 class SignUpRole(db.Model):
     __tablename__ = 'signuprole'
     id = db.Column(db.Integer, primary_key=True)
@@ -361,3 +391,6 @@ class SignUpRole(db.Model):
 
     def __str__(self):
         return self.name
+
+    def __unicode__(self):
+        return unicode(self.name)
