@@ -1,4 +1,4 @@
-from flask.ext.wtf import Form
+from flask_wtf import Form
 from wtforms import TextField, SubmitField, SelectField, IntegerField, widgets, HiddenField, BooleanField, DateTimeField, SelectMultipleField
 from wtforms.fields import TextAreaField
 from wtforms.validators import DataRequired, ValidationError, Length, NumberRange

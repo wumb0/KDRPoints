@@ -24,4 +24,5 @@ MAIL_USE_SSL = f.readline().strip()
 MAIL_USERNAME = f.readline().strip()
 MAIL_PASSWORD = f.readline().strip()
 USER_ROLES = {'admin':2,'chair':1,'user':0}
+INITIAL_DATA = {"semester": {"current":True, "year": 2018, "season": "Fall", "linkname": "fall2018", "required_service": 15}, "family": ["Bless", "Gates", "Bona", "Stumm", "Vadney"]}
 f.close()

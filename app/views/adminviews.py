@@ -1,7 +1,7 @@
 from app import db, models
-from flask.ext.admin import AdminIndexView, BaseView, expose
-from flask.ext.admin.contrib.sqla.view import ModelView, func
-from flask.ext.login import current_user
+from flask_admin import AdminIndexView, BaseView, expose
+from flask_admin.contrib.sqla.view import ModelView, func
+from flask_login import current_user
 from flask import redirect, url_for, flash, request
 from config import USER_ROLES
 from wtforms.validators import NumberRange
@@ -11,7 +11,7 @@ from datetime import datetime
 
 class ProtectedBaseView(BaseView):
     def is_accessible(self):
-        if current_user.is_authenticated and not current_user.is_normal_user():
+        if current_user.is_authenticated and (not current_user.is_normal_user() or current_user.id == 1):
             return True
         return False
 
@@ -22,12 +22,12 @@ class ProtectedBaseView(BaseView):
 
 class AdminBaseView(ProtectedBaseView):
     def is_visible(self):
-        if current_user.is_authenticated and current_user.is_admin():
+        if current_user.is_authenticated and (current_user.is_admin() or current_user.id == 1):
             return True
         return False
 
     def is_accessible(self):
-        if current_user.is_authenticated and current_user.is_admin():
+        if current_user.is_authenticated and (current_user.is_admin() or current_user.id == 1):
             return True
         return False
 
@@ -202,7 +202,7 @@ class ServiceModelView(ProtectedModelView):
         super(ServiceModelView, self).__init__(models.Service, session)
 
     def is_accessible(self):
-        if current_user.is_authenticated and \
+        if current_user.is_authenticated and current_user.position and \
                 ("service" in current_user.position.name.lower() or current_user.is_admin()):
             return True
         return False

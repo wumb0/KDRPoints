@@ -7,4 +7,5 @@ Flask-SQLAlchemy
 Flask-Migrate
 Flask-Mail
 Flask-MySQL
+mysql
 flup
