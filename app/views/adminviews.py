@@ -195,7 +195,8 @@ class ServiceModelView(ProtectedModelView):
     column_default_sort = ('approved')
     form_args = dict(brother=dict(query_factory=
                         lambda: models.Brother.query.filter_by(active=True)),
-                     weight=dict(default=1.0)
+                     weight=dict(default=1.0),
+                     semester=dict(default=models.Semester.query.filter_by(current=True).one_or_none())
                      )
 
     def __init__(self, session):
