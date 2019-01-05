@@ -270,9 +270,9 @@ class SignUpSheetsView(ProtectedModelView):
     create_template = 'admin/createsignup.html'
     edit_template = 'admin/editsignup.html'
     form_excluded_columns = ["roles"]
-    form_args = dict(semester=dict(default=models.Semester.query.filter_by(current=True).one()),
+    form_args = dict(semester=dict(default=models.Semester.query.filter_by(current=True).one_or_none()),
                      event=dict(query_factory=
-                        lambda: models.Event.query.filter_by(semester=models.Semester.query.filter_by(current=True).one())
+                        lambda: models.Event.query.filter_by(semester=models.Semester.query.filter_by(current=True).one_or_none())
                                 )
                      )
 
