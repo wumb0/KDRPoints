@@ -75,7 +75,7 @@ def authorized(response):
         return redirect(url_for('main.index'))
     bro = Brother.query.filter_by(email=me.data['email']).first()
     if bro is None:
-        bro = Brother(name=me.data['name'], nickname="", email=me.data['email'], position=None, pin=0)
+        bro = Brother(name=me.data.get("name", ""), nickname="", email=me.data['email'], position=None, pin=0)
         db.session.add(bro)
         db.session.commit()
     login_user(bro, remember = False)
