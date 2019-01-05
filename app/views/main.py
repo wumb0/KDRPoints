@@ -20,16 +20,16 @@ def before_request():
     #app.permanent_session_lifetime = timedelta(hours=24)
     g.user = current_user
     g.current_semester = Semester.query.filter_by(current=True).first()
-    if g.user.is_authenticated:
-        g.user.last_seen = datetime.utcnow()
-        db.session.add(g.user)
+    if current_user.is_authenticated:
+        current_user.last_seen = datetime.utcnow()
+        db.session.add(current_user)
         db.session.commit()
 
 @main.route('/')
 @main.route('/index')
 def index():
-    if g.user.is_authenticated:
-        name=g.user.name.split(" ")[0]
+    if current_user.is_authenticated:
+        name=current_user.name.split(" ")[0]
     else:
         name = "stranger"
     return render_template('index.html', title='Home', name=name)
@@ -44,8 +44,8 @@ def get_google_oauth_token():
 
 @main.route('/login')
 def login():
-    if g.user.is_authenticated:
-        flash("You are already logged in as {}.".format(g.user.email), category="warning")
+    if current_user.is_authenticated:
+        flash("You are already logged in as {}.".format(current_user.email), category="warning")
         return redirect(url_for(".index"))
     session.pop('google_token', None)
     return google.authorize(callback=url_for('.authorized', _external=True))
@@ -91,7 +91,7 @@ def flash_wtferrors(form):
 @main.route('/login/first', methods = ['GET', 'POST'])
 @login_required
 def first_login():
-    bro = g.user
+    bro = current_user
     if bro.pin != 0 or bro.family != None:
         flash("This page is meant for initial registrants only, change profile information on the edit profile page", category="error")
         abort(404)
@@ -123,8 +123,8 @@ def attend():
     events = []
     if events is not None:
         events = [ (x.id, x.name) for x in events_query ]
-    if g.user.is_authenticated:
-        form.pin.data = g.user.pin
+    if current_user.is_authenticated:
+        form.pin.data = current_user.pin
     form.event.choices = events
     if form.validate_on_submit():
         bro = Brother.query.filter_by(pin=form.pin.data).first()
@@ -148,14 +148,14 @@ def attend():
 def profile():
     form = EditNickForm()
     if form.validate_on_submit():
-        g.user.nickname = form.nickname.data
-        db.session.add(g.user)
+        current_user.nickname = form.nickname.data
+        db.session.add(current_user)
         db.session.commit()
         return redirect(url_for('.profile'))
     else:
         flash_wtferrors(form)
     avgpoints, avgsvc = __get_avg_points()
-    all_items = g.user.events.filter_by(semester=g.current_semester).all() + g.user.awards.filter_by(semester=g.current_semester).all()+ g.user.points.filter_by(semester=g.current_semester).all()
+    all_items = current_user.events.filter_by(semester=g.current_semester).all() + g.user.awards.filter_by(semester=g.current_semester).all()+ g.user.points.filter_by(semester=g.current_semester).all()
     all_items.sort(key=lambda x: x.timestamp, reverse=True)
     return render_template("profile.html", title="Profile", avgpoints=avgpoints, avgsvc=avgsvc, all_items=all_items[:10], Event=Event, Award=Award, OtherPoints=OtherPoints, isinstance=isinstance, form=form)
 
@@ -163,7 +163,7 @@ def profile():
 @login_required
 def allbrotherpoints(username):
     user = Brother.query.filter_by(email=username + "@kdrib.org").first()
-    if not user or not g.user.is_admin():
+    if not user or not current_user.is_admin():
         abort(404)
     all_items = (user.events.all() +
                  user.awards.all() +
@@ -181,9 +181,9 @@ def allbrotherpoints(username):
 @main.route('/allpoints')
 @login_required
 def allpoints():
-    all_items = (g.user.events.all() +
-                 g.user.awards.all() +
-                 g.user.points.all())
+    all_items = (current_user.events.all() +
+                 current_user.awards.all() +
+                 current_user.points.all())
     all_items.sort(key=lambda x: x.timestamp, reverse=True)
     return render_template("allpoints.html",
                            title="All Points",
@@ -191,7 +191,7 @@ def allpoints():
                            Event=Event, Award=Award,
                            OtherPoints=OtherPoints,
                            isinstance=isinstance,
-                           user=g.user)
+                           user=current_user)
 
 @main.route('/founderscup')
 @login_required
@@ -243,8 +243,8 @@ def award(id):
 @main.route('/service', methods = ['GET', 'POST'])
 def service():
     form = ServiceForm()
-    if g.user.is_authenticated:
-        form.pin.data = g.user.pin
+    if current_user.is_authenticated:
+        form.pin.data = current_user.pin
     if form.validate_on_submit():
         brother = Brother.query.filter_by(pin=form.pin.data).first()
         serv = Service(brother_id=brother.id,
@@ -306,7 +306,7 @@ def service_download(semester):
 @login_required
 def allservicesemester(semester):
     semesterobj = Semester.query.filter_by(linkname=semester).first()
-    if g.user.is_normal_user() or not semesterobj:
+    if current_user.is_normal_user() or not semesterobj:
         abort(404)
     brothers=semesterobj.active_brothers
     if semesterobj == g.current_semester:
@@ -374,11 +374,11 @@ def signup(id):
         if sheet.closed or not role:
             flash("This signup sheet is closed for modification or the role does not exist")
         else:
-            if g.user in role.brothers:
-                role.brothers.remove(g.user)
+            if current_user in role.brothers:
+                role.brothers.remove(current_user)
             else:
                 if len(role.brothers) < role.max:
-                    role.brothers.append(g.user)
+                    role.brothers.append(current_user)
                 else:
                     flash("No more brothers can sign up for this role.", category='error')
             db.session.add(role)

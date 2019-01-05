@@ -1,7 +1,10 @@
 from app import db
 from config import USER_ROLES
 from datetime import datetime
+from sqlalchemy import event
 from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy.orm import column_property, object_session
+from sqlalchemy.sql.expression import label
 
 events = db.Table('events',
     db.Column('event_id', db.Integer, db.ForeignKey('event.id')),
@@ -26,6 +29,12 @@ awards = db.Table('awards',
 points = db.Table('points',
     db.Column('otherpoints_id', db.Integer, db.ForeignKey('otherpoints.id')),
     db.Column('brother_id', db.Integer, db.ForeignKey('brother.id'))
+)
+
+totalpoints = db.Table('totalpoints',
+    db.Column('brother_id', db.Integer, db.ForeignKey('brother.id')),
+    db.Column('semester_id', db.Integer, db.ForeignKey('semester.id')),
+    db.Column('points', db.Integer)
 )
 
 class Brother(db.Model):
@@ -106,6 +115,7 @@ class Brother(db.Model):
     def last_seen_print(self):
         return self.last_seen.strftime('%A, %B %d %Y %I:%M%p')
 
+    '''
     def get_all_points(self, semester):
         total = 0
         for p in self.points:
@@ -119,6 +129,14 @@ class Brother(db.Model):
                 total += a.points
         total += self.total_service_hours(semester) * 5
         return total
+    '''
+    def get_all_points(self, semester):
+        total = 0
+        for i in [Event, Award, OtherPoints]:
+            total += object_session(self).query(i, label('sum', db.func.sum(i.points))) \
+                        .filter(i.brothers.any(id=self.id), i.semester_id==semester.id).one().sum or 0
+        total += self.total_service_hours(semester) * 5
+        return int(total)
 
     #poc test function to show what we can do now :)
     def get_missed_events(self, semester):
@@ -205,13 +223,13 @@ class OtherPoints(db.Model):
     timestamp = db.Column(db.DateTime, default=datetime.utcnow(), nullable=False)
 
     def __str__(self):
-        return '{} Points'.format(self.amount)
+        return '{} Points'.format(self.points)
 
     def __unicode__(self):
-        return unicode(self.amount)
+        return unicode(self.points)
 
     def __repr__(self):
-        return "<Points: {} - {} {}>".format(self.reason, self.semester.get_name())
+        return "<Points: {} - {}>".format(self.reason, self.semester.get_name())
 
     def print_timestamp(self):
         return self.timestamp.strftime('%A, %B %d %Y %I:%M%p')

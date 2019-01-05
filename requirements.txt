@@ -1,5 +1,5 @@
 Flask
-Flask-Admin
+git+https://github.com/flask-admin/flask-admin
 Flask-WTF
 Flask-Login
 Flask-Oauthlib
@@ -7,4 +7,4 @@ Flask-SQLAlchemy
 Flask-Migrate
 Flask-Mail
 Flask-MySQL
-flup
+flup==1.0.3.dev-20110405
