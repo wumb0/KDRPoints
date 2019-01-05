@@ -2,7 +2,7 @@
 from app import db, app, lm, google
 from datetime import datetime, timedelta
 from flask import render_template, url_for, session, g, redirect, Blueprint, flash, abort, request, make_response
-from flask.ext.login import logout_user, login_user, current_user, current_user, login_required
+from flask_login import logout_user, login_user, current_user, current_user, login_required
 from app.models import *
 from config import USER_ROLES, basedir
 from app.forms import *
@@ -75,7 +75,7 @@ def authorized(response):
         return redirect(url_for('main.index'))
     bro = Brother.query.filter_by(email=me.data['email']).first()
     if bro is None:
-        bro = Brother(name=me.data['name'], nickname="", email=me.data['email'], position=None, pin=0)
+        bro = Brother(name=me.data.get("name", ""), nickname="", email=me.data['email'], position=None, pin=0)
         db.session.add(bro)
         db.session.commit()
     login_user(bro, remember = False)

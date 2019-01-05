@@ -1,13 +1,13 @@
 #!flask/bin/python
 from flask import Flask, session
-from flask.ext.sqlalchemy import SQLAlchemy
-from flask.ext.login import LoginManager
+from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager
 from flask_oauthlib.client import OAuth
 from flask_admin.contrib.sqla import ModelView
-from config import GOOGLE_CONSUMER_KEY, GOOGLE_CONSUMER_SECRET
-from flask.ext.admin import Admin
+from config import GOOGLE_CONSUMER_KEY, GOOGLE_CONSUMER_SECRET, INITIAL_DATA
+from flask_admin import Admin
 from flask_admin.base import MenuLink
-from flask.ext.mail import Mail
+from flask_mail import Mail
 
 app = Flask(__name__)
 app.config.from_object('config')
@@ -36,6 +36,12 @@ mail = Mail(app)
 from app import models
 db.create_all()
 db.session.commit()
+if models.Semester.query.first() == None:
+    s = models.Semester(**INITIAL_DATA['semester'])
+    fams = [models.Family(name=i) for i in INITIAL_DATA['family']]
+    db.session.add(s)
+    db.session.bulk_save_objects(fams)
+    db.session.commit()
 from app.views import main, adminviews
 
 admin = Admin(app, 'KDR Points Admin', template_mode='bootstrap3', index_view=adminviews.ProtectedAdminIndex())

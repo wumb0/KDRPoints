@@ -1,0 +1,24 @@
+kdrpoints:
+    container_name: kdrpoints-dev
+    build: .
+    ports:
+        - 1072:1072
+    links:
+        - mysql
+    volumes:
+        - .:/develop
+    restart: on-failure
+
+mysql:
+    container_name: mysqlserver
+    image: mysql:5.5
+    ports:
+        - 3306:3306
+    volumes:
+        - /var/lib/mysql
+        - ./db:/docker-entrypoint-initdb.d
+    environment:
+        MYSQL_ROOT_PASSWORD: password
+        MYSQL_DATABASE: kdrpoints
+        MYSQL_USER: kdrpoints
+        MYSQL_PASSWORD: password

@@ -11,7 +11,6 @@ Then you need a few things.
 
 If you don't want to use mysql then you can use sqlite... just comment out the mysql lines in config.py and uncomment the sqlite line
 
-Install python-dev, libmysqlclient-dev, and mysql-server
 ```
 sudo apt-get install libmysqlclient-dev python-dev mysql-server
 ```
@@ -56,34 +55,12 @@ Running the Server
 ------------------
 Use the following command to start the server: python run.py
 
-It should work now but you have to run a few queries to insert things before you can complete registration:
-
-```
-mysql -u root -p < db_base.dump
-```
-OR
-```
-sqlite3 app.db -init db_base.dump
-```
-It will error because of the use statement but it should work otherwise. 
-
-Then restart the server
+It should work now.
 
 Log in with your kdrib Google account
 
-Run the following to upgrade yourself to admin:
+The user with id 1 will be granted access to the admin panel so use that to make yourself a role or two.  
 
-```
-mysql -u kdrpoints -p
-use kdrpoints
-insert into position values(1, "Admin", 2);
-update brother set position_id=1;
-```
-OR
-```
-sqlite3 app.db
-insert into position values(1, "Admin", 2);
-update brother set position_id=1;
-```
-
-Now you can access the admin panel as a superadmin
+Development
+===========
+`docker-compose up -d` then browse to 127.0.0.1:1072

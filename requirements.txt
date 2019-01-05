@@ -8,3 +8,6 @@ Flask-Migrate
 Flask-Mail
 Flask-MySQL
 flup==1.0.3.dev-20110405
+mysql
+flup
+enum
